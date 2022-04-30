@@ -1,0 +1,9 @@
+query Posts($limit: Int!, $offset: Int!, $ordering: String) {
+  posts(limit: $limit, offset: $offset, ordering: $ordering) {
+    totalCount
+    hasMore
+    results {
+      ...postWithUserInfo
+    }
+  }
+}

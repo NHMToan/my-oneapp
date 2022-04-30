@@ -1,0 +1,7 @@
+query PostIds($limit: Int!, $offset: Int!, $ordering: String) {
+  posts(limit: $limit, offset: $offset, ordering: $ordering) {
+    results {
+      id
+    }
+  }
+}
