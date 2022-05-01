@@ -17,7 +17,8 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "noImplicitAny": false,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "rootDir": "src"
   },
   "include": ["src"]
 }

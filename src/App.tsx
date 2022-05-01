@@ -1,8 +1,9 @@
 import { ApolloProvider } from "@apollo/client";
 import { useEffect } from "react";
-import AuthContextProvider, { useAuthContext } from "./contexts/AuthContext";
+import Router from "Router";
+import ThemeProvider from "theme";
+import { useAuthContext } from "./contexts/AuthContext";
 import { useApollo } from "./lib/apolloClient";
-import Root from "./pages/Root";
 function App() {
   const { checkAuth } = useAuthContext();
   useEffect(() => {
@@ -15,9 +16,9 @@ function App() {
   const apolloClient = useApollo();
   return (
     <ApolloProvider client={apolloClient}>
-      <AuthContextProvider>
-        <Root />
-      </AuthContextProvider>
+      <ThemeProvider>
+        <Router />
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
