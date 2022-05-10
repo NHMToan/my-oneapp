@@ -20,5 +20,5 @@
     "noUnusedLocals": true,
     "rootDir": "src"
   },
-  "include": ["src"]
+  "include": ["src", "config-overrides.js"]
 }

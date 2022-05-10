@@ -1,26 +1,38 @@
-import ScrollToTop from "components/ScrollToTop";
-import AuthContextProvider from "contexts/AuthContext";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { SettingsProvider } from "contexts/SettingsContext";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
-import { Provider } from "react-redux";
+import { Provider as ReduxProvider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/lib/integration/react";
 import App from "./App";
-import { store } from "./app/store";
+import { CollapseDrawerProvider } from "./contexts/CollapseDrawerContext";
+import { AuthProvider } from "./contexts/JWTContext";
+import { persistor, store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
+
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
-  <AuthContextProvider>
+  <AuthProvider>
     <HelmetProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <ScrollToTop />
-          <App />
-        </BrowserRouter>
-      </Provider>
+      <ReduxProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <SettingsProvider>
+              <CollapseDrawerProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </CollapseDrawerProvider>
+            </SettingsProvider>
+          </LocalizationProvider>
+        </PersistGate>
+      </ReduxProvider>
     </HelmetProvider>
-  </AuthContextProvider>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

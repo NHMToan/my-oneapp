@@ -1,33 +1,82 @@
+import { PATH_AFTER_LOGIN } from "config";
+import AuthGuard from "guards/AuthGuard";
+import GuestGuard from "guards/GuestGuard";
 import LogoOnlyLayout from "layouts/LogoOnlyLayout";
 import DashBoard from "pages/Dashboard";
-import Login from "pages/Login";
-import NotFound from "pages/Page404";
-import Register from "pages/Register";
-import { Navigate, Outlet, useRoutes } from "react-router-dom";
-import RequireAuth from "./Authentication/RequireAuth";
+import { lazy, Suspense } from "react";
+import { Navigate, useLocation, useRoutes } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
+
+const Loadable = (Component) => (props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { pathname } = useLocation();
+
+  return (
+    <Suspense
+      fallback={<LoadingScreen isDashboard={pathname.includes("/dashboard")} />}
+    >
+      <Component {...props} />
+    </Suspense>
+  );
+};
 
 export default function Router() {
   return useRoutes([
     {
-      path: "/",
+      path: "auth",
+      element: <LogoOnlyLayout />,
+      children: [
+        {
+          path: "login",
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
+        },
+        {
+          path: "register",
+          element: (
+            <GuestGuard>
+              <Register />
+            </GuestGuard>
+          ),
+        },
+        { path: "login-unprotected", element: <Login /> },
+        { path: "register-unprotected", element: <Register /> },
+      ],
+    },
+    {
+      path: "dashboard",
       element: (
-        <RequireAuth>
-          <Outlet />
-        </RequireAuth>
+        <AuthGuard>
+          <LogoOnlyLayout />
+        </AuthGuard>
       ),
-      children: [{ path: "dashboard", element: <DashBoard /> }],
+      children: [
+        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        { path: "app", element: <DashBoard /> },
+      ],
+    },
+    {
+      path: "*",
+      element: <LogoOnlyLayout />,
+      children: [
+        { path: "404", element: <Page404 /> },
+        { path: "*", element: <Navigate to="/404" replace /> },
+      ],
     },
     {
       path: "/",
-      element: <LogoOnlyLayout />,
       children: [
-        { path: "/", element: <Navigate to="/dashboard" /> },
-        { path: "login", element: <Login /> },
-        { path: "register", element: <Register /> },
-        { path: "404", element: <NotFound /> },
-        { path: "*", element: <Navigate to="/404" /> },
+        { element: <Navigate to="/dashboard/app" replace />, index: true },
       ],
     },
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 }
+
+const Login = Loadable(lazy(() => import("../pages/auth/Login")));
+const Register = Loadable(lazy(() => import("../pages/auth/Register")));
+
+const Page404 = Loadable(lazy(() => import("../pages/Page404")));

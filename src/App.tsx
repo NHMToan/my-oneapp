@@ -1,4 +1,7 @@
 import { ApolloProvider } from "@apollo/client";
+import { MotionLazyContainer } from "components/animate";
+import ScrollToTop from "components/ScrollToTop";
+import ThemeSettings from "components/settings";
 import { useEffect } from "react";
 import Router from "Router";
 import ThemeProvider from "theme";
@@ -16,9 +19,14 @@ function App() {
   const apolloClient = useApollo();
   return (
     <ApolloProvider client={apolloClient}>
-      <ThemeProvider>
-        <Router />
-      </ThemeProvider>
+      <MotionLazyContainer>
+        <ThemeProvider>
+          <ThemeSettings>
+            <ScrollToTop />
+            <Router />
+          </ThemeSettings>
+        </ThemeProvider>
+      </MotionLazyContainer>
     </ApolloProvider>
   );
 }

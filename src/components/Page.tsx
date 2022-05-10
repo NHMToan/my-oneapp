@@ -14,7 +14,7 @@ const Page: FC<PageProps> = forwardRef(
   ({ children, title = "", meta, ...other }, ref) => (
     <>
       <Helmet>
-        <title>{`${title} | Minimal-UI`}</title>
+        <title>{`${title} | Oneapp`}</title>
         {meta}
       </Helmet>
 
