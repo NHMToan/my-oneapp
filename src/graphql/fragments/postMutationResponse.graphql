@@ -1,9 +1,0 @@
-fragment postMutationResponse on PostMutationResponse {
-  ...postMutationStatuses
-  post {
-    ...postWithUserInfo
-  }
-  errors {
-    ...fieldError
-  }
-}

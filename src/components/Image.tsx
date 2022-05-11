@@ -1,12 +1,14 @@
 // @mui
-import { Box, BoxProps, SxProps } from "@mui/material";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Box, SxProps } from "@mui/material";
+import {
+  LazyLoadImage,
+  LazyLoadImageProps
+} from "react-lazy-load-image-component";
 
 // ----------------------------------------------------------------------
 
-interface ImageProps extends BoxProps {
+interface ImageProps extends LazyLoadImageProps {
   disabledEffect?: boolean;
-  effect?: string;
   ratio?:
     | "4/3"
     | "3/4"

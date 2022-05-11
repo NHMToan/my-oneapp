@@ -18,7 +18,7 @@ export default function useLocales() {
 
   return {
     onChangeLang: handleChangeLanguage,
-    translate: (text, options) => translate(text, options),
+    translate: (text, options?) => translate(text, options),
     currentLang,
     allLangs,
   };

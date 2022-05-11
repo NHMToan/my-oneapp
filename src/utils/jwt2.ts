@@ -1,5 +1,4 @@
 import jwtDecode from "jwt-decode";
-import { PATH_AUTH } from "Router/paths";
 
 // ----------------------------------------------------------------------
 
@@ -25,17 +24,10 @@ const handleTokenExpired = (exp) => {
 
   clearTimeout(expiredTimer);
 
-  expiredTimer = setTimeout(() => {
-    // eslint-disable-next-line no-alert
-    alert("Token expired");
-
-    localStorage.removeItem("accessToken");
-
-    window.location.href = PATH_AUTH.login;
-  }, timeLeft);
+  expiredTimer = setTimeout(getRefreshToken, timeLeft);
 };
 
-const setSession = (accessToken) => {
+const setSession = (accessToken?) => {
   if (accessToken) {
     localStorage.setItem("accessToken", accessToken);
     //setToken
@@ -45,7 +37,31 @@ const setSession = (accessToken) => {
     handleTokenExpired(exp);
   } else {
     //Remove token
+    localStorage.removeItem("accessToken");
   }
 };
 
-export { isValidToken, setSession };
+const getRefreshToken = async () => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}refresh_token`,
+      {
+        credentials: "include",
+      }
+    );
+
+    const data = (await response.json()) as {
+      success: boolean;
+      accessToken: string;
+    };
+
+    localStorage.setItem("accessToken", data.accessToken);
+
+    return true;
+  } catch (error) {
+    console.log("UNAUTHENTICATED", error);
+    return false;
+  }
+};
+
+export { isValidToken, setSession, getRefreshToken };

@@ -4,5 +4,8 @@ mutation Login($loginInput: LoginInput!) {
     success
     message
     accessToken
+    user {
+      ...userInfo
+    }
   }
 }

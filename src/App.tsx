@@ -1,33 +1,21 @@
-import { ApolloProvider } from "@apollo/client";
 import { MotionLazyContainer } from "components/animate";
+import NotistackProvider from "components/NotistackProvider";
 import ScrollToTop from "components/ScrollToTop";
 import ThemeSettings from "components/settings";
-import { useEffect } from "react";
 import Router from "Router";
 import ThemeProvider from "theme";
-import { useAuthContext } from "./contexts/AuthContext";
-import { useApollo } from "./lib/apolloClient";
 function App() {
-  const { checkAuth } = useAuthContext();
-  useEffect(() => {
-    const authenticate = async () => {
-      await checkAuth();
-    };
-
-    authenticate();
-  }, [checkAuth]);
-  const apolloClient = useApollo();
   return (
-    <ApolloProvider client={apolloClient}>
-      <MotionLazyContainer>
-        <ThemeProvider>
-          <ThemeSettings>
+    <MotionLazyContainer>
+      <ThemeProvider>
+        <ThemeSettings>
+          <NotistackProvider>
             <ScrollToTop />
             <Router />
-          </ThemeSettings>
-        </ThemeProvider>
-      </MotionLazyContainer>
-    </ApolloProvider>
+          </NotistackProvider>
+        </ThemeSettings>
+      </ThemeProvider>
+    </MotionLazyContainer>
   );
 }
 

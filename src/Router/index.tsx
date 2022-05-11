@@ -1,6 +1,7 @@
 import { PATH_AFTER_LOGIN } from "config";
 import AuthGuard from "guards/AuthGuard";
 import GuestGuard from "guards/GuestGuard";
+import DashboardLayout from "layouts/dashboard";
 import LogoOnlyLayout from "layouts/LogoOnlyLayout";
 import DashBoard from "pages/Dashboard";
 import { lazy, Suspense } from "react";
@@ -50,7 +51,7 @@ export default function Router() {
       path: "dashboard",
       element: (
         <AuthGuard>
-          <LogoOnlyLayout />
+          <DashboardLayout />
         </AuthGuard>
       ),
       children: [

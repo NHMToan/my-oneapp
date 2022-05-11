@@ -1,3 +1,4 @@
+import { ApolloProvider } from "@apollo/client";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { SettingsProvider } from "contexts/SettingsContext";
@@ -9,30 +10,32 @@ import { PersistGate } from "redux-persist/lib/integration/react";
 import App from "./App";
 import { CollapseDrawerProvider } from "./contexts/CollapseDrawerContext";
 import { AuthProvider } from "./contexts/JWTContext";
+import apolloClient from "./lib/apolloClient";
 import { persistor, store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
-
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
-  <AuthProvider>
-    <HelmetProvider>
-      <ReduxProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <SettingsProvider>
-              <CollapseDrawerProvider>
-                <BrowserRouter>
-                  <App />
-                </BrowserRouter>
-              </CollapseDrawerProvider>
-            </SettingsProvider>
-          </LocalizationProvider>
-        </PersistGate>
-      </ReduxProvider>
-    </HelmetProvider>
-  </AuthProvider>
+  <ApolloProvider client={apolloClient}>
+    <AuthProvider>
+      <HelmetProvider>
+        <ReduxProvider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <SettingsProvider>
+                <CollapseDrawerProvider>
+                  <BrowserRouter>
+                    <App />
+                  </BrowserRouter>
+                </CollapseDrawerProvider>
+              </SettingsProvider>
+            </LocalizationProvider>
+          </PersistGate>
+        </ReduxProvider>
+      </HelmetProvider>
+    </AuthProvider>
+  </ApolloProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

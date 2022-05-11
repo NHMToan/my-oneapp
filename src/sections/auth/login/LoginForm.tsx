@@ -1,25 +1,21 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
-// material
-import {
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-  Link,
-  Stack,
-  TextField,
-} from "@mui/material";
-import { Form, FormikProvider, useFormik } from "formik";
+import { Alert, IconButton, InputAdornment, Link, Stack } from "@mui/material";
+import { FormProvider, RHFCheckbox, RHFTextField } from "components/hook-form";
+import Iconify from "components/Iconify";
+import useAuth from "hooks/useAuth";
+import useIsMountedRef from "hooks/useIsMountedRef";
 import { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link as RouterLink } from "react-router-dom";
+import { PATH_AUTH } from "Router/paths";
 import * as Yup from "yup";
-// component
-import Iconify from "../../../components/IconBox";
-
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const isMountedRef = useIsMountedRef();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,97 +26,91 @@ export default function LoginForm() {
     password: Yup.string().required("Password is required"),
   });
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-      remember: true,
-    },
-    validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate("/dashboard", { replace: true });
-    },
+  const defaultValues: any = {
+    email: "toan.nguyen@servicenode.se",
+    password: "demo",
+    remember: true,
+    afterSubmit: "",
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(LoginSchema),
+    defaultValues,
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-    formik;
+  const {
+    reset,
+    setError,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = methods;
 
-  const handleShowPassword = () => {
-    setShowPassword((show) => !show);
+  const onSubmit = async (data: any) => {
+    try {
+      await login(data.email, data.password);
+    } catch (error) {
+      reset();
+      if (isMountedRef.current) {
+        setError("afterSubmit", { ...error, message: error });
+      }
+    }
   };
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <TextField
-            fullWidth
-            autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps("email")}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
-          />
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={3}>
+        {!!errors.afterSubmit && (
+          <Alert severity="error">{errors.afterSubmit.message}</Alert>
+        )}
 
-          <TextField
-            fullWidth
-            autoComplete="current-password"
-            type={showPassword ? "text" : "password"}
-            label="Password"
-            {...getFieldProps("password")}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
-                    <Iconify
-                      icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
-                    />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
-          />
-        </Stack>
+        <RHFTextField name="email" label="Email address" />
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ my: 2 }}
+        <RHFTextField
+          name="password"
+          label="Password"
+          type={showPassword ? "text" : "password"}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  <Iconify
+                    icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
+                  />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Stack>
+
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ my: 2 }}
+      >
+        <RHFCheckbox name="remember" label="Remember me" />
+        <Link
+          component={RouterLink}
+          variant="subtitle2"
+          to={PATH_AUTH.resetPassword}
         >
-          <FormControlLabel
-            control={
-              <Checkbox
-                {...getFieldProps("remember")}
-                checked={values.remember}
-              />
-            }
-            label="Remember me"
-          />
+          Forgot password?
+        </Link>
+      </Stack>
 
-          <Link
-            component={RouterLink}
-            variant="subtitle2"
-            to="#"
-            underline="hover"
-          >
-            Forgot password?
-          </Link>
-        </Stack>
-
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-        >
-          Login
-        </LoadingButton>
-      </Form>
-    </FormikProvider>
+      <LoadingButton
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+        loading={isSubmitting}
+      >
+        Login
+      </LoadingButton>
+    </FormProvider>
   );
 }

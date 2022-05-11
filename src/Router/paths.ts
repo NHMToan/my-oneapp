@@ -21,4 +21,9 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, "/app"),
   },
+  user: {
+    account: path(ROOTS_DASHBOARD, "/user/account"),
+    edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
+    profile: path(ROOTS_DASHBOARD, "/user/profile"),
+  },
 };

@@ -1,19 +1,8 @@
-import {
-  Alert,
-  Box,
-  Card,
-  Container,
-  Link,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Card, Container, Link, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { capitalCase } from "change-case";
 import Image from "components/Image";
 import Logo from "components/Logo";
 import Page from "components/Page";
-import useAuth from "hooks/useAuth";
 import useResponsive from "hooks/useResponsive";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_AUTH } from "Router/paths";
@@ -65,8 +54,6 @@ const ContentStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
-  const { method } = useAuth();
-
   const smUp = useResponsive("up", "sm");
 
   const mdUp = useResponsive("up", "md");
@@ -116,21 +103,21 @@ export default function Login() {
                 </Typography>
               </Box>
 
-              <Tooltip title={capitalCase(method)} placement="right">
+              {/* <Tooltip title={capitalCase(method)} placement="right">
                 <>
                   <Image
                     disabledEffect
-                    src={`https://minimal-assets-api-dev.vercel.app/assets/icons/auth/ic_${method}.png`}
+                    src={"/static/illustrations/illustration_login.png"}
                     sx={{ width: 32, height: 32 }}
                   />
                 </>
-              </Tooltip>
+              </Tooltip> */}
             </Stack>
 
-            <Alert severity="info" sx={{ mb: 3 }}>
+            {/* <Alert severity="info" sx={{ mb: 3 }}>
               Use email : <strong>demo@minimals.cc</strong> / password :
               <strong> demo1234</strong>
-            </Alert>
+            </Alert> */}
 
             <AuthSocial />
 

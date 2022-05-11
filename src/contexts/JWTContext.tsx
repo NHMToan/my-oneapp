@@ -1,7 +1,12 @@
-import PropTypes from "prop-types";
-import { createContext, useEffect, useReducer } from "react";
+import {
+  useLoginMutation,
+  useLogoutMutation,
+  useMeLazyQuery,
+  useRegisterMutation,
+} from "generated/graphql";
+import { createContext, ReactNode, useEffect, useReducer } from "react";
 // utils
-import { isValidToken, setSession } from "../utils/jwt2";
+import { getRefreshToken, isValidToken, setSession } from "../utils/jwt2";
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +24,14 @@ const handlers = {
       isAuthenticated,
       isInitialized: true,
       user,
+    };
+  },
+  REFRESH_TOKEN: (state, action) => {
+    const { isAuthenticated } = action.payload;
+    return {
+      ...state,
+      isAuthenticated,
+      isInitialized: true,
     };
   },
   LOGIN: (state, action) => {
@@ -49,7 +62,21 @@ const handlers = {
 const reducer = (state, action) =>
   handlers[action.type] ? handlers[action.type](state, action) : state;
 
-const AuthContext = createContext({
+interface IAuthContext {
+  isAuthenticated: boolean;
+  isInitialized: boolean;
+  user: any;
+  method: string;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => Promise<void>;
+}
+const AuthContext = createContext<IAuthContext>({
   ...initialState,
   method: "jwt",
   login: () => Promise.resolve(),
@@ -59,12 +86,16 @@ const AuthContext = createContext({
 
 // ----------------------------------------------------------------------
 
-AuthProvider.propTypes = {
-  children: PropTypes.node,
-};
-
-function AuthProvider({ children }) {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [onLogin] = useLoginMutation();
+  const [getUser] = useMeLazyQuery();
+  const [onRegister] = useRegisterMutation();
+  const [logoutServer] = useLogoutMutation();
 
   useEffect(() => {
     const initialize = async () => {
@@ -74,26 +105,38 @@ function AuthProvider({ children }) {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const user = { id: 1 };
+          const res = await getUser();
 
           dispatch({
             type: "INITIALIZE",
             payload: {
               isAuthenticated: true,
-              user,
+              user: res.data.me,
             },
           });
         } else {
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
+          const success = await getRefreshToken();
+          if (success) {
+            const res = await getUser();
+            dispatch({
+              type: "INITIALIZE",
+              payload: {
+                isAuthenticated: true,
+                user: res.data.me,
+              },
+            });
+          } else {
+            dispatch({
+              type: "INITIALIZE",
+              payload: {
+                isAuthenticated: false,
+                user: null,
+              },
+            });
+          }
         }
       } catch (err) {
-        console.error(err);
+        console.log("Authen 3", err);
         dispatch({
           type: "INITIALIZE",
           payload: {
@@ -108,33 +151,56 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const accessToken = "";
-    const user = { id: 1 };
-    setSession(accessToken);
-
-    dispatch({
-      type: "LOGIN",
-      payload: {
-        user,
-      },
+    const response = await onLogin({
+      variables: { loginInput: { email, password } },
     });
+
+    if (response.data?.login.success) {
+      const {
+        login: { accessToken, user },
+      } = response.data;
+
+      setSession(accessToken);
+
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          user,
+        },
+      });
+    } else {
+      if (response.data?.login.message) throw response.data.login.message;
+    }
   };
 
   const register = async (email, password, firstName, lastName) => {
-    const accessToken = "";
-    const user = { id: 1 };
-    localStorage.setItem("accessToken", accessToken);
-
-    dispatch({
-      type: "REGISTER",
-      payload: {
-        user,
-      },
+    const response = await onRegister({
+      variables: { registerInput: { email, password, firstName, lastName } },
     });
+
+    if (response.data?.register.success) {
+      const {
+        register: { accessToken, user },
+      } = response.data;
+
+      localStorage.setItem("accessToken", accessToken);
+
+      dispatch({
+        type: "REGISTER",
+        payload: {
+          user,
+        },
+      });
+    } else {
+      if (response.data?.register.message) throw response.data.register.message;
+    }
   };
 
   const logout = async () => {
     setSession(null);
+    await logoutServer({
+      variables: { userId: state?.user?.id },
+    });
     dispatch({ type: "LOGOUT" });
   };
 
