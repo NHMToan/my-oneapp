@@ -5,6 +5,7 @@ import {
   useRegisterMutation,
 } from "generated/graphql";
 import { createContext, ReactNode, useEffect, useReducer } from "react";
+import { IUser } from "types/user";
 // utils
 import { getRefreshToken, isValidToken, setSession } from "../utils/jwt2";
 
@@ -65,7 +66,7 @@ const reducer = (state, action) =>
 interface IAuthContext {
   isAuthenticated: boolean;
   isInitialized: boolean;
-  user: any;
+  user: IUser;
   method: string;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;

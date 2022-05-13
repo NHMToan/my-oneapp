@@ -1,6 +1,7 @@
 import { Box, Link, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
+import { userName } from "consts";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
 // components
@@ -35,7 +36,7 @@ export default function NavbarAccount({ isCollapse }: INavbarAccount) {
       underline="none"
       color="inherit"
       component={RouterLink}
-      to={PATH_DASHBOARD.user.account}
+      to={PATH_DASHBOARD.user.profile}
     >
       <RootStyle
         sx={{
@@ -60,7 +61,7 @@ export default function NavbarAccount({ isCollapse }: INavbarAccount) {
           }}
         >
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {userName(user)}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: "text.secondary" }}>
             {user?.role}

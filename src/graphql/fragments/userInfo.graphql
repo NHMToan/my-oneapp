@@ -3,4 +3,6 @@ fragment userInfo on User {
   email
   lastName
   firstName
+  isPublic
+  role
 }

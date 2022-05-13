@@ -1,6 +1,7 @@
 import { Box, Divider, MenuItem, Stack, Typography } from "@mui/material";
 // @mui
 import { alpha } from "@mui/material/styles";
+import { userName } from "consts";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
@@ -104,7 +105,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {userName(user)}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
             {user?.email}

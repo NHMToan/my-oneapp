@@ -3,7 +3,6 @@ import AuthGuard from "guards/AuthGuard";
 import GuestGuard from "guards/GuestGuard";
 import DashboardLayout from "layouts/dashboard";
 import LogoOnlyLayout from "layouts/LogoOnlyLayout";
-import DashBoard from "pages/Dashboard";
 import { lazy, Suspense } from "react";
 import { Navigate, useLocation, useRoutes } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
@@ -57,6 +56,17 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: "app", element: <DashBoard /> },
+        {
+          path: "user",
+          children: [
+            {
+              element: <Navigate to="/dashboard/user/profile" replace />,
+              index: true,
+            },
+            { path: "profile", element: <UserProfile /> },
+            { path: "account", element: <UserAccount /> },
+          ],
+        },
       ],
     },
     {
@@ -81,3 +91,8 @@ const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 const Register = Loadable(lazy(() => import("../pages/auth/Register")));
 
 const Page404 = Loadable(lazy(() => import("../pages/Page404")));
+
+const DashBoard = Loadable(lazy(() => import("../pages/Dashboard")));
+
+const UserAccount = Loadable(lazy(() => import("../pages/User/UserAccount")));
+const UserProfile = Loadable(lazy(() => import("../pages/User/UserProfile")));

@@ -10,7 +10,7 @@ import { UploadAvatar, UploadMultiFile, UploadSingleFile } from "../upload";
 
 // ----------------------------------------------------------------------
 
-interface RHFUploadAvatarProps extends UploadAvatarProps {
+interface RHFUploadAvatarProps extends Omit<UploadAvatarProps, "file"> {
   name?: string;
 }
 export function RHFUploadAvatar({ name, ...other }: RHFUploadAvatarProps) {

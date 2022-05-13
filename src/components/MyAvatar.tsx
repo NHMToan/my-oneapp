@@ -1,23 +1,25 @@
 // hooks
-import useAuth from '../hooks/useAuth';
+import useAuth from "../hooks/useAuth";
 // utils
-import createAvatar from '../utils/createAvatar';
+import createAvatar from "../utils/createAvatar";
 //
-import Avatar from './Avatar';
+import Avatar from "./Avatar";
 
 // ----------------------------------------------------------------------
 
 export default function MyAvatar({ ...other }) {
   const { user } = useAuth();
 
+  const userName =
+    user.profile?.displayName || `${user?.lastName} ${user?.firstName}`;
   return (
     <Avatar
-      src={user?.photoURL}
-      alt={user?.displayName}
-      color={user?.photoURL ? 'default' : createAvatar(user?.displayName).color}
+      src={user?.profile.avatar}
+      alt={user?.profile.displayName || "userAvatar"}
+      color={user?.profile?.avatar ? "default" : createAvatar(userName).color}
       {...other}
     >
-      {createAvatar(user?.displayName).name}
+      {createAvatar(userName).name}
     </Avatar>
   );
 }

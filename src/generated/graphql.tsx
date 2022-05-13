@@ -115,13 +115,45 @@ export type Posts = {
   totalCount: Scalars['Float'];
 };
 
+export type Profile = {
+  __typename?: 'Profile';
+  about?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  cover?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  facebookLink?: Maybe<Scalars['String']>;
+  follower: Scalars['Float'];
+  following: Scalars['Float'];
+  gender?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  instagramLink?: Maybe<Scalars['String']>;
+  linkedinLink?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']>;
+  portfolioLink?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+  school?: Maybe<Scalars['String']>;
+  twitterLink?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  getProfile?: Maybe<Profile>;
   hello: Scalars['String'];
   me?: Maybe<User>;
+  myProfile?: Maybe<Profile>;
   post?: Maybe<Post>;
   posts?: Maybe<Posts>;
   users: Array<User>;
+};
+
+
+export type QueryGetProfileArgs = {
+  uuid: Scalars['ID'];
 };
 
 
@@ -160,7 +192,10 @@ export type User = {
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['ID'];
+  isPublic: Scalars['Boolean'];
   lastName: Scalars['String'];
+  profile: Profile;
+  role: Scalars['String'];
 };
 
 export type UserMutationResponse = IMutationResponse & {
@@ -178,14 +213,14 @@ export type UserMutationStatusesFragment = { __typename?: 'UserMutationResponse'
 
 export type PostMutationStatusesFragment = { __typename?: 'PostMutationResponse', code: number, success: boolean, message?: string | null };
 
-export type UserInfoFragment = { __typename?: 'User', id: string, email: string, lastName: string, firstName: string };
+export type UserInfoFragment = { __typename?: 'User', id: string, email: string, lastName: string, firstName: string, isPublic: boolean, role: string };
 
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null, accessToken?: string | null, user?: { __typename?: 'User', id: string, email: string, lastName: string, firstName: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null, accessToken?: string | null, user?: { __typename?: 'User', id: string, email: string, lastName: string, firstName: string, isPublic: boolean, role: string } | null } };
 
 export type LogoutMutationVariables = Exact<{
   userId: Scalars['ID'];
@@ -199,12 +234,17 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null, accessToken?: string | null, user?: { __typename?: 'User', id: string, email: string, lastName: string, firstName: string } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null, accessToken?: string | null, user?: { __typename?: 'User', id: string, email: string, lastName: string, firstName: string, isPublic: boolean, role: string } | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, lastName: string, firstName: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, lastName: string, firstName: string, isPublic: boolean, role: string, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } } | null };
+
+export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyProfileQuery = { __typename?: 'Query', myProfile?: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, about?: string | null, phoneNumber?: string | null } | null };
 
 export const FieldErrorFragmentDoc = gql`
     fragment fieldError on FieldError {
@@ -232,6 +272,8 @@ export const UserInfoFragmentDoc = gql`
   email
   lastName
   firstName
+  isPublic
+  role
 }
     `;
 export const LoginDocument = gql`
@@ -350,6 +392,11 @@ export const MeDocument = gql`
     query Me {
   me {
     ...userInfo
+    profile {
+      id
+      avatar
+      displayName
+    }
   }
 }
     ${UserInfoFragmentDoc}`;
@@ -380,3 +427,56 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MyProfileDocument = gql`
+    query MyProfile {
+  myProfile {
+    id
+    avatar
+    displayName
+    cover
+    gender
+    country
+    role
+    company
+    position
+    email
+    facebookLink
+    instagramLink
+    linkedinLink
+    twitterLink
+    portfolioLink
+    school
+    follower
+    following
+    about
+    phoneNumber
+  }
+}
+    `;
+
+/**
+ * __useMyProfileQuery__
+ *
+ * To run a query within a React component, call `useMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyProfileQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, options);
+      }
+export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, options);
+        }
+export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
+export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
+export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;

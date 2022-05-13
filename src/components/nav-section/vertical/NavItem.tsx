@@ -44,7 +44,7 @@ interface ItemProps {
   caption: string;
   roles: string[];
 }
-interface NavItemRootProps {
+interface INavItemRoot {
   active?: boolean;
   open?: boolean;
   isCollapse?: boolean;
@@ -57,7 +57,7 @@ export function NavItemRoot({
   open = false,
   active,
   onOpen,
-}: NavItemRootProps) {
+}: INavItemRoot) {
   const { translate } = useLocales();
 
   const { title, path, icon, info, children, disabled, caption, roles } = item;

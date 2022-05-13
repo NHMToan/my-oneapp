@@ -1,20 +1,24 @@
 // @mui
-import { FormControlLabel, FormControlLabelProps, Switch } from '@mui/material';
+import { FormControlLabel, FormControlLabelProps, Switch } from "@mui/material";
 // form
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from "react-hook-form";
 
 // ----------------------------------------------------------------------
 
-interface RHFSwitchProps extends FormControlLabelProps{
-  name?:string;
+interface RHFSwitchProps extends Omit<FormControlLabelProps, "control"> {
+  name?: string;
 }
-export default function RHFSwitch({ name, ...other }:RHFSwitchProps) {
+export default function RHFSwitch({ name, ...other }: RHFSwitchProps) {
   const { control } = useFormContext();
 
   return (
     <FormControlLabel
       control={
-        <Controller name={name} control={control} render={({ field }) => <Switch {...field} checked={field.value} />} />
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => <Switch {...field} checked={field.value} />}
+        />
       }
       {...other}
     />
