@@ -5,4 +5,9 @@ fragment userInfo on User {
   firstName
   isPublic
   role
+  avatar
+  displayName
+  profile {
+    ...profileInfo
+  }
 }

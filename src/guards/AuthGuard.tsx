@@ -18,6 +18,10 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 
   const { pathname } = useLocation();
 
+  // useEffect(() => {
+  //   if (!isAuthenticated) logout();
+  // }, []);
+
   const [requestedLocation, setRequestedLocation] = useState(null);
 
   if (!isInitialized) {
@@ -28,6 +32,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);
     }
+    // logout();
     return <Login />;
   }
 

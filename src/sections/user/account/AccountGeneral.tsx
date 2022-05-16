@@ -8,9 +8,11 @@ import {
   RHFTextField,
   RHFUploadAvatar,
 } from "components/hook-form";
+import { AuthContext } from "contexts/JWTContext";
+import { useUpdateProfileMutation } from "generated/graphql";
 import useAuth from "hooks/useAuth";
 import { useSnackbar } from "notistack";
-import { useCallback } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IProfile } from "types/user";
 import { fData } from "utils/formatNumber";
@@ -23,8 +25,10 @@ interface IAccountGeneral {
 }
 export default function AccountGeneral({ profile }: IAccountGeneral) {
   const { enqueueSnackbar } = useSnackbar();
-
+  const [updateProfile, _] = useUpdateProfileMutation();
   const { user } = useAuth();
+  const { refreshUser } = useContext(AuthContext);
+  const [avatar, setAvatar] = useState<any>();
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required("Name is required"),
@@ -57,10 +61,24 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
 
   const onSubmit = async (values) => {
     try {
-      console.log(values);
+      const params = { ...values };
+      let newFileObject;
+      if (avatar) {
+        newFileObject = new File([avatar], avatar.name);
+      }
+      console.log(newFileObject);
+      delete params.isPublic;
+      delete params.avatar;
+      const res = await updateProfile({
+        variables: { updateProfileInput: params, avatarFile: newFileObject },
+      });
+      if (res.data?.updateProfile?.success) {
+        enqueueSnackbar("Update success!");
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar("Update success!");
+        refreshUser();
+      } else {
+        throw res.data.updateProfile.message;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -70,6 +88,7 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
     (acceptedFiles) => {
       const file = acceptedFiles[0];
 
+      setAvatar(acceptedFiles[0]);
       if (file) {
         setValue(
           "avatar",

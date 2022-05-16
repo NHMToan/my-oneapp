@@ -20,7 +20,7 @@ interface IProfileAbout {
   profile: any;
 }
 export default function ProfileAbout({ profile }: IProfileAbout) {
-  const { about, country, email, role, company, school } = profile;
+  const { about, country, role, company, school } = profile;
 
   return (
     <Card>
@@ -37,11 +37,6 @@ export default function ProfileAbout({ profile }: IProfileAbout) {
               {country}
             </Link>
           </Typography>
-        </Stack>
-
-        <Stack direction="row">
-          <IconStyle icon={"eva:email-fill"} />
-          <Typography variant="body2">{email}</Typography>
         </Stack>
 
         <Stack direction="row">

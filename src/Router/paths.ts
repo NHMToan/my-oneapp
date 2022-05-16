@@ -26,4 +26,15 @@ export const PATH_DASHBOARD = {
     edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
     profile: path(ROOTS_DASHBOARD, "/user/profile"),
   },
+  blog: {
+    root: path(ROOTS_DASHBOARD, "/blog"),
+    posts: path(ROOTS_DASHBOARD, "/blog/posts"),
+    new: path(ROOTS_DASHBOARD, "/blog/new"),
+    view: (title) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
+    edit: (id) => path(ROOTS_DASHBOARD, `/blog/post/${id}/edit`),
+    demoView: path(
+      ROOTS_DASHBOARD,
+      "/blog/post/apply-these-7-secret-techniques-to-improve-event"
+    ),
+  },
 };

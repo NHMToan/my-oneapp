@@ -14,6 +14,7 @@ const getIcon = (name) => (
 
 const ICONS = {
   dashboard: getIcon("ic_dashboard"),
+  blog: getIcon("ic_blog"),
 };
 
 const navConfig = [
@@ -22,7 +23,16 @@ const navConfig = [
   {
     subheader: "general",
     items: [
-      { title: "app", path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
+      {
+        title: "home",
+        path: PATH_DASHBOARD.general.app,
+        icon: ICONS.dashboard,
+      },
+      {
+        title: "blog",
+        path: PATH_DASHBOARD.blog.posts,
+        icon: ICONS.blog,
+      },
     ],
   },
 ];

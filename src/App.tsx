@@ -4,6 +4,7 @@ import ScrollToTop from "components/ScrollToTop";
 import ThemeSettings from "components/settings";
 import Router from "Router";
 import ThemeProvider from "theme";
+
 function App() {
   return (
     <MotionLazyContainer>

@@ -1,10 +1,5 @@
 query Me {
   me {
     ...userInfo
-    profile {
-      id
-      avatar
-      displayName
-    }
   }
 }

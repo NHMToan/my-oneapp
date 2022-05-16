@@ -15,7 +15,7 @@ import useTabs from "../../hooks/useTabs";
 // ----------------------------------------------------------------------
 
 export default function UserAccount() {
-  const { loading, data } = useMyProfileQuery();
+  const { loading, data } = useMyProfileQuery({ fetchPolicy: "no-cache" });
 
   const { themeStretch } = useSettings();
 

@@ -1,0 +1,22 @@
+fragment profileInfo on Profile {
+  id
+  avatar
+  displayName
+  cover
+  gender
+  country
+  role
+  company
+  position
+  email
+  facebookLink
+  instagramLink
+  linkedinLink
+  twitterLink
+  portfolioLink
+  school
+  follower
+  following
+  about
+  phoneNumber
+}

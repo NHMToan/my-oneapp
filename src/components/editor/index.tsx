@@ -2,7 +2,7 @@ import { Box, SxProps } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
 import { ReactNode } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { ReactQuillProps } from "react-quill";
 //
 import EditorToolbar, {
   formats,
@@ -11,8 +11,10 @@ import EditorToolbar, {
 } from "./EditorToolbar";
 
 // ----------------------------------------------------------------------
-
-const RootStyle = styled(Box)(({ theme }) => ({
+interface RootStyleProps {
+  children?: ReactNode;
+}
+const RootStyle = styled(Box)<RootStyleProps>(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   border: `solid 1px ${theme.palette.grey[500_32]}`,
   "& .ql-container.ql-snow": {
@@ -38,14 +40,11 @@ const RootStyle = styled(Box)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export interface EditorProps {
-  id: string;
-  value: string;
+export interface EditorProps extends ReactQuillProps {
   error?: boolean;
   helperText?: ReactNode;
   simple?: boolean;
   sx?: SxProps;
-  onChange: any;
 }
 export default function Editor({
   id = "minimal-quill",
@@ -70,7 +69,7 @@ export default function Editor({
       maxStack: 100,
       userOnly: true,
     },
-    syntax: true,
+    syntax: false,
     clipboard: {
       matchVisual: false,
     },

@@ -32,7 +32,7 @@ export default function Logo({
         width="160%"
         height="100%"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="130.16875000000002 -10.299999999999997 343.66249999999997 170.6"
+        viewBox="120.16875000000002 -10.299999999999997 343.66249999999997 170.6"
       >
         <defs>
           <linearGradient

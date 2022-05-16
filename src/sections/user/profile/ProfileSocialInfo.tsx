@@ -16,13 +16,18 @@ const IconStyle = styled(Iconify)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
-interface IProfileSocialInfo{
-  profile:any;
+interface IProfileSocialInfo {
+  profile: any;
 }
 
-export default function ProfileSocialInfo({ profile }:IProfileSocialInfo) {
-  const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
+export default function ProfileSocialInfo({ profile }: IProfileSocialInfo) {
+  const {
+    facebookLink,
+    instagramLink,
+    linkedinLink,
+    twitterLink,
+    portfolioLink,
+  } = profile;
 
   const SOCIALS = [
     {
@@ -45,20 +50,37 @@ export default function ProfileSocialInfo({ profile }:IProfileSocialInfo) {
       icon: <IconStyle icon={"eva:facebook-fill"} color="#1877F2" />,
       href: facebookLink,
     },
+    {
+      name: "Portfolio",
+      icon: <IconStyle icon={"bxs:user-rectangle"} color="#1C9CEA" />,
+      href: portfolioLink,
+    },
   ];
 
   return (
     <Card>
       <CardHeader title="Social" />
       <Stack spacing={2} sx={{ p: 3 }}>
-        {SOCIALS.map((link) => link.href && (
-          <Stack key={link.name} direction="row" alignItems="center">
-            {link.icon}
-            <Link component="span" variant="body2" color="text.primary" noWrap>
-              {link.href}
-            </Link>
-          </Stack>
-        ))}
+        {SOCIALS.map(
+          (link) =>
+            link.href && (
+              <Stack key={link.name} direction="row" alignItems="center">
+                {link.icon}
+                <Link
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
+                  noWrap
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <a href={link.href} target="_blank" rel="noopener noreferrer">
+                    {link.href}
+                  </a>
+                </Link>
+              </Stack>
+            )
+        )}
       </Stack>
     </Card>
   );

@@ -40,8 +40,10 @@ export function RHFUploadAvatar({ name, ...other }: RHFUploadAvatarProps) {
 
 // ----------------------------------------------------------------------
 
-interface RHFUploadSingleFileProps extends UploadSingleFileProps {
+interface RHFUploadSingleFileProps
+  extends Omit<UploadSingleFileProps, "accept"> {
   name?: string;
+  accept?: any;
 }
 export function RHFUploadSingleFile({
   name,

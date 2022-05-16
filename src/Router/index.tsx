@@ -44,6 +44,8 @@ export default function Router() {
         },
         { path: "login-unprotected", element: <Login /> },
         { path: "register-unprotected", element: <Register /> },
+        { path: "reset-password", element: <ResetPassword /> },
+        { path: "new-password", element: <NewPassword /> },
       ],
     },
     {
@@ -65,6 +67,19 @@ export default function Router() {
             },
             { path: "profile", element: <UserProfile /> },
             { path: "account", element: <UserAccount /> },
+          ],
+        },
+        {
+          path: "blog",
+          children: [
+            {
+              element: <Navigate to="/dashboard/blog/posts" replace />,
+              index: true,
+            },
+            { path: "posts", element: <BlogPosts /> },
+            { path: "post/:id", element: <BlogPost /> },
+            { path: "new", element: <BlogNewPost /> },
+            { path: "post/:id/edit", element: <BlogNewPost /> },
           ],
         },
       ],
@@ -89,10 +104,19 @@ export default function Router() {
 
 const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 const Register = Loadable(lazy(() => import("../pages/auth/Register")));
+const ResetPassword = Loadable(
+  lazy(() => import("../pages/auth/ResetPassword"))
+);
+const NewPassword = Loadable(lazy(() => import("../pages/auth/NewPassword")));
 
 const Page404 = Loadable(lazy(() => import("../pages/Page404")));
 
 const DashBoard = Loadable(lazy(() => import("../pages/Dashboard")));
 
+// USER
 const UserAccount = Loadable(lazy(() => import("../pages/User/UserAccount")));
 const UserProfile = Loadable(lazy(() => import("../pages/User/UserProfile")));
+// BLOG
+const BlogPosts = Loadable(lazy(() => import("../pages/Blogs/BlogsList")));
+const BlogPost = Loadable(lazy(() => import("../pages/Blogs/BlogPost")));
+const BlogNewPost = Loadable(lazy(() => import("../pages/Blogs/BlogForm")));

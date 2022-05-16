@@ -35,6 +35,14 @@ const handlers = {
       isInitialized: true,
     };
   },
+  REFRESH_USER: (state, action) => {
+    const { user } = action.payload;
+
+    return {
+      ...state,
+      user,
+    };
+  },
   LOGIN: (state, action) => {
     const { user } = action.payload;
 
@@ -70,6 +78,7 @@ interface IAuthContext {
   method: string;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   register: (
     email: string,
     password: string,
@@ -83,6 +92,7 @@ const AuthContext = createContext<IAuthContext>({
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  refreshUser: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -94,7 +104,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [onLogin] = useLoginMutation();
-  const [getUser] = useMeLazyQuery();
+  const [getUser] = useMeLazyQuery({ fetchPolicy: "no-cache" });
   const [onRegister] = useRegisterMutation();
   const [logoutServer] = useLogoutMutation();
 
@@ -137,7 +147,6 @@ function AuthProvider({ children }: AuthProviderProps) {
           }
         }
       } catch (err) {
-        console.log("Authen 3", err);
         dispatch({
           type: "INITIALIZE",
           payload: {
@@ -152,28 +161,40 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = async (email, password) => {
-    const response = await onLogin({
-      variables: { loginInput: { email, password } },
-    });
-
-    if (response.data?.login.success) {
-      const {
-        login: { accessToken, user },
-      } = response.data;
-
-      setSession(accessToken);
-
-      dispatch({
-        type: "LOGIN",
-        payload: {
-          user,
-        },
+    try {
+      const response = await onLogin({
+        variables: { loginInput: { email, password } },
       });
-    } else {
-      if (response.data?.login.message) throw response.data.login.message;
+      if (response?.data?.login.success) {
+        const {
+          login: { accessToken, user },
+        } = response.data;
+
+        localStorage.setItem("accessToken", accessToken);
+
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            user,
+          },
+        });
+      } else {
+        if (response?.data?.login.message) throw response.data.login.message;
+      }
+    } catch (e) {
+      throw e || "Server error!";
     }
   };
+  const refreshUser = async () => {
+    const res = await getUser();
 
+    dispatch({
+      type: "REFRESH_USER",
+      payload: {
+        user: res.data.me,
+      },
+    });
+  };
   const register = async (email, password, firstName, lastName) => {
     const response = await onRegister({
       variables: { registerInput: { email, password, firstName, lastName } },
@@ -213,6 +234,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         login,
         logout,
         register,
+        refreshUser,
       }}
     >
       {children}

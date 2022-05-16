@@ -46,7 +46,7 @@ interface IProfileCover {
 export default function ProfileCover({ myProfile }: IProfileCover) {
   const { user } = useAuth();
 
-  const { position, cover } = myProfile;
+  const { role, cover } = myProfile;
 
   return (
     <RootStyle>
@@ -70,7 +70,7 @@ export default function ProfileCover({ myProfile }: IProfileCover) {
           }}
         >
           <Typography variant="h4">{userName(user)}</Typography>
-          <Typography sx={{ opacity: 0.72 }}>{position}</Typography>
+          <Typography sx={{ opacity: 0.72 }}>{role}</Typography>
         </Box>
       </InfoStyle>
       <Image

@@ -37,7 +37,7 @@ const SimpleBarStyle = styled(SimpleBarReact)(({ theme }) => ({
 
 interface ScrollbarProps extends SimpleBarReact.Props {
   children: ReactNode;
-  sx: object;
+  sx?: object;
 }
 export default function Scrollbar({ children, sx, ...other }: ScrollbarProps) {
   const userAgent =

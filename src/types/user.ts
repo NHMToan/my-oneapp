@@ -22,11 +22,13 @@ export interface IProfile {
 }
 
 export interface IUser {
-  id: number;
+  id: string;
   email: string;
   firstName?: string;
   lastName: string;
   isPublic: boolean;
   role: string;
   profile: IProfile;
+  avatar: string;
+  displayName: string;
 }

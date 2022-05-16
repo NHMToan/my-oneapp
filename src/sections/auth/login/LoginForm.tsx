@@ -27,8 +27,8 @@ export default function LoginForm() {
   });
 
   const defaultValues: any = {
-    email: "toan.nguyen@servicenode.se",
-    password: "demo",
+    email: "nhmtoan1509@gmail.com",
+    password: "demo123",
     remember: true,
     afterSubmit: "",
   };
@@ -51,7 +51,7 @@ export default function LoginForm() {
     } catch (error) {
       reset();
       if (isMountedRef.current) {
-        setError("afterSubmit", { ...error, message: error });
+        setError("afterSubmit", { ...error, message: error || "Server error" });
       }
     }
   };
@@ -60,7 +60,9 @@ export default function LoginForm() {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         {!!errors.afterSubmit && (
-          <Alert severity="error">{errors.afterSubmit.message}</Alert>
+          <Alert severity="error">
+            {errors.afterSubmit.message || "Error"}
+          </Alert>
         )}
 
         <RHFTextField name="email" label="Email address" />

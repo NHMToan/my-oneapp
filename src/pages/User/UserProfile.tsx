@@ -36,7 +36,7 @@ export default function UserProfile() {
   const { themeStretch } = useSettings();
 
   const { currentTab, onChangeTab } = useTabs("profile");
-  const { loading, data } = useMyProfileQuery();
+  const { loading, data } = useMyProfileQuery({ fetchPolicy: "no-cache" });
   if (loading) return <LoadingScreen />;
   if (!data) return <div>User error</div>;
 

@@ -1,0 +1,20 @@
+fragment postWithUserInfo on Post {
+  id
+  title
+  content
+  cover
+  description
+  tags
+  metaDescription
+  metaKeywords
+  metaTitle
+  publish
+  comments
+  createdAt
+  updatedAt
+  author {
+    id
+    displayName
+    avatar
+  }
+}

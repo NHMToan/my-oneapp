@@ -4,6 +4,7 @@ import { Card, InputAdornment, Stack } from "@mui/material";
 import { FormProvider, RHFTextField } from "components/hook-form";
 // components
 import Iconify from "components/Iconify";
+import { useUpdateProfileMutation } from "generated/graphql";
 import { useSnackbar } from "notistack";
 // form
 import { useForm } from "react-hook-form";
@@ -43,12 +44,13 @@ interface IAccountSocialLinks {
 }
 export default function AccountSocialLinks({ profile }: IAccountSocialLinks) {
   const { enqueueSnackbar } = useSnackbar();
-
+  const [updateProfile, _] = useUpdateProfileMutation();
   const defaultValues = {
     facebookLink: profile.facebookLink,
     instagramLink: profile.instagramLink,
     linkedinLink: profile.linkedinLink,
     twitterLink: profile.twitterLink,
+    portfolioLink: profile.portfolioLink,
   };
 
   const methods: any = useForm({
@@ -60,10 +62,16 @@ export default function AccountSocialLinks({ profile }: IAccountSocialLinks) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (values) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar("Update success!");
+      const res = await updateProfile({
+        variables: { updateProfileInput: values, avatarFile: null },
+      });
+      if (res.data?.updateProfile?.success) {
+        enqueueSnackbar("Update success!");
+      } else {
+        throw res.data.updateProfile.message;
+      }
     } catch (error) {
       console.error(error);
     }
