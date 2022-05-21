@@ -4,7 +4,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // components
-import Logo from "../../../components/Logo2";
+import Logo from "../../../components/Logo3";
 import { NavSectionVertical } from "../../../components/nav-section";
 import Scrollbar from "../../../components/Scrollbar";
 // config
@@ -88,7 +88,10 @@ export default function NavbarVertical({
           alignItems="center"
           justifyContent="space-between"
         >
-          <Logo size={80} />
+          <Logo
+            size={isCollapse ? 40 : 60}
+            compact={isCollapse ? true : false}
+          />
 
           {isDesktop && !isCollapse && (
             <CollapseButton

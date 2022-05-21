@@ -1,0 +1,14 @@
+query Comments($limit: Int, $offset: Int, $ordering: String, $postId: ID!) {
+  comments(
+    limit: $limit
+    offset: $offset
+    ordering: $ordering
+    postId: $postId
+  ) {
+    totalCount
+    hasMore
+    results {
+      ...commentInfo
+    }
+  }
+}

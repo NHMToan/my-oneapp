@@ -1,7 +1,7 @@
 import { Box, Card, Container, Link, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Image from "components/Image";
-import Logo from "components/Logo";
+import Logo from "components/Logo3";
 import Page from "components/Page";
 import useResponsive from "hooks/useResponsive";
 import { Link as RouterLink } from "react-router-dom";

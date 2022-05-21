@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { IconButton, SxProps } from "@mui/material";
 import { ReactNode, useState } from "react";
 import Iconify from "./Iconify";
 //
@@ -8,8 +8,9 @@ import MenuPopover from "./MenuPopover";
 
 interface DropdownMenuProps {
   actions: ReactNode;
+  sx?: SxProps;
 }
-export default function DropdownMenu({ actions }: DropdownMenuProps) {
+export default function DropdownMenu({ actions, sx }: DropdownMenuProps) {
   const [openMenu, setOpenMenuActions] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -21,7 +22,7 @@ export default function DropdownMenu({ actions }: DropdownMenuProps) {
   };
   return (
     <>
-      <IconButton onClick={handleOpenMenu}>
+      <IconButton onClick={handleOpenMenu} sx={sx}>
         <Iconify icon={"eva:more-vertical-fill"} width={20} height={20} />
       </IconButton>
 

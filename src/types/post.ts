@@ -11,7 +11,7 @@ export interface PostData {
   metaKeywords?: string[];
   metaTitle?: string;
   publish: boolean;
-  comments: boolean;
+  allowComments: boolean;
   author: IUser;
   createdAt: string;
   updatedAt?: string;

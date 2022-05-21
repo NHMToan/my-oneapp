@@ -1,0 +1,9 @@
+fragment commentMutationResponse on CommentMutationResponse {
+  ...commentMutationStatuses
+  comment {
+    ...commentWithUserInfo
+  }
+  errors {
+    ...fieldError
+  }
+}

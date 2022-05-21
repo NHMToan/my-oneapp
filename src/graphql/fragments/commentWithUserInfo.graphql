@@ -1,0 +1,10 @@
+fragment commentWithUserInfo on Comment {
+  id
+  content
+  createdAt
+  author {
+    id
+    displayName
+    avatar
+  }
+}

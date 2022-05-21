@@ -4,7 +4,6 @@ import {
   Container,
   Divider,
   MenuItem,
-  Pagination,
   Typography,
 } from "@mui/material";
 import { paramCase } from "change-case";
@@ -15,12 +14,14 @@ import Markdown from "components/Markdown";
 import Page from "components/Page";
 import { SkeletonPost } from "components/skeleton";
 import { AuthContext } from "contexts/JWTContext";
-import { usePostQuery } from "generated/graphql";
+import { usePostQuery, usePostsQuery } from "generated/graphql";
 import useSettings from "hooks/useSettings";
 import { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
-import { BlogPostCommentForm, BlogPostHero, BlogPostTags } from "../sections";
+import { PostData } from "types/post";
+import { BlogPostHero, BlogPostRecent, BlogPostTags } from "../sections";
+import BlogPostCommentList from "../sections/BlogPostCommentList";
 // ----------------------------------------------------------------------
 
 export default function BlogPost() {
@@ -28,8 +29,13 @@ export default function BlogPost() {
   const { user } = useContext(AuthContext);
   const { id: postID } = useParams();
   const navigate = useNavigate();
-  const { data, loading, error } = usePostQuery({
+  const { data, loading, error, refetch } = usePostQuery({
     variables: { id: postID },
+    fetchPolicy: "no-cache",
+  });
+
+  const { data: recentPosts } = usePostsQuery({
+    variables: { limit: 50, offset: 0 },
     fetchPolicy: "no-cache",
   });
   const onDeletePost = () => {};
@@ -56,35 +62,9 @@ export default function BlogPost() {
 
             <Box sx={{ my: 5 }}>
               <Divider />
-              <BlogPostTags post={post} />
+              <BlogPostTags post={post} refreshPost={refetch} />
             </Box>
-            {post.comments && (
-              <>
-                <Divider />
-                <Box sx={{ display: "flex", mb: 2 }}>
-                  <Typography variant="h4">Comments</Typography>
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ color: "text.disabled" }}
-                  >
-                    ({post.comments.length})
-                  </Typography>
-                </Box>
-
-                <Box
-                  sx={{
-                    mb: 5,
-                    mt: 3,
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Pagination count={8} color="primary" />
-                </Box>
-
-                <BlogPostCommentForm />
-              </>
-            )}
+            {post.allowComments && <BlogPostCommentList post={post} />}
           </Box>
         </Card>
       );
@@ -125,7 +105,9 @@ export default function BlogPost() {
           }
         />
         {renderContent()}
-        {/* <BlogPostRecent posts={recentPosts} /> */}
+        <BlogPostRecent
+          posts={(recentPosts?.posts?.results as PostData[]) || []}
+        />
       </Container>
     </Page>
   );

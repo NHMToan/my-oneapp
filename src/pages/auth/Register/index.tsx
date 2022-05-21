@@ -1,7 +1,7 @@
 import { Card, Container, Link, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
-import Logo from "components/Logo";
+import Logo from "components/Logo3";
 import Page from "components/Page";
 import useResponsive from "hooks/useResponsive";
 import { Link as RouterLink } from "react-router-dom";

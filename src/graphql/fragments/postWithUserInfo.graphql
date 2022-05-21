@@ -9,9 +9,10 @@ fragment postWithUserInfo on Post {
   metaKeywords
   metaTitle
   publish
-  comments
+  allowComments
   createdAt
   updatedAt
+  favorite
   author {
     id
     displayName

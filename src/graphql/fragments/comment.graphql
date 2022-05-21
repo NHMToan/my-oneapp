@@ -1,0 +1,20 @@
+fragment commentInfo on Comment {
+  id
+  content
+  createdAt
+  author {
+    id
+    displayName
+    avatar
+  }
+  replyComments {
+    id
+    content
+    createdAt
+    author {
+      id
+      displayName
+      avatar
+    }
+  }
+}

@@ -170,7 +170,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           login: { accessToken, user },
         } = response.data;
 
-        localStorage.setItem("accessToken", accessToken);
+        setSession(accessToken);
 
         dispatch({
           type: "LOGIN",

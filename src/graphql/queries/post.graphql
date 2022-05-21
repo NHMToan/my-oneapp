@@ -1,5 +1,13 @@
 query Post($id: ID!) {
   post(id: $id) {
+    comments {
+      ...commentInfo
+    }
     ...postWithUserInfo
+    favoritePerson {
+      id
+      avatar
+      displayName
+    }
   }
 }

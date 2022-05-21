@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import { IconButtonAnimate } from "../../../components/animate";
 import Iconify from "../../../components/Iconify";
 // components
-import Logo from "../../../components/Logo2";
+import Logo from "../../../components/Logo3";
 // config
 import { HEADER, NAVBAR } from "../../../config";
 // hooks
@@ -81,7 +81,9 @@ export default function DashboardHeader({
           px: { lg: 5 },
         }}
       >
-        {isDesktop && verticalLayout && <Logo sx={{ mr: 2.5 }} />}
+        {isDesktop && verticalLayout && (
+          <Logo sx={{ mr: 2.5 }} compact size={40} />
+        )}
 
         {!isDesktop && (
           <IconButtonAnimate

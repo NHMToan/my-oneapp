@@ -2,7 +2,7 @@
 import { styled } from "@mui/material/styles";
 import { Outlet } from "react-router-dom";
 // components
-import Logo from "../components/Logo2";
+import Logo from "../components/Logo3";
 
 // ----------------------------------------------------------------------
 

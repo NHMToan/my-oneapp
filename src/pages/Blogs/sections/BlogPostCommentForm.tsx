@@ -3,6 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import { Stack, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
+import { useCommentPostMutation } from "generated/graphql";
 // form
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -18,20 +19,22 @@ const RootStyles = styled("div")(({ theme }: { theme: any }) => ({
 }));
 
 // ----------------------------------------------------------------------
+interface BlogPostCommentFormProps {
+  post: any;
+  postSuccess?: () => void;
+}
+export default function BlogPostCommentForm({
+  post,
+  postSuccess,
+}: BlogPostCommentFormProps) {
+  const [onComment] = useCommentPostMutation();
 
-export default function BlogPostCommentForm() {
   const CommentSchema = Yup.object().shape({
-    comment: Yup.string().required("Comment is required"),
-    name: Yup.string().required("Name is required"),
-    email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
+    content: Yup.string().required("Comment is required"),
   });
 
   const defaultValues = {
-    comment: "",
-    name: "",
-    email: "",
+    content: "",
   };
 
   const methods = useForm({
@@ -45,10 +48,22 @@ export default function BlogPostCommentForm() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (values) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
+      const res = await onComment({
+        variables: {
+          commentInput: {
+            postId: post.id,
+            content: values.content,
+          },
+        },
+      });
+      if (res?.data?.commentPost?.code === 200) {
+        postSuccess();
+        reset();
+      } else {
+        throw res?.data?.commentPost?.message || "Server error";
+      }
     } catch (error) {
       console.error(error);
     }
@@ -62,12 +77,7 @@ export default function BlogPostCommentForm() {
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3} alignItems="flex-end">
-          <RHFTextField name="comment" label="Comment *" multiline rows={3} />
-
-          <RHFTextField name="name" label="Name *" />
-
-          <RHFTextField name="email" label="Email *" />
-
+          <RHFTextField name="content" label="Comment *" multiline rows={3} />
           <LoadingButton
             type="submit"
             variant="contained"

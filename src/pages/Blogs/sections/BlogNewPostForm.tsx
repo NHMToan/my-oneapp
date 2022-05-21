@@ -93,12 +93,12 @@ export default function BlogNewPostForm({
       description: currentPost?.description || "",
       content: currentPost?.content || "",
       coverFile: currentPost?.cover || "",
-      tags: currentPost?.tags || [""],
+      tags: currentPost?.tags || [],
       publish: currentPost?.publish || true,
-      comments: currentPost?.comments || true,
+      allowComments: currentPost?.allowComments || true,
       metaTitle: currentPost?.metaTitle || "",
       metaDescription: currentPost?.metaDescription || "",
-      metaKeywords: currentPost?.metaKeywords || [""],
+      metaKeywords: currentPost?.metaKeywords || [],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentPost]
@@ -245,7 +245,7 @@ export default function BlogNewPostForm({
                   />
 
                   <RHFSwitch
-                    name="comments"
+                    name="allowComments"
                     label="Enable comments"
                     labelPlacement="start"
                     sx={{ mx: 0, width: 1, justifyContent: "space-between" }}
