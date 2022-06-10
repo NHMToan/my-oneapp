@@ -1,0 +1,11 @@
+mutation AddFriend($profileId: ID!) {
+  addFriend(toId: $profileId) {
+    ...mutationStatuses
+  }
+}
+
+mutation DeleteFriendShip($profileId: ID!) {
+  deleteFriendShip(toId: $profileId) {
+    ...mutationStatuses
+  }
+}

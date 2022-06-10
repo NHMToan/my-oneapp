@@ -1,5 +1,5 @@
 export interface IProfile {
-  id: number;
+  id: string;
   displayName: string;
   avatar: string;
   cover: string;
@@ -17,8 +17,16 @@ export interface IProfile {
   school: string;
   follower: number;
   following: number;
+  friend: number;
   phoneNumber: string;
   about: string;
+  isFollowing?: boolean;
+  isFollower?: boolean;
+  isFriendRequest?: boolean;
+  isFriend?: boolean;
+  isFriendSending?: boolean;
+  status?: string;
+  lastActivity?: string;
 }
 
 export interface IUser {

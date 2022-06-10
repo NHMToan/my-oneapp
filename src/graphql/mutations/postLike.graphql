@@ -1,5 +1,0 @@
-mutation Like($postId: ID!) {
-  like(postId: $postId) {
-    ...mutationStatuses
-  }
-}

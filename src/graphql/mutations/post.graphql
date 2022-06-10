@@ -1,0 +1,41 @@
+mutation DeletePost($id: ID!) {
+  deletePost(id: $id) {
+    ...postMutationStatuses
+  }
+}
+
+mutation CreatePost($createPostInput: CreatePostInput!) {
+  createPost(createPostInput: $createPostInput) {
+    ...postMutationResponse
+  }
+}
+
+mutation UpdatePost($id: String!, $updatePostInput: UpdatePostInput!) {
+  updatePost(id: $id, updatePostInput: $updatePostInput) {
+    ...postMutationResponse
+  }
+}
+
+mutation Like($postId: ID!) {
+  like(postId: $postId) {
+    ...mutationStatuses
+  }
+}
+
+mutation CommentPost($commentInput: CommentInput!) {
+  commentPost(commentInput: $commentInput) {
+    ...commentMutationResponse
+  }
+}
+
+mutation DeleteComment($id: ID!) {
+  deleteComment(id: $id) {
+    ...commentMutationStatuses
+  }
+}
+
+mutation ReplyComment($replyCommentInput: ReplyCommentInput!) {
+  replyComment(replyCommentInput: $replyCommentInput) {
+    ...commentMutationResponse
+  }
+}

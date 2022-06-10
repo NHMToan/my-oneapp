@@ -24,7 +24,10 @@ export const PATH_DASHBOARD = {
   user: {
     account: path(ROOTS_DASHBOARD, "/user/account"),
     edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
-    profile: path(ROOTS_DASHBOARD, "/user/profile"),
+    profile: (uuid) => path(ROOTS_DASHBOARD, `/user/${uuid}/`),
+  },
+  peple: {
+    root: path(ROOTS_DASHBOARD, "/people"),
   },
   blog: {
     root: path(ROOTS_DASHBOARD, "/blog"),
@@ -36,5 +39,17 @@ export const PATH_DASHBOARD = {
       ROOTS_DASHBOARD,
       "/blog/post/apply-these-7-secret-techniques-to-improve-event"
     ),
+  },
+  club: {
+    root: path(ROOTS_DASHBOARD, "/club"),
+    new: path(ROOTS_DASHBOARD, "/club/new"),
+    view: (uuid) => path(ROOTS_DASHBOARD, `/club/${uuid}`),
+    event: (uuid) => path(ROOTS_DASHBOARD, `/club/${uuid}/event/`),
+    eventNew: (uuid) => path(ROOTS_DASHBOARD, `/club/${uuid}/event/create`),
+  },
+  chat: {
+    root: path(ROOTS_DASHBOARD, "/chat"),
+    new: path(ROOTS_DASHBOARD, "/chat/new"),
+    view: (uuid) => path(ROOTS_DASHBOARD, `/chat/${uuid}`),
   },
 };

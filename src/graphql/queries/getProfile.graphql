@@ -1,0 +1,5 @@
+query GetProfile($id: ID!) {
+  getProfile(id: $id) {
+    ...profileInfo
+  }
+}

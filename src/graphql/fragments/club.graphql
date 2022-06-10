@@ -1,0 +1,37 @@
+fragment clubMutationResponse on ClubMutationResponse {
+  ...mutationStatuses
+  club {
+    ...clubInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+fragment clubInfo on Club {
+  id
+  title
+  cover
+  description
+  publish
+  createdAt
+  updatedAt
+  admin {
+    ...profileInfo
+  }
+  isAdmin
+  isSubAdmin
+  isMember
+  isRequesting
+  memberCount
+}
+
+fragment clubMemberInfo on ClubMember {
+  id
+  profile {
+    ...profileInfo
+  }
+  status
+  role
+  createdAt
+  updatedAt
+}

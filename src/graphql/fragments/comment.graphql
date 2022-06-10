@@ -18,3 +18,23 @@ fragment commentInfo on Comment {
     }
   }
 }
+
+fragment commentMutationResponse on CommentMutationResponse {
+  ...commentMutationStatuses
+  comment {
+    ...commentWithUserInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+fragment commentWithUserInfo on Comment {
+  id
+  content
+  createdAt
+  author {
+    id
+    displayName
+    avatar
+  }
+}

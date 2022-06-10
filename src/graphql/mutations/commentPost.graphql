@@ -1,5 +1,0 @@
-mutation CommentPost($commentInput: CommentInput!) {
-  commentPost(commentInput: $commentInput) {
-    ...commentMutationResponse
-  }
-}

@@ -17,6 +17,11 @@ fragment profileInfo on Profile {
   school
   follower
   following
+  friend
   about
   phoneNumber
+  isFollowing
+  isFriend
+  isFriendRequest
+  isFriendSending
 }

@@ -10,8 +10,7 @@ import Avatar from "./Avatar";
 export default function MyAvatar({ ...other }) {
   const { user } = useAuth();
 
-  const userName =
-    user.profile?.displayName || `${user?.lastName} ${user?.firstName}`;
+  const userName = user.displayName || "";
   return (
     <Avatar
       src={user?.avatar}

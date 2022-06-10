@@ -1,11 +1,5 @@
-mutation UpdateProfile(
-  $updateProfileInput: UpdateProfileInput!
-  $avatarFile: Upload!
-) {
-  updateProfile(
-    updateProfileInput: $updateProfileInput
-    avatarFile: $avatarFile
-  ) {
+mutation UpdateProfile($updateProfileInput: UpdateProfileInput!) {
+  updateProfile(updateProfileInput: $updateProfileInput) {
     code
     success
     message

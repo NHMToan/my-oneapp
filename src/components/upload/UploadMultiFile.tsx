@@ -21,14 +21,14 @@ const DropZoneStyle = styled("div")(({ theme }: { theme: any }) => ({
 
 // ----------------------------------------------------------------------
 export interface UploadMultiFileProps extends DropzoneOptions {
-  files: any[];
+  files?: any[];
   error?: boolean;
   showPreview?: boolean;
   onUpload?: any;
   onRemove?: any;
   onRemoveAll?: any;
   helperText?: ReactNode;
-  sx: SxProps;
+  sx?: SxProps;
 }
 export default function UploadMultiFile({
   error,
@@ -69,7 +69,7 @@ export default function UploadMultiFile({
         <BlockContent />
       </DropZoneStyle>
 
-      {fileRejections.length > 0 && (
+      {fileRejections?.length > 0 && (
         <RejectionFiles fileRejections={fileRejections} />
       )}
 
@@ -79,7 +79,7 @@ export default function UploadMultiFile({
         onRemove={onRemove}
       />
 
-      {files.length > 0 && (
+      {files?.length > 0 && (
         <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
           <Button color="inherit" size="small" onClick={onRemoveAll}>
             Remove all

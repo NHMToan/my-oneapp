@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Box,
   Card,
   CardContent,
   Link,
@@ -15,7 +14,6 @@ import { PATH_DASHBOARD } from "Router/paths";
 import { PostData } from "types/post";
 import Iconify from "../../../components/Iconify";
 import Image from "../../../components/Image";
-import SvgIconStyle from "../../../components/SvgIconStyle";
 import TextIconLabel from "../../../components/TextIconLabel";
 import TextMaxLine from "../../../components/TextMaxLine";
 import useResponsive from "../../../hooks/useResponsive";
@@ -40,79 +38,34 @@ interface BlogPostCardProps {
   post: PostData;
 }
 export default function BlogPostCard({ post, index }: BlogPostCardProps) {
-  const isDesktop = useResponsive("up", "md");
-
-  const { cover, title, view, comment, share, author, createdAt, id } = post;
-
-  const latestPost = index === 0 || index === 1 || index === 2;
-
-  if (isDesktop && latestPost) {
-    return (
-      <Card>
-        <Avatar
-          alt={author.displayName}
-          src={author.avatar}
-          sx={{
-            zIndex: 9,
-            top: 24,
-            left: 24,
-            width: 40,
-            height: 40,
-            position: "absolute",
-          }}
-        />
-        <PostContent
-          id={id}
-          title={title}
-          view={view}
-          comment={comment}
-          share={share}
-          createdAt={createdAt}
-          index={index}
-        />
-        <OverlayStyle />
-        <Image alt="cover" src={cover} sx={{ height: 360 }} />
-      </Card>
-    );
-  }
+  const { cover, title, favorite, comment, share, author, createdAt, id } =
+    post;
 
   return (
     <Card>
-      <Box sx={{ position: "relative" }}>
-        <SvgIconStyle
-          src="https://minimal-assets-api-dev.vercel.app/assets/icons/shape-avatar.svg"
-          sx={{
-            width: 80,
-            height: 36,
-            zIndex: 9,
-            bottom: -15,
-            position: "absolute",
-            color: "background.paper",
-          }}
-        />
-        <Avatar
-          alt={author.displayName}
-          src={author.avatar}
-          sx={{
-            left: 24,
-            zIndex: 9,
-            width: 32,
-            height: 32,
-            bottom: -16,
-            position: "absolute",
-          }}
-        />
-        <Image alt="cover" src={cover} ratio="4/3" />
-      </Box>
-
+      <Avatar
+        alt={author.displayName}
+        src={author.avatar}
+        sx={{
+          zIndex: 9,
+          top: 24,
+          left: 24,
+          width: 40,
+          height: 40,
+          position: "absolute",
+        }}
+      />
       <PostContent
         id={id}
         title={title}
-        view={view}
+        favorite={favorite}
         comment={comment}
         share={share}
         createdAt={createdAt}
+        index={index}
       />
+      <OverlayStyle />
+      <Image alt="cover" src={cover} sx={{ height: 360 }} />
     </Card>
   );
 }
@@ -124,12 +77,12 @@ interface PostContentProps {
   index?: number;
   share?: number;
   title?: string;
-  view?: number;
+  favorite?: number;
   id: string;
 }
 export function PostContent({
   title,
-  view,
+  favorite,
   comment,
   share,
   createdAt,
@@ -145,22 +98,19 @@ export function PostContent({
 
   const POST_INFO = [
     { number: comment, icon: "eva:message-circle-fill" },
-    { number: view, icon: "eva:eye-fill" },
+    { number: favorite, icon: "eva:heart-fill" },
     { number: share, icon: "eva:share-fill" },
   ];
 
   return (
     <CardContent
       sx={{
-        pt: 4.5,
         width: 1,
-        ...((latestPostLarge || latestPostSmall) && {
-          pt: 0,
-          zIndex: 9,
-          bottom: 0,
-          position: "absolute",
-          color: "common.white",
-        }),
+        pt: 0,
+        zIndex: 9,
+        bottom: 0,
+        position: "absolute",
+        color: "common.white",
       }}
     >
       <Typography
@@ -168,11 +118,8 @@ export function PostContent({
         variant="caption"
         component="div"
         sx={{
-          color: "text.disabled",
-          ...((latestPostLarge || latestPostSmall) && {
-            opacity: 0.64,
-            color: "common.white",
-          }),
+          opacity: 0.64,
+          color: "common.white",
         }}
       >
         {fDate(createdAt)}

@@ -1,0 +1,20 @@
+query GetFriends(
+  $profileId: String!
+  $limit: Int
+  $offset: Int
+  $search: String
+) {
+  getFriends(
+    limit: $limit
+    offset: $offset
+    profileId: $profileId
+    search: $search
+  ) {
+    totalCount
+    hasMore
+    results {
+      ...profileInfo
+      isFollowing
+    }
+  }
+}

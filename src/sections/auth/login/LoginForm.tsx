@@ -27,8 +27,8 @@ export default function LoginForm() {
   });
 
   const defaultValues: any = {
-    email: "nhmtoan1509@gmail.com",
-    password: "demo123",
+    email: "",
+    password: "",
     remember: true,
     afterSubmit: "",
   };

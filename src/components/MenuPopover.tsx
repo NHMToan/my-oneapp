@@ -108,6 +108,7 @@ const ArrowStyle = styled("span")<IArrowStyle>(({ arrow, theme }) => {
 interface IMenuPopover extends PopoverProps {
   arrow?: TArrow;
   disabledArrow?: boolean;
+  anchorEl?: any;
 }
 export default function MenuPopover({
   children,

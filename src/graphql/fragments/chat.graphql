@@ -1,0 +1,39 @@
+fragment messageInfo on Message {
+  id
+  createdAt
+  content
+  contentType
+  sender {
+    id
+    avatar
+    displayName
+  }
+}
+
+fragment conversationInfo on Conversation {
+  id
+  type
+  updatedAt
+  members {
+    id
+    displayName
+    avatar
+    email
+    phoneNumber
+    country
+  }
+  messages {
+    ...messageInfo
+  }
+}
+
+fragment conversationMutationResponse on ConversationMutationResponse {
+  ...mutationStatuses
+  conversation {
+    id
+    type
+  }
+  errors {
+    ...fieldError
+  }
+}

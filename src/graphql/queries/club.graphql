@@ -1,0 +1,37 @@
+query Club($id: ID!) {
+  club(id: $id) {
+    ...clubInfo
+  }
+}
+
+query Clubs($limit: Int!, $offset: Int!, $ordering: String) {
+  clubs(limit: $limit, offset: $offset, ordering: $ordering) {
+    totalCount
+    hasMore
+    results {
+      ...clubInfo
+    }
+  }
+}
+
+query ClubMembers(
+  $limit: Int
+  $offset: Int
+  $clubId: ID!
+  $status: Int!
+  $role: Int
+) {
+  clubmembers(
+    limit: $limit
+    offset: $offset
+    clubId: $clubId
+    status: $status
+    role: $role
+  ) {
+    totalCount
+    hasMore
+    results {
+      ...clubMemberInfo
+    }
+  }
+}

@@ -20,5 +20,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-
-export { store, persistor };
+const { dispatch } = store;
+export { store, persistor, dispatch };

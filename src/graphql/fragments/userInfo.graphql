@@ -8,6 +8,6 @@ fragment userInfo on User {
   avatar
   displayName
   profile {
-    ...profileInfo
+    id
   }
 }

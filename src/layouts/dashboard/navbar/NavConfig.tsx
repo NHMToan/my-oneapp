@@ -15,6 +15,8 @@ const getIcon = (name) => (
 const ICONS = {
   dashboard: getIcon("ic_dashboard"),
   blog: getIcon("ic_blog"),
+  people: getIcon("ic_user"),
+  chat: getIcon("ic_chat"),
 };
 
 const navConfig = [
@@ -29,10 +31,17 @@ const navConfig = [
         icon: ICONS.dashboard,
       },
       {
+        title: "people",
+        path: PATH_DASHBOARD.peple.root,
+        icon: ICONS.people,
+      },
+      {
         title: "blog",
         path: PATH_DASHBOARD.blog.posts,
         icon: ICONS.blog,
       },
+      { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      { title: "club", path: PATH_DASHBOARD.club.root, icon: ICONS.blog },
     ],
   },
 ];

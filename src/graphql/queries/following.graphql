@@ -1,0 +1,10 @@
+query GetFollowers($profileId: String!, $limit: Int, $offset: Int) {
+  getFollowers(limit: $limit, offset: $offset, profileId: $profileId) {
+    totalCount
+    hasMore
+    results {
+      ...profileInfo
+      isFollowing
+    }
+  }
+}

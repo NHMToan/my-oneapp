@@ -1,0 +1,45 @@
+mutation DeleteClub($id: ID!) {
+  deleteClub(id: $id) {
+    ...mutationStatuses
+  }
+}
+
+mutation CreateClub($createClubInput: CreateClubInput!) {
+  createClub(createClubInput: $createClubInput) {
+    ...clubMutationResponse
+  }
+}
+
+mutation UpdateClub($id: String!, $updateClubInput: UpdateClubInput!) {
+  updateClub(id: $id, updateClubInput: $updateClubInput) {
+    ...clubMutationResponse
+  }
+}
+mutation RequestJoinClub($clubId: ID!) {
+  requestJoinClub(id: $clubId) {
+    ...clubMutationResponse
+  }
+}
+
+mutation AcceptJoinClub($clubMemId: ID!) {
+  acceptJoin(id: $clubMemId) {
+    ...clubMutationResponse
+  }
+}
+
+mutation SetRole($clubMemId: ID!, $role: Int!) {
+  setRole(id: $clubMemId, role: $role) {
+    ...clubMutationResponse
+  }
+}
+
+mutation DeleteClubMember($clubMemId: ID!) {
+  deleteClubMember(id: $clubMemId) {
+    ...clubMutationResponse
+  }
+}
+mutation CancelRequestClub($clubId: ID!) {
+  cancelRequestClub(clubId: $clubId) {
+    ...clubMutationResponse
+  }
+}

@@ -1,0 +1,10 @@
+mutation FollowUser($profileId: ID!) {
+  follow(followId: $profileId) {
+    ...mutationStatuses
+  }
+}
+mutation UnFollowUser($profileId: ID!) {
+  unFollow(followId: $profileId) {
+    ...mutationStatuses
+  }
+}

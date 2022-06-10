@@ -1,0 +1,11 @@
+subscription MessageSendSubscription($conversationId: ID!) {
+  newMessageSent(conversationId: $conversationId) {
+    ...messageInfo
+  }
+}
+
+subscription ConversationChanged($profileId: ID!) {
+  conversationChanged(profileId: $profileId) {
+    ...conversationInfo
+  }
+}

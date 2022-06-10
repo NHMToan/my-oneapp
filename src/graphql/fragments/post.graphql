@@ -1,0 +1,31 @@
+fragment postMutationResponse on PostMutationResponse {
+  ...postMutationStatuses
+  post {
+    ...postWithUserInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+fragment postWithUserInfo on Post {
+  id
+  title
+  content
+  cover
+  description
+  tags
+  metaDescription
+  metaKeywords
+  metaTitle
+  publish
+  allowComments
+  createdAt
+  updatedAt
+  favorite
+  comment
+  author {
+    id
+    displayName
+    avatar
+  }
+}

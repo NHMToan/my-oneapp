@@ -1,0 +1,8 @@
+mutation AddConversation($input: ConversationInput!) {
+  addNewConversation(converInput: $input) {
+    ...conversationMutationResponse
+  }
+}
+mutation CreateMessage($messageInput: MessageInput!) {
+  addNewMessage(messageInput: $messageInput)
+}

@@ -1,0 +1,27 @@
+query Conversations($limit: Int, $offset: Int) {
+  getConversations(limit: $limit, offset: $offset) {
+    totalCount
+    hasMore
+    error
+    results {
+      ...conversationInfo
+    }
+  }
+}
+
+query GetMessages($limit: Int, $offset: Int, $conversationId: ID!) {
+  getMessages(limit: $limit, offset: $offset, conversationId: $conversationId) {
+    totalCount
+    hasMore
+    error
+    results {
+      ...messageInfo
+    }
+  }
+}
+
+query Conversation($id: ID!) {
+  getConversation(id: $id) {
+    ...conversationInfo
+  }
+}

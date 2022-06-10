@@ -65,10 +65,11 @@ export default function Router() {
               element: <Navigate to="/dashboard/user/profile" replace />,
               index: true,
             },
-            { path: "profile", element: <UserProfile /> },
+            { path: ":id", element: <UserProfile /> },
             { path: "account", element: <UserAccount /> },
           ],
         },
+        { path: "people", element: <People /> },
         {
           path: "blog",
           children: [
@@ -80,6 +81,26 @@ export default function Router() {
             { path: "post/:id", element: <BlogPost /> },
             { path: "new", element: <BlogNewPost /> },
             { path: "post/:id/edit", element: <BlogNewPost /> },
+          ],
+        },
+        {
+          path: "club",
+          children: [
+            {
+              element: <ClubsList />,
+              index: true,
+            },
+            { path: ":id", element: <ClubPage /> },
+            { path: "new", element: <ClubForm /> },
+            { path: ":id/edit", element: <ClubForm /> },
+          ],
+        },
+        {
+          path: "chat",
+          children: [
+            { element: <Chat />, index: true },
+            { path: "new", element: <Chat /> },
+            { path: ":conversationKey", element: <Chat /> },
           ],
         },
       ],
@@ -116,7 +137,16 @@ const DashBoard = Loadable(lazy(() => import("../pages/Dashboard")));
 // USER
 const UserAccount = Loadable(lazy(() => import("../pages/User/UserAccount")));
 const UserProfile = Loadable(lazy(() => import("../pages/User/UserProfile")));
+
+//People
+const People = Loadable(lazy(() => import("../pages/People")));
 // BLOG
 const BlogPosts = Loadable(lazy(() => import("../pages/Blogs/BlogsList")));
 const BlogPost = Loadable(lazy(() => import("../pages/Blogs/BlogPost")));
 const BlogNewPost = Loadable(lazy(() => import("../pages/Blogs/BlogForm")));
+// BLOG
+const ClubsList = Loadable(lazy(() => import("../pages/Clubs/ClubsList")));
+const ClubForm = Loadable(lazy(() => import("../pages/Clubs/ClubFrom")));
+const ClubPage = Loadable(lazy(() => import("../pages/Clubs/ClubPage")));
+
+const Chat = Loadable(lazy(() => import("../pages/Chat")));

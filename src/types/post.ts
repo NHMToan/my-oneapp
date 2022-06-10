@@ -19,5 +19,6 @@ export interface PostData {
   comment?: number;
   share?: number;
   favorite?: number;
+  commentCount?: number;
   favoritePerson?: IUser[];
 }

@@ -131,8 +131,8 @@ export default function BlogNewPostForm({
   }, [isEdit, currentPost]);
 
   const onSubmit = async (values) => {
+    console.log(values);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
       if (isEdit) {
         if (typeof values.coverFile === "string") {
           delete values.coverFile;

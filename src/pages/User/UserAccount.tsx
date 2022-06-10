@@ -1,13 +1,13 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { capitalCase } from "change-case";
 import Iconify from "components/Iconify";
-import LoadingScreen from "components/LoadingScreen";
+import { SkeletonCommon } from "components/skeleton";
 import { useMyProfileQuery } from "generated/graphql";
 import {
   AccountChangePassword,
   AccountGeneral,
   AccountSocialLinks,
-} from "sections/user/account";
+} from "pages/User/sections/account";
 import Page from "../../components/Page";
 import useSettings from "../../hooks/useSettings";
 import useTabs from "../../hooks/useTabs";
@@ -21,7 +21,7 @@ export default function UserAccount() {
 
   const { currentTab, onChangeTab } = useTabs("general");
 
-  if (loading) return <LoadingScreen />;
+  if (loading) return <SkeletonCommon />;
   if (!data) return <div>User error</div>;
 
   const ACCOUNT_TABS = [

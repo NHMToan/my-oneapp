@@ -9,8 +9,13 @@ import MenuPopover from "./MenuPopover";
 interface DropdownMenuProps {
   actions: ReactNode;
   sx?: SxProps;
+  children?: ReactNode;
 }
-export default function DropdownMenu({ actions, sx }: DropdownMenuProps) {
+export default function DropdownMenu({
+  actions,
+  sx,
+  children,
+}: DropdownMenuProps) {
   const [openMenu, setOpenMenuActions] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -23,7 +28,9 @@ export default function DropdownMenu({ actions, sx }: DropdownMenuProps) {
   return (
     <>
       <IconButton onClick={handleOpenMenu} sx={sx}>
-        <Iconify icon={"eva:more-vertical-fill"} width={20} height={20} />
+        {children || (
+          <Iconify icon={"eva:more-vertical-fill"} width={20} height={20} />
+        )}
       </IconButton>
 
       <MenuPopover

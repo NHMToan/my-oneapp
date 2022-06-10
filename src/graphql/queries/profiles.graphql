@@ -1,0 +1,19 @@
+query Profiles(
+  $limit: Int!
+  $offset: Int!
+  $ordering: String
+  $search: String
+) {
+  getProfiles(
+    limit: $limit
+    offset: $offset
+    ordering: $ordering
+    search: $search
+  ) {
+    totalCount
+    hasMore
+    results {
+      ...profileInfo
+    }
+  }
+}

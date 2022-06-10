@@ -185,16 +185,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       throw e || "Server error!";
     }
   };
-  const refreshUser = async () => {
-    const res = await getUser();
 
-    dispatch({
-      type: "REFRESH_USER",
-      payload: {
-        user: res.data.me,
-      },
-    });
-  };
   const register = async (email, password, firstName, lastName) => {
     const response = await onRegister({
       variables: { registerInput: { email, password, firstName, lastName } },
@@ -205,7 +196,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         register: { accessToken, user },
       } = response.data;
 
-      localStorage.setItem("accessToken", accessToken);
+      setSession(accessToken);
 
       dispatch({
         type: "REGISTER",
@@ -216,6 +207,17 @@ function AuthProvider({ children }: AuthProviderProps) {
     } else {
       if (response.data?.register.message) throw response.data.register.message;
     }
+  };
+
+  const refreshUser = async () => {
+    const res = await getUser();
+
+    dispatch({
+      type: "REFRESH_USER",
+      payload: {
+        user: res.data.me,
+      },
+    });
   };
 
   const logout = async () => {
