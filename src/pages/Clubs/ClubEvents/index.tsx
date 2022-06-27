@@ -10,34 +10,61 @@ import { Button, Card, Container } from "@mui/material";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
 import Page from "components/Page";
+import { useEventsQuery } from "generated/graphql";
 import useResponsive from "hooks/useResponsive";
 import useSettings from "hooks/useSettings";
 import { FC, useEffect, useRef, useState } from "react";
-import { ClubData } from "../data.t";
+import { fFullTime } from "utils/formatTime";
+import { ClubData, ClubEvent } from "../data.t";
 import {
   CalendarStyle,
   CalendarToolbar,
-  EventFormModal
+  EventDetailsModal,
+  EventFormModal,
 } from "../sections/event";
-
-
 // ----------------------------------------------------------------------
 interface ClubEventsProps {
   club: ClubData;
 }
+const formatEvent = (event: ClubEvent) => {
+  return {
+    allDay: false,
+    description: event.description,
+    end: event.description,
+    id: event.id,
+    start: event.start,
+    textColor: event.color,
+    title: event.title,
+  };
+};
 const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
-  const {isAdmin,isSubAdmin} = club;
+  const { isAdmin, isSubAdmin } = club;
   const { themeStretch } = useSettings();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [selectedRange, setSelectedRange] = useState<any>({});
-
+  const [currentRange, setCurrentRange] = useState<[string, string]>();
   const isDesktop = useResponsive("up", "sm");
+
+  const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
+
+  const [selectedEvent, setSelectedEvent] = useState<string>(null);
 
   const calendarRef = useRef(null);
 
   const [date, setDate] = useState(new Date());
 
   const [view, setView] = useState(isDesktop ? "dayGridMonth" : "listWeek");
+
+  const { data } = useEventsQuery({
+    variables: {
+      clubId: club.id,
+      dateAfter: currentRange?.length > 0 && currentRange[0],
+      dateBefore: currentRange?.length > 0 && currentRange[1],
+      limit: 100,
+      offset: 0,
+    },
+    skip: !currentRange,
+  });
 
   useEffect(() => {
     const calendarEl = calendarRef.current;
@@ -92,16 +119,16 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
       calendarApi.unselect();
     }
     setSelectedRange({ start: arg.start.getTime(), end: arg.end.getTime() });
-    setIsFormOpen(true)
+    setIsFormOpen(true);
   };
 
   const handleSelectEvent = (arg) => {
-    console.log(arg);
+    setSelectedEvent(arg.event.id);
+    setIsDetailsOpen(true);
   };
 
   const handleAddEvent = () => {
-    if(isAdmin || isSubAdmin)
-    setIsFormOpen(true);
+    if (isAdmin || isSubAdmin) setIsFormOpen(true);
   };
 
   return (
@@ -110,15 +137,17 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
         <HeaderBreadcrumbs
           heading="Event"
           action={
-           ( isAdmin||isSubAdmin) &&        <Button
-              variant="contained"
-              startIcon={
-                <Iconify icon={"eva:plus-fill"} width={20} height={20} />
-              }
-              onClick={handleAddEvent}
-            >
-              New Event
-            </Button>
+            (isAdmin || isSubAdmin) && (
+              <Button
+                variant="contained"
+                startIcon={
+                  <Iconify icon={"eva:plus-fill"} width={20} height={20} />
+                }
+                onClick={handleAddEvent}
+              >
+                New Event
+              </Button>
+            )
           }
         />
 
@@ -137,7 +166,11 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
               editable
               droppable
               selectable
-              events={[]}
+              events={
+                data?.getEvents?.results?.map((event: any) =>
+                  formatEvent(event)
+                ) || []
+              }
               ref={calendarRef}
               rerenderDelay={10}
               initialDate={date}
@@ -157,6 +190,9 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
                 timeGridPlugin,
                 interactionPlugin,
               ]}
+              datesSet={(arg) => {
+                setCurrentRange([fFullTime(arg.start), fFullTime(arg.end)]);
+              }}
             />
           </CalendarStyle>
         </Card>
@@ -164,6 +200,16 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
           isOpen={isFormOpen}
           onClose={() => setIsFormOpen(false)}
           range={selectedRange}
+          club={club}
+          onPostSave={() => {}}
+        />
+        <EventDetailsModal
+          open={isDetailsOpen}
+          eventId={selectedEvent}
+          onClose={() => {
+            setSelectedEvent(null);
+            setIsDetailsOpen(false);
+          }}
         />
       </Container>
     </Page>

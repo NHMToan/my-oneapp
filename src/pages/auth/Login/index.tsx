@@ -1,7 +1,7 @@
 import { Box, Card, Container, Link, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Image from "components/Image";
-import Logo from "components/Logo3";
+import Logo from "components/Logo4";
 import Page from "components/Page";
 import useResponsive from "hooks/useResponsive";
 import { Link as RouterLink } from "react-router-dom";
@@ -80,7 +80,7 @@ export default function Login() {
         {mdUp && (
           <SectionStyle>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
+              Hi, Welcome to VSG
             </Typography>
             <Image
               visibleByDefault
@@ -96,28 +96,13 @@ export default function Login() {
             <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography variant="h4" gutterBottom>
-                  Sign in to Minimal
+                  Sign in to VSG
                 </Typography>
                 <Typography sx={{ color: "text.secondary" }}>
                   Enter your details below.
                 </Typography>
               </Box>
-
-              {/* <Tooltip title={capitalCase(method)} placement="right">
-                <>
-                  <Image
-                    disabledEffect
-                    src={"/static/illustrations/illustration_login.png"}
-                    sx={{ width: 32, height: 32 }}
-                  />
-                </>
-              </Tooltip> */}
             </Stack>
-
-            {/* <Alert severity="info" sx={{ mb: 3 }}>
-              Use email : <strong>demo@minimals.cc</strong> / password :
-              <strong> demo1234</strong>
-            </Alert> */}
 
             <AuthSocial />
 

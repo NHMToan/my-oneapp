@@ -11,26 +11,16 @@ export default function AuthSocial() {
       <Stack direction="row" spacing={2}>
         <Button fullWidth size="large" color="inherit" variant="outlined">
           <IconBox
-            icon="eva:google-fill"
-            color="#DF3E30"
-            width={22}
-            height={22}
-          />
-        </Button>
-
-        <Button fullWidth size="large" color="inherit" variant="outlined">
-          <IconBox
             icon="eva:facebook-fill"
             color="#1877F2"
             width={22}
             height={22}
           />
         </Button>
-
         <Button fullWidth size="large" color="inherit" variant="outlined">
           <IconBox
-            icon="eva:twitter-fill"
-            color="#1C9CEA"
+            icon="eva:google-fill"
+            color="#DF3E30"
             width={22}
             height={22}
           />

@@ -1,13 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
-import { Card, Grid, Stack, Typography } from "@mui/material";
+import { Button, Card, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import PopConfirm from "components/PopConfirm";
 import {
   useCreateClubMutation,
+  useDeleteClubMutation,
   useUpdateClubMutation,
 } from "generated/graphql";
 import { useSnackbar } from "notistack";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
@@ -41,7 +43,11 @@ export default function ClubFormContent({
 
   const [createClub] = useCreateClubMutation({ fetchPolicy: "no-cache" });
   const [updateClub] = useUpdateClubMutation({ fetchPolicy: "no-cache" });
+  const [deleteClub] = useDeleteClubMutation({ fetchPolicy: "no-cache" });
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const NewClubSchema = Yup.object().shape({
@@ -67,12 +73,7 @@ export default function ClubFormContent({
     defaultValues,
   });
 
-  const {
-    reset,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, setValue, handleSubmit } = methods;
 
   useEffect(() => {
     if (isEdit && currentClub) {
@@ -86,6 +87,7 @@ export default function ClubFormContent({
 
   const onSubmit = async (values) => {
     try {
+      setIsLoading(true);
       if (isEdit) {
         if (typeof values.coverFile === "string") {
           delete values.coverFile;
@@ -98,12 +100,14 @@ export default function ClubFormContent({
           },
         })
           .then((response) => {
+            setIsLoading(false);
             if (response?.data?.updateClub?.success) {
               reset();
 
               enqueueSnackbar("Updated success!");
               navigate(PATH_DASHBOARD.club.root);
             } else {
+              setIsLoading(false);
               throw response?.data?.updateClub?.message || "Unexpected error!";
             }
           })
@@ -123,11 +127,29 @@ export default function ClubFormContent({
             } else {
               throw response?.data?.createClub?.message || "Unexpected error!";
             }
+            setIsLoading(false);
           })
-          .catch((e) => {});
+          .catch((e) => {
+            setIsLoading(false);
+          });
       }
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true);
+      const res = await deleteClub({ variables: { id: currentClub.id } });
+      if (res.data.deleteClub.success) {
+        enqueueSnackbar("Club delete successfully!");
+        navigate(PATH_DASHBOARD.club.root);
+      }
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
     }
   };
 
@@ -160,10 +182,10 @@ export default function ClubFormContent({
                     label="Club key (Only admin has it)"
                   />
                 )}
-                <RHFTextField name="title" label="Post Title" />
+                <RHFTextField name="title" label="CLub Name" />
 
                 <div>
-                  <LabelStyle>Content</LabelStyle>
+                  <LabelStyle>Description</LabelStyle>
                   <RHFEditor simple name="description" />
                 </div>
 
@@ -199,16 +221,59 @@ export default function ClubFormContent({
               </Stack>
             </Card>
 
-            <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+            <Stack direction="column" spacing={1.5} sx={{ mt: 3 }}>
               <LoadingButton
                 fullWidth
                 type="submit"
                 variant="contained"
                 size="large"
-                loading={isSubmitting}
+                loading={isLoading}
               >
                 {!isEdit ? "Create" : "Save Changes"}
               </LoadingButton>
+
+              {isEdit && (
+                <PopConfirm
+                  open={openDelete}
+                  onClose={() => setOpenDelete(false)}
+                  title={
+                    <Typography>
+                      Are you sure you want to delete club {currentClub.title}?
+                    </Typography>
+                  }
+                  actions={
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => setOpenDelete(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  }
+                >
+                  <LoadingButton
+                    fullWidth
+                    color="error"
+                    variant="contained"
+                    size="large"
+                    loading={isLoading}
+                    onClick={() => {
+                      setOpenDelete(true);
+                    }}
+                  >
+                    Delete
+                  </LoadingButton>
+                </PopConfirm>
+              )}
             </Stack>
           </Grid>
         </Grid>

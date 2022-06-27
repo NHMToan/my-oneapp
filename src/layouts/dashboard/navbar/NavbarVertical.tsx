@@ -4,7 +4,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // components
-import Logo from "../../../components/Logo3";
+import Logo from "../../../components/Logo4";
 import { NavSectionVertical } from "../../../components/nav-section";
 import Scrollbar from "../../../components/Scrollbar";
 // config

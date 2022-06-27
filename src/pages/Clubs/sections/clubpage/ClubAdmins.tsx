@@ -57,15 +57,17 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
             refetch={refetch}
           />
         </Grid>
-        {data?.clubmembers?.results?.map((member) => (
-          <Grid key={member.id} item xs={12} md={4}>
-            <AdminCard
-              member={member as any}
-              refetch={refetch}
-              showAction={club.isAdmin}
-            />
-          </Grid>
-        ))}
+        {data?.clubmembers?.results
+          ?.filter((member) => !member.isAdmin)
+          .map((member) => (
+            <Grid key={member.id} item xs={12} md={4}>
+              <AdminCard
+                member={member as any}
+                refetch={refetch}
+                showAction={club.isAdmin}
+              />
+            </Grid>
+          ))}
       </Grid>
     </Box>
   );

@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import { IconButtonAnimate } from "../../../components/animate";
 import Iconify from "../../../components/Iconify";
 // components
-import Logo from "../../../components/Logo3";
+import Logo from "../../../components/Logo4";
 // config
 import { HEADER, NAVBAR } from "../../../config";
 // hooks

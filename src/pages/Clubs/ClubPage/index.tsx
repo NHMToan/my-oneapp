@@ -11,6 +11,7 @@ import useTabs from "hooks/useTabs";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 import ClubEvents from "../ClubEvents";
+import { ClubFormContent } from "../sections";
 import ClubAdmins from "../sections/clubpage/ClubAdmins";
 import ClubCover from "../sections/clubpage/ClubCover";
 import ClubGeneral from "../sections/clubpage/ClubGeneral";
@@ -60,14 +61,14 @@ const ClubPage: FC<ClubPageProps> = (props) => {
     },
     {
       value: "events",
-      icon: (
-        <Iconify icon={"bxs:calendar-star"} width={20} height={20} />
-      ),
+      icon: <Iconify icon={"bxs:calendar-star"} width={20} height={20} />,
       component: <ClubEvents club={club as any} />,
     },
     {
       value: "members",
-      icon: <Iconify icon={"gridicons:multiple-users"} width={20} height={20} />,
+      icon: (
+        <Iconify icon={"gridicons:multiple-users"} width={20} height={20} />
+      ),
       component: (
         <div>
           <ClubAdmins club={club as any} />
@@ -78,10 +79,21 @@ const ClubPage: FC<ClubPageProps> = (props) => {
     {
       hidden: !isAdmin,
       value: "requesting",
-      icon: <Iconify icon={"fluent:task-list-square-add-20-filled"} width={20} height={20} />,
+      icon: (
+        <Iconify
+          icon={"fluent:task-list-square-add-20-filled"}
+          width={20}
+          height={20}
+        />
+      ),
       component: <ClubRequests club={club as any} />,
     },
-
+    {
+      hidden: !isAdmin,
+      value: "settings",
+      icon: <Iconify icon={"mdi:archive-cog-outline"} width={20} height={20} />,
+      component: <ClubFormContent currentClub={club as any} isEdit />,
+    },
   ];
 
   return (

@@ -9,27 +9,31 @@ import cssStyles from "utils/cssStyles";
 // ----------------------------------------------------------------------
 interface IRootStyle {
   theme?: any;
-  active?: boolean;
+  active?: "true" | "false";
 }
 const RootStyle = styled("div")<IRootStyle>(({ theme, active }) => ({
-  "&:before": active
-    ? {
-        ...cssStyles().bgBlur({ blur: 2, color: theme.palette.primary.darker }),
-        top: 0,
-        zIndex: 9,
-        content: "''",
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-      }
-    : {
-        top: 0,
-        zIndex: 9,
-        content: "''",
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-      },
+  "&:before":
+    active === "true"
+      ? {
+          ...cssStyles().bgBlur({
+            blur: 2,
+            color: theme.palette.primary.darker,
+          }),
+          top: 0,
+          zIndex: 9,
+          content: "''",
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+        }
+      : {
+          top: 0,
+          zIndex: 9,
+          content: "''",
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+        },
 }));
 
 const InfoStyle = styled("div")(({ theme }) => ({
@@ -56,7 +60,7 @@ export default function ClubCover({ club }: ClubCoverProps) {
   const { title, cover } = club;
   const isDesktop = useResponsive("up", "md");
   return (
-    <RootStyle active={!cover}>
+    <RootStyle active="false">
       <InfoStyle>
         <Box
           sx={{

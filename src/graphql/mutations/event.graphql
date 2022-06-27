@@ -1,0 +1,5 @@
+mutation CreateEvent($createEventInput: CreateEventInput!) {
+  createEvent(createEventInput: $createEventInput) {
+    ...eventMutationResponse
+  }
+}

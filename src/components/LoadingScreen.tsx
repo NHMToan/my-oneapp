@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 import { m } from "framer-motion";
 //
-import Logo from "./Logo3";
+import Logo from "./Logo4";
 import ProgressBar from "./ProgressBar";
 
 // ----------------------------------------------------------------------

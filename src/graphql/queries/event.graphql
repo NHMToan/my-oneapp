@@ -1,0 +1,27 @@
+query Event($id: ID!) {
+  getEvent(id: $id) {
+    ...eventInfo
+  }
+}
+
+query Events(
+  $limit: Int!
+  $offset: Int!
+  $dateBefore: String!
+  $dateAfter: String!
+  $clubId: String!
+) {
+  getEvents(
+    limit: $limit
+    offset: $offset
+    dateAfter: $dateAfter
+    dateBefore: $dateBefore
+    clubId: $clubId
+  ) {
+    totalCount
+    hasMore
+    results {
+      ...eventInfo
+    }
+  }
+}

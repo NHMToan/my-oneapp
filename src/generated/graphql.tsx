@@ -37,11 +37,34 @@ export type Club = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ClubEvent = {
+  __typename?: 'ClubEvent';
+  address?: Maybe<Scalars['String']>;
+  addressLink?: Maybe<Scalars['String']>;
+  color: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  createdBy: ClubMember;
+  description: Scalars['String'];
+  end: Scalars['String'];
+  id: Scalars['ID'];
+  isAdmin: Scalars['Boolean'];
+  isVoted: Scalars['Boolean'];
+  show: Scalars['Boolean'];
+  slot: Scalars['Float'];
+  start: Scalars['String'];
+  status: Scalars['Float'];
+  title: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  voteCount: Scalars['Float'];
+  votes: Array<Vote>;
+};
+
 export type ClubMember = {
   __typename?: 'ClubMember';
   club: Club;
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  isAdmin: Scalars['Boolean'];
   profile: Profile;
   role?: Maybe<Scalars['Float']>;
   status: Scalars['Float'];
@@ -143,6 +166,19 @@ export type CreateClubInput = {
   title: Scalars['String'];
 };
 
+export type CreateEventInput = {
+  address?: InputMaybe<Scalars['String']>;
+  addressLink?: InputMaybe<Scalars['String']>;
+  clubId: Scalars['String'];
+  color: Scalars['String'];
+  description: Scalars['String'];
+  end: Scalars['String'];
+  isInstant?: InputMaybe<Scalars['Boolean']>;
+  slot: Scalars['Float'];
+  start: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type CreatePostInput = {
   allowComments: Scalars['Boolean'];
   content: Scalars['String'];
@@ -154,6 +190,22 @@ export type CreatePostInput = {
   publish: Scalars['Boolean'];
   tags?: InputMaybe<Array<Scalars['String']>>;
   title: Scalars['String'];
+};
+
+export type EventMutationResponse = IMutationResponse & {
+  __typename?: 'EventMutationResponse';
+  code: Scalars['Float'];
+  errors?: Maybe<Array<FieldError>>;
+  event?: Maybe<ClubEvent>;
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
+export type Events = {
+  __typename?: 'Events';
+  hasMore: Scalars['Boolean'];
+  results: Array<ClubEvent>;
+  totalCount: Scalars['Float'];
 };
 
 export type FieldError = {
@@ -242,6 +294,7 @@ export type Mutation = {
   changePassword: UserMutationResponse;
   commentPost: CommentMutationResponse;
   createClub: ClubMutationResponse;
+  createEvent: EventMutationResponse;
   createPost: PostMutationResponse;
   deleteClub: ClubMutationResponse;
   deleteClubMember: ClubMutationResponse;
@@ -303,6 +356,11 @@ export type MutationCommentPostArgs = {
 
 export type MutationCreateClubArgs = {
   createClubInput: CreateClubInput;
+};
+
+
+export type MutationCreateEventArgs = {
+  createEventInput: CreateEventInput;
 };
 
 
@@ -513,6 +571,8 @@ export type Query = {
   comments?: Maybe<Comments>;
   getConversation?: Maybe<Conversation>;
   getConversations?: Maybe<Conversations>;
+  getEvent?: Maybe<ClubEvent>;
+  getEvents?: Maybe<Events>;
   getFollowers?: Maybe<Profiles>;
   getFriends?: Maybe<Profiles>;
   getMessages?: Maybe<Messages>;
@@ -562,6 +622,20 @@ export type QueryGetConversationArgs = {
 
 
 export type QueryGetConversationsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryGetEventArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetEventsArgs = {
+  clubId: Scalars['String'];
+  dateAfter?: InputMaybe<Scalars['String']>;
+  dateBefore?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 };
@@ -713,6 +787,15 @@ export type UserMutationResponse = IMutationResponse & {
   user?: Maybe<User>;
 };
 
+export type Vote = {
+  __typename?: 'Vote';
+  date: Scalars['DateTime'];
+  id: Scalars['ID'];
+  member: ClubMember;
+  status: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
 export type MessageInfoFragment = { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } };
 
 export type ConversationInfoFragment = { __typename?: 'Conversation', id: string, type: string, updatedAt: any, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> };
@@ -723,13 +806,17 @@ export type ClubMutationResponseFragment = { __typename?: 'ClubMutationResponse'
 
 export type ClubInfoFragment = { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } };
 
-export type ClubMemberInfoFragment = { __typename?: 'ClubMember', id: string, status: number, role?: number | null, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } };
+export type ClubMemberInfoFragment = { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } };
 
 export type CommentInfoFragment = { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string }, replyComments?: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } }> | null };
 
 export type CommentMutationResponseFragment = { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null, comment?: { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
 export type CommentWithUserInfoFragment = { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } };
+
+export type EventMutationResponseFragment = { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, isVoted: boolean, isAdmin: boolean, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
+
+export type EventInfoFragment = { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, isVoted: boolean, isAdmin: boolean, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } };
 
 export type FieldErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -738,6 +825,8 @@ type MutationStatuses_ClubMutationResponse_Fragment = { __typename?: 'ClubMutati
 type MutationStatuses_CommentMutationResponse_Fragment = { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null };
 
 type MutationStatuses_ConversationMutationResponse_Fragment = { __typename?: 'ConversationMutationResponse', code: number, success: boolean, message?: string | null };
+
+type MutationStatuses_EventMutationResponse_Fragment = { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null };
 
 type MutationStatuses_FollowingMutaionResponse_Fragment = { __typename?: 'FollowingMutaionResponse', code: number, success: boolean, message?: string | null };
 
@@ -751,7 +840,7 @@ type MutationStatuses_ProfileMutationResponse_Fragment = { __typename?: 'Profile
 
 type MutationStatuses_UserMutationResponse_Fragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
-export type MutationStatusesFragment = MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
+export type MutationStatusesFragment = MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
 
 export type UserMutationStatusesFragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
@@ -846,6 +935,13 @@ export type CancelRequestClubMutationVariables = Exact<{
 
 
 export type CancelRequestClubMutation = { __typename?: 'Mutation', cancelRequestClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type CreateEventMutationVariables = Exact<{
+  createEventInput: CreateEventInput;
+}>;
+
+
+export type CreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, isVoted: boolean, isAdmin: boolean, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type FollowUserMutationVariables = Exact<{
   profileId: Scalars['ID'];
@@ -1009,7 +1105,7 @@ export type ClubMembersQueryVariables = Exact<{
 }>;
 
 
-export type ClubMembersQuery = { __typename?: 'Query', clubmembers?: { __typename?: 'Clubmembers', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubMember', id: string, status: number, role?: number | null, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } }> } | null };
+export type ClubMembersQuery = { __typename?: 'Query', clubmembers?: { __typename?: 'Clubmembers', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } }> } | null };
 
 export type CommentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -1020,6 +1116,24 @@ export type CommentsQueryVariables = Exact<{
 
 
 export type CommentsQuery = { __typename?: 'Query', comments?: { __typename?: 'Comments', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string }, replyComments?: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } }> | null }> } | null };
+
+export type EventQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type EventQuery = { __typename?: 'Query', getEvent?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, isVoted: boolean, isAdmin: boolean, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null };
+
+export type EventsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  dateBefore: Scalars['String'];
+  dateAfter: Scalars['String'];
+  clubId: Scalars['String'];
+}>;
+
+
+export type EventsQuery = { __typename?: 'Query', getEvents?: { __typename?: 'Events', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, isVoted: boolean, isAdmin: boolean, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } }> } | null };
 
 export type GetFollowersQueryVariables = Exact<{
   profileId: Scalars['String'];
@@ -1215,18 +1329,6 @@ export const ClubMutationResponseFragmentDoc = gql`
     ${MutationStatusesFragmentDoc}
 ${ClubInfoFragmentDoc}
 ${FieldErrorFragmentDoc}`;
-export const ClubMemberInfoFragmentDoc = gql`
-    fragment clubMemberInfo on ClubMember {
-  id
-  profile {
-    ...profileInfo
-  }
-  status
-  role
-  createdAt
-  updatedAt
-}
-    ${ProfileInfoFragmentDoc}`;
 export const CommentInfoFragmentDoc = gql`
     fragment commentInfo on Comment {
   id
@@ -1280,6 +1382,55 @@ export const CommentMutationResponseFragmentDoc = gql`
 }
     ${CommentMutationStatusesFragmentDoc}
 ${CommentWithUserInfoFragmentDoc}
+${FieldErrorFragmentDoc}`;
+export const ClubMemberInfoFragmentDoc = gql`
+    fragment clubMemberInfo on ClubMember {
+  id
+  profile {
+    ...profileInfo
+  }
+  status
+  role
+  isAdmin
+  createdAt
+  updatedAt
+}
+    ${ProfileInfoFragmentDoc}`;
+export const EventInfoFragmentDoc = gql`
+    fragment eventInfo on ClubEvent {
+  id
+  title
+  description
+  start
+  end
+  createdAt
+  updatedAt
+  createdBy {
+    ...clubMemberInfo
+  }
+  show
+  status
+  slot
+  addressLink
+  address
+  color
+  voteCount
+  isVoted
+  isAdmin
+}
+    ${ClubMemberInfoFragmentDoc}`;
+export const EventMutationResponseFragmentDoc = gql`
+    fragment eventMutationResponse on EventMutationResponse {
+  ...mutationStatuses
+  event {
+    ...eventInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+    ${MutationStatusesFragmentDoc}
+${EventInfoFragmentDoc}
 ${FieldErrorFragmentDoc}`;
 export const UserMutationStatusesFragmentDoc = gql`
     fragment userMutationStatuses on UserMutationResponse {
@@ -1713,6 +1864,39 @@ export function useCancelRequestClubMutation(baseOptions?: Apollo.MutationHookOp
 export type CancelRequestClubMutationHookResult = ReturnType<typeof useCancelRequestClubMutation>;
 export type CancelRequestClubMutationResult = Apollo.MutationResult<CancelRequestClubMutation>;
 export type CancelRequestClubMutationOptions = Apollo.BaseMutationOptions<CancelRequestClubMutation, CancelRequestClubMutationVariables>;
+export const CreateEventDocument = gql`
+    mutation CreateEvent($createEventInput: CreateEventInput!) {
+  createEvent(createEventInput: $createEventInput) {
+    ...eventMutationResponse
+  }
+}
+    ${EventMutationResponseFragmentDoc}`;
+export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation, CreateEventMutationVariables>;
+
+/**
+ * __useCreateEventMutation__
+ *
+ * To run a mutation, you first call `useCreateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEventMutation, { data, loading, error }] = useCreateEventMutation({
+ *   variables: {
+ *      createEventInput: // value for 'createEventInput'
+ *   },
+ * });
+ */
+export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventMutation, CreateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEventMutation, CreateEventMutationVariables>(CreateEventDocument, options);
+      }
+export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
+export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
+export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
 export const FollowUserDocument = gql`
     mutation FollowUser($profileId: ID!) {
   follow(followId: $profileId) {
@@ -2547,6 +2731,90 @@ export function useCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<C
 export type CommentsQueryHookResult = ReturnType<typeof useCommentsQuery>;
 export type CommentsLazyQueryHookResult = ReturnType<typeof useCommentsLazyQuery>;
 export type CommentsQueryResult = Apollo.QueryResult<CommentsQuery, CommentsQueryVariables>;
+export const EventDocument = gql`
+    query Event($id: ID!) {
+  getEvent(id: $id) {
+    ...eventInfo
+  }
+}
+    ${EventInfoFragmentDoc}`;
+
+/**
+ * __useEventQuery__
+ *
+ * To run a query within a React component, call `useEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEventQuery(baseOptions: Apollo.QueryHookOptions<EventQuery, EventQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventQuery, EventQueryVariables>(EventDocument, options);
+      }
+export function useEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventQuery, EventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventQuery, EventQueryVariables>(EventDocument, options);
+        }
+export type EventQueryHookResult = ReturnType<typeof useEventQuery>;
+export type EventLazyQueryHookResult = ReturnType<typeof useEventLazyQuery>;
+export type EventQueryResult = Apollo.QueryResult<EventQuery, EventQueryVariables>;
+export const EventsDocument = gql`
+    query Events($limit: Int!, $offset: Int!, $dateBefore: String!, $dateAfter: String!, $clubId: String!) {
+  getEvents(
+    limit: $limit
+    offset: $offset
+    dateAfter: $dateAfter
+    dateBefore: $dateBefore
+    clubId: $clubId
+  ) {
+    totalCount
+    hasMore
+    results {
+      ...eventInfo
+    }
+  }
+}
+    ${EventInfoFragmentDoc}`;
+
+/**
+ * __useEventsQuery__
+ *
+ * To run a query within a React component, call `useEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      dateBefore: // value for 'dateBefore'
+ *      dateAfter: // value for 'dateAfter'
+ *      clubId: // value for 'clubId'
+ *   },
+ * });
+ */
+export function useEventsQuery(baseOptions: Apollo.QueryHookOptions<EventsQuery, EventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventsQuery, EventsQueryVariables>(EventsDocument, options);
+      }
+export function useEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventsQuery, EventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventsQuery, EventsQueryVariables>(EventsDocument, options);
+        }
+export type EventsQueryHookResult = ReturnType<typeof useEventsQuery>;
+export type EventsLazyQueryHookResult = ReturnType<typeof useEventsLazyQuery>;
+export type EventsQueryResult = Apollo.QueryResult<EventsQuery, EventsQueryVariables>;
 export const GetFollowersDocument = gql`
     query GetFollowers($profileId: String!, $limit: Int, $offset: Int) {
   getFollowers(limit: $limit, offset: $offset, profileId: $profileId) {

@@ -32,6 +32,7 @@ fragment clubMemberInfo on ClubMember {
   }
   status
   role
+  isAdmin
   createdAt
   updatedAt
 }

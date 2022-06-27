@@ -1,0 +1,30 @@
+fragment eventMutationResponse on EventMutationResponse {
+  ...mutationStatuses
+  event {
+    ...eventInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+fragment eventInfo on ClubEvent {
+  id
+  title
+  description
+  start
+  end
+  createdAt
+  updatedAt
+  createdBy {
+    ...clubMemberInfo
+  }
+  show
+  status
+  slot
+  addressLink
+  address
+  color
+  voteCount
+  isVoted
+  isAdmin
+}

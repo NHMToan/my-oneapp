@@ -23,3 +23,30 @@ export interface ClubData {
   isAdmin: boolean;
   isSubAdmin: boolean;
 }
+
+export interface ClubEvent {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  start: string;
+  end: string;
+  isAdmin: boolean;
+  address: string;
+  addressLink: string;
+  slot: number;
+  status: number;
+  show: boolean;
+  club: ClubData;
+  createdBy: ClubMemberData;
+  createdAt: string;
+  updatedAt: string;
+  voteCount: number;
+}
+export interface VoteData {
+  id: string;
+  value: number;
+  member: ClubMemberData;
+  createdAt: string;
+  status: number;
+}

@@ -3,10 +3,12 @@ import { LoadingButton, MobileDateTimePicker } from "@mui/lab";
 // @mui
 import { Box, Button, DialogActions, Stack, TextField } from "@mui/material";
 import { ColorSinglePicker } from "components/color-utils";
-import { FormProvider, RHFSwitch, RHFTextField } from "components/hook-form";
+import { FormProvider, RHFTextField } from "components/hook-form";
 import { isBefore } from "date-fns";
+import { useCreateEventMutation } from "generated/graphql";
 import merge from "lodash/merge";
 import { useSnackbar } from "notistack";
+import { ClubData } from "pages/Clubs/data.t";
 // form
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -26,10 +28,12 @@ const getInitialValues = (event, range) => {
   const _event = {
     title: "",
     description: "",
+    address: "",
+    addressLink: "",
     textColor: "#1890FF",
-    allDay: false,
     start: range ? new Date(range.start) : new Date(),
     end: range ? new Date(range.end) : new Date(),
+    slot: 0,
   };
 
   if (event || range) {
@@ -45,10 +49,18 @@ interface EventFormProps {
   event?: any;
   range?: any;
   onCancel: () => void;
+  onPostSave: () => void;
+  club: ClubData;
 }
-export default function EventForm({ event, range, onCancel }: EventFormProps) {
+export default function EventForm({
+  event,
+  range,
+  onCancel,
+  onPostSave,
+  club,
+}: EventFormProps) {
   const { enqueueSnackbar } = useSnackbar();
-
+  const [createEvent] = useCreateEventMutation();
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required("Title is required"),
     description: Yup.string().max(5000),
@@ -64,25 +76,36 @@ export default function EventForm({ event, range, onCancel }: EventFormProps) {
     watch,
     control,
     handleSubmit,
+
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async (data) => {
     try {
-      const newEvent = {
+      const newEvent: any = {
         title: data.title,
         description: data.description,
-        textColor: data.textColor,
-        allDay: data.allDay,
+        color: data.textColor,
+        slot: ~~data.slot,
         start: data.start,
         end: data.end,
+        address: data.address,
+        addressLink: data.addressLink,
+        isInstant: false,
+        clubId: club.id,
       };
       if (event.id) {
         enqueueSnackbar("Update success!");
       } else {
+        const res = await createEvent({ variables: {createEventInput:newEvent} });
+
+        console.log(res);
         enqueueSnackbar("Create success!");
         console.log(newEvent);
       }
+
+      onPostSave();
+
       onCancel();
       reset();
     } catch (error) {
@@ -106,7 +129,10 @@ export default function EventForm({ event, range, onCancel }: EventFormProps) {
           rows={4}
         />
 
-        <RHFSwitch name="allDay" label="All day" />
+        <RHFTextField name="slot" label="Slots" type="number" />
+
+        <RHFTextField name="address" label="Address" />
+        <RHFTextField name="addressLink" label="Address link" />
 
         <Controller
           name="start"

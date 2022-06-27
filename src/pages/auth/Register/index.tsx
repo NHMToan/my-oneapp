@@ -1,7 +1,7 @@
 import { Card, Container, Link, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
-import Logo from "components/Logo3";
+import Logo from "components/Logo4";
 import Page from "components/Page";
 import useResponsive from "hooks/useResponsive";
 import { Link as RouterLink } from "react-router-dom";
@@ -75,7 +75,7 @@ export default function Register() {
         {mdUp && (
           <SectionStyle>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Manage the job more effectively with Minimal
+              Join with us
             </Typography>
             <img
               alt="register"
@@ -87,11 +87,11 @@ export default function Register() {
         <Container>
           <ContentStyle>
             <Typography variant="h4" gutterBottom>
-              Get started absolutely free.
+              Register to join with us.
             </Typography>
 
             <Typography sx={{ color: "text.secondary", mb: 5 }}>
-              Free forever.
+              Viet Sportmates Group
             </Typography>
 
             <AuthSocial />
@@ -103,7 +103,7 @@ export default function Register() {
               align="center"
               sx={{ color: "text.secondary", mt: 3 }}
             >
-              By registering, I agree to Minimal&nbsp;
+              By registering, I agree to VSG&nbsp;
               <Link underline="always" color="text.primary" href="#">
                 Terms of Service
               </Link>{" "}

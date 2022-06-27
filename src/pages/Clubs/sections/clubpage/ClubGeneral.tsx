@@ -17,7 +17,6 @@ import {
 import { ClubData } from "pages/Clubs/data.t";
 import { useState } from "react";
 import { fNumber } from "utils/formatNumber";
-import ClubActions from "./ClubActions";
 
 interface ClubGeneralProps {
   club: ClubData;
@@ -138,7 +137,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
               divider={<Divider orientation="vertical" flexItem />}
             >
               <Stack width={1} textAlign="center">
-                <Typography variant="h4">{fNumber(memberCount + 1)}</Typography>
+                <Typography variant="h4">{fNumber(memberCount)}</Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Members
                 </Typography>
@@ -152,8 +151,6 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
               </Stack>
             </Stack>
           </Card>
-
-          <ClubActions club={club} />
         </Stack>
       </Grid>
 

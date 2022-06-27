@@ -4,7 +4,7 @@ import { boolean } from "./boolean";
 import { company } from "./company";
 import { email } from "./email";
 import { firstName, fullName, lastName } from "./name";
-import { age, percent, price, rating } from "./number";
+import { age, number, percent, price, rating } from "./number";
 import { phoneNumber } from "./phoneNumber";
 import { role } from "./role";
 import { description, sentence, title } from "./text";
@@ -37,6 +37,7 @@ const _mock = {
     rating: (index) => rating[index],
     age: (index) => age[index],
     price: (index) => price[index],
+    number: (index) => number[index],
   },
   image: {
     cover: (index) =>
