@@ -1,7 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
-import { Alert, IconButton, InputAdornment, Link, Stack } from "@mui/material";
-import { FormProvider, RHFCheckbox, RHFTextField } from "components/hook-form";
+import {
+  Alert,
+  IconButton,
+  InputAdornment,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { FormProvider, RHFTextField } from "components/hook-form";
 import Iconify from "components/Iconify";
 import useAuth from "hooks/useAuth";
 import useIsMountedRef from "hooks/useIsMountedRef";
@@ -94,7 +101,16 @@ export default function LoginForm() {
         justifyContent="space-between"
         sx={{ my: 2 }}
       >
-        <RHFCheckbox name="remember" label="Remember me" />
+        <Typography variant="body2" align="center">
+          Don’t have an account?{" "}
+          <Link
+            variant="subtitle2"
+            component={RouterLink}
+            to={PATH_AUTH.register}
+          >
+            Register now
+          </Link>
+        </Typography>
         <Link
           component={RouterLink}
           variant="subtitle2"

@@ -52,7 +52,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
   if (!data) return <div>User error</div>;
 
   const { club } = data;
-  const { isAdmin } = club;
+  const { isAdmin, isMember } = club;
   const Club_TABS = [
     {
       value: "general",
@@ -60,11 +60,13 @@ const ClubPage: FC<ClubPageProps> = (props) => {
       component: <ClubGeneral club={club as any} refreshClub={refetch} />,
     },
     {
+      hidden: !isMember,
       value: "events",
       icon: <Iconify icon={"bxs:calendar-star"} width={20} height={20} />,
       component: <ClubEvents club={club as any} />,
     },
     {
+      hidden: !isMember,
       value: "members",
       icon: (
         <Iconify icon={"gridicons:multiple-users"} width={20} height={20} />

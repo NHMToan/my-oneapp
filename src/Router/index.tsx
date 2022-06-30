@@ -67,7 +67,7 @@ export default function Router() {
             { path: "account", element: <UserAccount /> },
           ],
         },
-        { path: "people", element: <People /> },
+        // { path: "people", element: <People /> },
         {
           path: "blog",
           children: [
@@ -93,14 +93,14 @@ export default function Router() {
             { path: ":id/edit", element: <ClubForm /> },
           ],
         },
-        {
-          path: "chat",
-          children: [
-            { element: <Chat />, index: true },
-            { path: "new", element: <Chat /> },
-            { path: ":conversationKey", element: <Chat /> },
-          ],
-        },
+        // {
+        //   path: "chat",
+        //   children: [
+        //     { element: <Chat />, index: true },
+        //     { path: "new", element: <Chat /> },
+        //     { path: ":conversationKey", element: <Chat /> },
+        //   ],
+        // },
       ],
     },
     { path: "/", element: <Navigate to="/home" replace /> },
@@ -132,7 +132,7 @@ const UserAccount = Loadable(lazy(() => import("../pages/User/UserAccount")));
 const UserProfile = Loadable(lazy(() => import("../pages/User/UserProfile")));
 
 //People
-const People = Loadable(lazy(() => import("../pages/People")));
+// const People = Loadable(lazy(() => import("../pages/People")));
 // BLOG
 const BlogPosts = Loadable(lazy(() => import("../pages/Blogs/BlogsList")));
 const BlogPost = Loadable(lazy(() => import("../pages/Blogs/BlogPost")));
@@ -142,4 +142,4 @@ const ClubsList = Loadable(lazy(() => import("../pages/Clubs/ClubsList")));
 const ClubForm = Loadable(lazy(() => import("../pages/Clubs/ClubFrom")));
 const ClubPage = Loadable(lazy(() => import("../pages/Clubs/ClubPage")));
 
-const Chat = Loadable(lazy(() => import("../pages/Chat")));
+// const Chat = Loadable(lazy(() => import("../pages/Chat")));

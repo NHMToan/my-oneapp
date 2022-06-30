@@ -30,17 +30,17 @@ const navConfig = [
         path: PATH_DASHBOARD.general.app,
         icon: ICONS.dashboard,
       },
-      {
-        title: "people",
-        path: PATH_DASHBOARD.peple.root,
-        icon: ICONS.people,
-      },
-      {
-        title: "blog",
-        path: PATH_DASHBOARD.blog.posts,
-        icon: ICONS.blog,
-      },
-      { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      // {
+      //   title: "people",
+      //   path: PATH_DASHBOARD.peple.root,
+      //   icon: ICONS.people,
+      // },
+      // {
+      //   title: "blog",
+      //   path: PATH_DASHBOARD.blog.posts,
+      //   icon: ICONS.blog,
+      // },
+      // { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
       { title: "club", path: PATH_DASHBOARD.club.root, icon: ICONS.blog },
     ],
   },

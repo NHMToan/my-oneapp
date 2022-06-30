@@ -1,7 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 // @mui
-import { Alert, IconButton, InputAdornment, Stack } from "@mui/material";
+import {
+  Alert,
+  IconButton,
+  InputAdornment,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 // form
 import { useForm } from "react-hook-form";
@@ -10,9 +17,9 @@ import { FormProvider, RHFTextField } from "../../../components/hook-form";
 // components
 import Iconify from "../../../components/Iconify";
 // hooks
+import { Link as RouterLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
-
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
@@ -95,7 +102,19 @@ export default function RegisterForm() {
             ),
           }}
         />
-
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ my: 2 }}
+        >
+          <Typography variant="body2" sx={{ mt: { md: -2 } }}>
+            Already have an account? {""}
+            <Link variant="subtitle2" component={RouterLink} to="/auth/login">
+              Login
+            </Link>
+          </Typography>
+        </Stack>
         <LoadingButton
           fullWidth
           size="large"
