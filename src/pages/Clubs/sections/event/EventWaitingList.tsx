@@ -11,29 +11,35 @@ import {
 import { ClubEvent } from "pages/Clubs/data.t";
 import { FC } from "react";
 import _mock from "_mock";
-import orderBy from "lodash/orderBy";
 import Iconify from "components/Iconify";
 import { fDateTime } from "utils/formatTime";
 import DropdownMenu from "components/DropdownMenu";
+import { useGetVotesQuery } from "generated/graphql";
+import { SkeletonCommon } from "components/skeleton";
 
 interface EventWaitingListProps {
   event: ClubEvent;
 }
-
-export const _appVoter = [...Array(3)].map((_, index) => ({
-  id: _mock.id(index),
-  name: _mock.name.fullName(index),
-  avatar: _mock.image.avatar(index),
-  createdAt: _mock.time(index),
-  value: _mock.number.number(index),
-}));
 const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
-  return (
-    <Card>
-      <CardHeader title="Waiting List" />
+  const { data, loading } = useGetVotesQuery({
+    fetchPolicy: "no-cache",
+    skip: !event,
+    variables: { status: 2, limit: 100, offset: 0, eventId: event.id },
+  });
 
+  const renderList = () => {
+    if (loading) return <SkeletonCommon />;
+
+    if (!data || !data.getVotes || data?.getVotes?.totalCount === 0)
+      return (
+        <Typography sx={{ p: 3, color: "text.secondary" }}>
+          No waiting vote found
+        </Typography>
+      );
+
+    return (
       <Stack spacing={3} sx={{ p: 3 }}>
-        {orderBy(_appVoter, ["createdAt"], ["desc"]).map((vote, index) => (
+        {data?.getVotes?.results.map((vote, index) => (
           <Voter
             key={vote.id}
             vote={vote}
@@ -42,6 +48,13 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
           />
         ))}
       </Stack>
+    );
+  };
+  return (
+    <Card>
+      <CardHeader title="Waiting List" />
+
+      {renderList()}
     </Card>
   );
 };

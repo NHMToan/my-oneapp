@@ -34,4 +34,15 @@ fragment eventInfo on ClubEvent {
     status
     value
   }
+  time
+}
+fragment voteInfo on Vote {
+  id
+  value
+  member {
+    ...clubMemberInfo
+  }
+  createdAt
+  status
+  updatedAt
 }

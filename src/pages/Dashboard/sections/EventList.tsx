@@ -1,12 +1,31 @@
 import { Container, Stack } from "@mui/material";
+import { SeoIllustration } from "assets";
 import { useMyEventsQuery } from "generated/graphql";
+import useAuth from "hooks/useAuth";
 import { FC } from "react";
+import AppWelcome from "./AppWelcome";
 import EventCard from "./EventCard";
 
 interface EventListProps {}
 const EventList: FC<EventListProps> = (props) => {
   const { data } = useMyEventsQuery({ fetchPolicy: "no-cache" });
-
+  const { user } = useAuth();
+  if (!data || data?.myEvents?.totalCount === 0)
+    return (
+      <AppWelcome
+        title={`Welcome back! \n ${user?.displayName}`}
+        description="There is no event for now!"
+        img={
+          <SeoIllustration
+            sx={{
+              p: 3,
+              width: 360,
+              margin: { xs: "auto", md: "inherit" },
+            }}
+          />
+        }
+      />
+    );
   return (
     <Container maxWidth="xs" sx={{ pt: 3 }}>
       <Stack direction="column" justifyContent="center" spacing={4}>

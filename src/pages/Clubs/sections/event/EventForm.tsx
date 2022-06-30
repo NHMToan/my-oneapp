@@ -1,7 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton, MobileDateTimePicker } from "@mui/lab";
 // @mui
-import { Box, Button, DialogActions, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  DialogActions,
+  Divider,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { ColorSinglePicker } from "components/color-utils";
 import { FormProvider, RHFTextField } from "components/hook-form";
 import { isBefore } from "date-fns";
@@ -33,6 +40,7 @@ const getInitialValues = (event, range) => {
     textColor: "#1890FF",
     start: range ? new Date(range.start) : new Date(),
     end: range ? new Date(range.end) : new Date(),
+    time: null,
     slot: 0,
   };
 
@@ -88,6 +96,7 @@ export default function EventForm({
         color: data.textColor,
         slot: ~~data.slot,
         start: data.start,
+        time: data.time,
         end: data.end,
         address: data.address,
         addressLink: data.addressLink,
@@ -97,7 +106,9 @@ export default function EventForm({
       if (event.id) {
         enqueueSnackbar("Update success!");
       } else {
-        const res = await createEvent({ variables: {createEventInput:newEvent} });
+        const res = await createEvent({
+          variables: { createEventInput: newEvent },
+        });
 
         console.log(res);
         enqueueSnackbar("Create success!");
@@ -130,9 +141,6 @@ export default function EventForm({
         />
 
         <RHFTextField name="slot" label="Slots" type="number" />
-
-        <RHFTextField name="address" label="Address" />
-        <RHFTextField name="addressLink" label="Address link" />
 
         <Controller
           name="start"
@@ -169,6 +177,24 @@ export default function EventForm({
           )}
         />
 
+        <Divider />
+
+        <Controller
+          name="time"
+          control={control}
+          render={({ field }) => (
+            <MobileDateTimePicker
+              {...field}
+              label="Event time"
+              inputFormat="dd/MM/yyyy hh:mm a"
+              renderInput={(params) => <TextField {...params} fullWidth />}
+            />
+          )}
+        />
+
+        <RHFTextField name="address" label="Address" />
+        <RHFTextField name="addressLink" label="Address link" />
+
         <Controller
           name="textColor"
           control={control}
@@ -181,7 +207,6 @@ export default function EventForm({
           )}
         />
       </Stack>
-
       <DialogActions>
         <Box sx={{ flexGrow: 1 }} />
 

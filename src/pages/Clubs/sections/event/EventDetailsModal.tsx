@@ -1,17 +1,31 @@
 import {
+  Card,
+  CardHeader,
   Container,
   Dialog,
   DialogTitle,
   Grid,
+  Link,
   Stack,
+  styled,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import Iconify from "components/Iconify";
 import { SimpleSkeleton } from "components/skeleton";
 import { useEventQuery } from "generated/graphql";
 import { FC } from "react";
+import { fDateTime } from "utils/formatTime";
 import EventChart from "./EventChart";
 import EventVoteList from "./EventVoteList";
 import EventWaitingList from "./EventWaitingList";
+const IconStyle = styled(Iconify)(({ theme }) => ({
+  width: 20,
+  height: 20,
+  marginTop: 1,
+  flexShrink: 0,
+  marginRight: theme.spacing(2),
+}));
 
 interface EventDetailsModalProps {
   eventId: string;
@@ -28,21 +42,69 @@ const Content = ({ eventId }) => {
   if (loading) return <SimpleSkeleton />;
   if (!data) return null;
 
-  const { title, description } = data.getEvent;
+  const { title } = data.getEvent;
 
+  const renderGeneral = () => {
+    const { description, start, end, address, time } = data.getEvent;
+    return (
+      <Card>
+        <CardHeader title="Event info" />
+
+        <Stack spacing={2} sx={{ p: 3 }}>
+          <Typography variant="body2">{description}</Typography>
+
+          <Stack direction="row">
+            <Tooltip title="Vote start at">
+              <IconStyle icon={"fluent:clock-48-filled"} />
+            </Tooltip>
+            <Typography variant="body2">
+              <Typography variant="subtitle2">{fDateTime(start)}</Typography>
+            </Typography>
+          </Stack>
+          <Stack direction="row">
+            <Tooltip title="Vote end at">
+              <IconStyle icon={"fluent:clock-dismiss-20-filled"} />
+            </Tooltip>
+            <Typography variant="body2">
+              <Typography variant="subtitle2">{fDateTime(end)}</Typography>
+            </Typography>
+          </Stack>
+
+          <Stack direction="row">
+            <IconStyle icon={"clarity:alarm-clock-solid"} />
+            <Typography variant="body2">
+              Time: &nbsp;
+              <Link component="span" variant="subtitle2" color="text.primary">
+                {fDateTime(time)}
+              </Link>
+            </Typography>
+          </Stack>
+          <Stack direction="row">
+            <IconStyle icon={"eva:pin-fill"} />
+            <Typography variant="body2">
+              Address: &nbsp;
+              <Link component="span" variant="subtitle2" color="text.primary">
+                {address}
+              </Link>
+            </Typography>
+          </Stack>
+        </Stack>
+      </Card>
+    );
+  };
   return (
     <>
       <DialogTitle>
         <Typography variant="h4" gutterBottom>
           {title}
         </Typography>
-        <Typography sx={{ color: "text.secondary", mb: 5 }}>
-          {description}
-        </Typography>
       </DialogTitle>
-      <Container sx={{ px: 3 }}>
+      <Container sx={{ px: 2 }}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
+            {renderGeneral()}
+          </Grid>
+          <Grid item xs={12} md={6}>
             <EventChart event={data.getEvent as any} />
           </Grid>
           <Grid item xs={12} md={6}>

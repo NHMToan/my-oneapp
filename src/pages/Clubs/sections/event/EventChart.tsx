@@ -17,7 +17,7 @@ interface EventChartProps {
 export default function EventChart({ event }: EventChartProps) {
   const total = event.slot;
   const theme = useTheme();
-  const chartSeries = (6 / total) * 100;
+  const chartSeries = (event.voteCount / total) * 100;
 
   const chartOptions: any = merge(BaseOptionChart(), {
     legend: { show: false },
@@ -43,7 +43,7 @@ export default function EventChart({ event }: EventChartProps) {
           value: { offsetY: 8 },
           total: {
             label: "Slot",
-            formatter: () => `${fNumber(6)}/${fNumber(total)}`,
+            formatter: () => `${fNumber(event.voteCount)}/${fNumber(total)}`,
           },
         },
       },

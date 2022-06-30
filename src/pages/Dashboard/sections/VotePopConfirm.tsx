@@ -6,9 +6,10 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  MenuItem,
   Stack,
 } from "@mui/material";
-import { FormProvider, RHFTextField } from "components/hook-form";
+import { FormProvider, RHFSelect } from "components/hook-form";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -28,7 +29,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
   isWaiting,
 }) => {
   const defaultValues: any = {
-    value: 0,
+    value: 1,
   };
   const EventSchema = Yup.object().shape({
     value: Yup.number()
@@ -74,7 +75,11 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
       </DialogTitle>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3} sx={{ p: 3 }}>
-          <RHFTextField name="value" label="Slots" type="number" />
+          <RHFSelect name="value" label="Slots">
+            <MenuItem value={1}>1</MenuItem>
+            <MenuItem value={2}>2</MenuItem>
+            <MenuItem value={3}>3</MenuItem>
+          </RHFSelect>
         </Stack>
 
         <DialogActions>

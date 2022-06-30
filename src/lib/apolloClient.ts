@@ -14,7 +14,7 @@ const token = localStorage.getItem("accessToken");
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/graphql",
+    url: process.env.REACT_APP_WS_URL,
     connectionParams: {
       authorization: token ? `Bearer ${token}` : "",
     },
