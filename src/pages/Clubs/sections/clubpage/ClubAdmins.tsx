@@ -58,7 +58,7 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
           />
         </Grid>
         {data?.clubmembers?.results
-          ?.filter((member) => !member.isAdmin)
+          ?.filter((member) => member.profile.id !== club.admin.id)
           .map((member) => (
             <Grid key={member.id} item xs={12} md={4}>
               <AdminCard
