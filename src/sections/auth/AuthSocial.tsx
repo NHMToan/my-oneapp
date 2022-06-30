@@ -32,7 +32,6 @@ export default function AuthSocial() {
       <Stack direction="row" spacing={2}>
         <FacebookLogin
           appId="573224731075564"
-          autoLoad={true}
           fields="name,email,picture"
           callback={responseFacebook}
           render={(renderProps) => {
