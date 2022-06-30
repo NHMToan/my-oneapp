@@ -25,3 +25,19 @@ query Events(
     }
   }
 }
+
+query MyEvents {
+  myEvents {
+    totalCount
+    hasMore
+    results {
+      ...eventInfo
+    }
+  }
+}
+query GetVoteCount($id: ID!) {
+  getVoteCount(id: $id)
+}
+query GetWaitingVote($id: ID!) {
+  getWaitingVote(id: $id)
+}

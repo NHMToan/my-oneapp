@@ -42,6 +42,9 @@ export interface ClubEvent {
   createdAt: string;
   updatedAt: string;
   voteCount: number;
+  waitingCount: number;
+  isVoted: boolean;
+  vote: VoteData;
 }
 export interface VoteData {
   id: string;

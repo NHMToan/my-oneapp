@@ -1,0 +1,7 @@
+subscription EventVoteChangedSubscription($eventId: ID!, $status: Int!) {
+  voteChanged(eventId: $eventId, status: $status) {
+    voteCount
+    waitingCount
+    eventId
+  }
+}

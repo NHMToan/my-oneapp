@@ -78,6 +78,7 @@ interface IAuthContext {
   method: string;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  postLogin: (res: any) => void;
   refreshUser: () => Promise<void>;
   register: (
     email: string,
@@ -93,6 +94,7 @@ const AuthContext = createContext<IAuthContext>({
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   refreshUser: () => Promise.resolve(),
+  postLogin: () => {},
 });
 
 // ----------------------------------------------------------------------
@@ -185,7 +187,26 @@ function AuthProvider({ children }: AuthProviderProps) {
       throw e || "Server error!";
     }
   };
+  const postLogin = (response) => {
+    try {
+      if (response?.success) {
+        const { accessToken, user } = response;
 
+        setSession(accessToken);
+
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            user,
+          },
+        });
+      } else {
+        if (response?.message) throw response?.message;
+      }
+    } catch (e) {
+      throw e || "Server error!";
+    }
+  };
   const register = async (email, password, firstName, lastName) => {
     const response = await onRegister({
       variables: { registerInput: { email, password, firstName, lastName } },
@@ -237,6 +258,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         logout,
         register,
         refreshUser,
+        postLogin,
       }}
     >
       {children}

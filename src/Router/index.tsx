@@ -12,9 +12,7 @@ const Loadable = (Component) => (props) => {
   const { pathname } = useLocation();
 
   return (
-    <Suspense
-      fallback={<LoadingScreen isDashboard={pathname.includes("/dashboard")} />}
-    >
+    <Suspense fallback={<LoadingScreen isDashboard={pathname.includes("/")} />}>
       <Component {...props} />
     </Suspense>
   );
@@ -49,7 +47,7 @@ export default function Router() {
       ],
     },
     {
-      path: "dashboard",
+      path: "/",
       element: (
         <AuthGuard>
           <DashboardLayout />
@@ -57,7 +55,7 @@ export default function Router() {
       ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-        { path: "app", element: <DashBoard /> },
+        { path: "home", element: <DashBoard /> },
         {
           path: "user",
           children: [
@@ -105,18 +103,13 @@ export default function Router() {
         },
       ],
     },
+    { path: "/", element: <Navigate to="/home" replace /> },
     {
       path: "*",
       element: <LogoOnlyLayout />,
       children: [
         { path: "404", element: <Page404 /> },
         { path: "*", element: <Navigate to="/404" replace /> },
-      ],
-    },
-    {
-      path: "/",
-      children: [
-        { element: <Navigate to="/dashboard/app" replace />, index: true },
       ],
     },
     { path: "*", element: <Navigate to="/404" replace /> },

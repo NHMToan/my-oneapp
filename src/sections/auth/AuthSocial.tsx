@@ -2,21 +2,59 @@
 import { Button, Divider, Stack, Typography } from "@mui/material";
 // component
 import IconBox from "../../components/IconBox";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { useFbLoginMutation } from "generated/graphql";
+import useAuth from "hooks/useAuth";
 
 // ----------------------------------------------------------------------
 
 export default function AuthSocial() {
+  const [onFBLogin] = useFbLoginMutation();
+  const { postLogin } = useAuth();
+  const responseFacebook = async (res) => {
+    try {
+      const loginRes = await onFBLogin({
+        variables: {
+          fbLoginInput: {
+            id: res.id,
+            name: res.name,
+            picture: res?.picture?.data?.url || "",
+          },
+        },
+      });
+      postLogin(loginRes.data.fbLogin);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
       <Stack direction="row" spacing={2}>
-        <Button fullWidth size="large" color="inherit" variant="outlined">
-          <IconBox
-            icon="eva:facebook-fill"
-            color="#1877F2"
-            width={22}
-            height={22}
-          />
-        </Button>
+        <FacebookLogin
+          appId="573224731075564"
+          autoLoad={true}
+          fields="name,email,picture"
+          callback={responseFacebook}
+          render={(renderProps) => {
+            return (
+              <Button
+                fullWidth
+                size="large"
+                color="inherit"
+                variant="outlined"
+                onClick={renderProps.onClick}
+              >
+                <IconBox
+                  icon="eva:facebook-fill"
+                  color="#1877F2"
+                  width={22}
+                  height={22}
+                />
+              </Button>
+            );
+          }}
+        />
+
         <Button fullWidth size="large" color="inherit" variant="outlined">
           <IconBox
             icon="eva:google-fill"

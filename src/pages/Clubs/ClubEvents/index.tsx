@@ -55,7 +55,7 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
 
   const [view, setView] = useState(isDesktop ? "dayGridMonth" : "listWeek");
 
-  const { data } = useEventsQuery({
+  const { data, refetch } = useEventsQuery({
     variables: {
       clubId: club.id,
       dateAfter: currentRange?.length > 0 && currentRange[0],
@@ -201,7 +201,9 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
           onClose={() => setIsFormOpen(false)}
           range={selectedRange}
           club={club}
-          onPostSave={() => {}}
+          onPostSave={() => {
+            refetch();
+          }}
         />
         <EventDetailsModal
           open={isDetailsOpen}

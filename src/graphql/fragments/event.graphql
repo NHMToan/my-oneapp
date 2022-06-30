@@ -7,6 +7,7 @@ fragment eventMutationResponse on EventMutationResponse {
     ...fieldError
   }
 }
+
 fragment eventInfo on ClubEvent {
   id
   title
@@ -25,6 +26,12 @@ fragment eventInfo on ClubEvent {
   address
   color
   voteCount
+  waitingCount
   isVoted
   isAdmin
+  vote {
+    id
+    status
+    value
+  }
 }

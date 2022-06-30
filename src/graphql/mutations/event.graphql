@@ -3,3 +3,13 @@ mutation CreateEvent($createEventInput: CreateEventInput!) {
     ...eventMutationResponse
   }
 }
+mutation CreateVoteEvent($createVoteInput: CreateVoteInput!) {
+  voteEvent(createVoteInput: $createVoteInput) {
+    ...eventMutationResponse
+  }
+}
+mutation UnVoteEvent($eventId: ID!) {
+  unVoteEvent(eventId: $eventId) {
+    ...eventMutationResponse
+  }
+}

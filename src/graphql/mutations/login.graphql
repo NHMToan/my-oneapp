@@ -9,3 +9,14 @@ mutation Login($loginInput: LoginInput!) {
     }
   }
 }
+mutation FBLogin($fbLoginInput: FBLoginInput!) {
+  fbLogin(fbLoginInput: $fbLoginInput) {
+    code
+    success
+    message
+    accessToken
+    user {
+      ...userInfo
+    }
+  }
+}
