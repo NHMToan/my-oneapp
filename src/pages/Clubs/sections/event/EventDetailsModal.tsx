@@ -3,7 +3,6 @@ import {
   CardHeader,
   Container,
   Dialog,
-  DialogTitle,
   Divider,
   Grid,
   Link,
@@ -45,7 +44,7 @@ const Content = ({ eventId }) => {
   if (loading) return <SimpleSkeleton />;
   if (!data) return null;
 
-  const { title } = data.getEvent;
+  const { title, status } = data.getEvent;
 
   const renderGeneral = () => {
     const { description, start, end, address, time } = data.getEvent;
@@ -97,43 +96,59 @@ const Content = ({ eventId }) => {
   };
   return (
     <>
-      <DialogTitle>
-        <Typography variant="h4" gutterBottom>
-          {title}
-        </Typography>
-        <DropdownMenu
-          actions={
-            <>
-              <MenuItem
-                onClick={async () => {
-                  try {
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-              >
-                <Iconify icon={"eva:checkmark-circle-2-fill"} />
-                Set sub-admin
-              </MenuItem>
+      <CardHeader
+        title={title}
+        sx={{ p: "12px 24px 24px" }}
+        action={
+          <DropdownMenu
+            actions={
+              <>
+                <MenuItem
+                  onClick={async () => {
+                    try {
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  }}
+                  key="edit"
+                >
+                  <Iconify icon={"bxs:pencil"} />
+                  Edit
+                </MenuItem>
 
-              <Divider sx={{ borderStyle: "dashed" }} />
+                <MenuItem
+                  onClick={async () => {
+                    try {
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  }}
+                  key="setShow"
+                >
+                  <Iconify icon={"bxs:hide"} />
+                  {status === 1 ? "Hide event" : "Show Event"}
+                </MenuItem>
 
-              <MenuItem
-                sx={{ color: "error.main" }}
-                onClick={async () => {
-                  try {
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-              >
-                <Iconify icon={"eva:trash-2-outline"} />
-                Delete
-              </MenuItem>
-            </>
-          }
-        />
-      </DialogTitle>
+                <Divider sx={{ borderStyle: "dashed" }} />
+
+                <MenuItem
+                  sx={{ color: "error.main" }}
+                  onClick={async () => {
+                    try {
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  }}
+                  key="delete"
+                >
+                  <Iconify icon={"eva:trash-2-outline"} />
+                  Delete
+                </MenuItem>
+              </>
+            }
+          />
+        }
+      />
 
       <Container sx={{ px: 2 }}>
         <Grid container spacing={3}>

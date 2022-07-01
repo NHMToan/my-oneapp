@@ -12,6 +12,7 @@ export default function AuthSocial() {
   const [onFBLogin] = useFbLoginMutation();
   const { postLogin } = useAuth();
   const responseFacebook = async (res) => {
+    console.log(res);
     try {
       const loginRes = await onFBLogin({
         variables: {
@@ -31,9 +32,11 @@ export default function AuthSocial() {
     <>
       <Stack direction="row" spacing={2}>
         <FacebookLogin
-          appId="573224731075564"
+          appId={process.env.REACT_APP_FB_DEV}
           fields="name,email,picture"
           callback={responseFacebook}
+          disableMobileRedirect={true}
+          isMobile={false}
           render={(renderProps) => {
             return (
               <Button

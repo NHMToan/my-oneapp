@@ -5,9 +5,10 @@ import {
   Box,
   Button,
   DialogActions,
-  Divider,
+  Grid,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import { ColorSinglePicker } from "components/color-utils";
 import { FormProvider, RHFTextField } from "components/hook-form";
@@ -130,83 +131,97 @@ export default function EventForm({
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3} sx={{ p: 3 }}>
-        <RHFTextField name="title" label="Title" />
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Typography variant="overline" sx={{ color: "text.secondary" }}>
+              Event Info
+            </Typography>
 
-        <RHFTextField
-          name="description"
-          label="Description"
-          multiline
-          rows={4}
-        />
+            <RHFTextField name="title" label="Title" />
 
-        <RHFTextField name="slot" label="Slots" type="number" />
+            <RHFTextField name="slot" label="Slots" type="number" />
 
-        <Controller
-          name="start"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              label="Start date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
+            <RHFTextField name="maxVote" label="Max vote" type="number" />
 
-        <Controller
-          name="end"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              label="End date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  error={!!isDateError}
-                  helperText={
-                    isDateError && "End date must be later than start date"
-                  }
+            <Controller
+              name="start"
+              control={control}
+              render={({ field }) => (
+                <MobileDateTimePicker
+                  {...field}
+                  label="Start date"
+                  inputFormat="dd/MM/yyyy hh:mm a"
+                  renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               )}
             />
-          )}
-        />
 
-        <Divider />
-
-        <Controller
-          name="time"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              label="Event time"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => <TextField {...params} fullWidth />}
+            <Controller
+              name="end"
+              control={control}
+              render={({ field }) => (
+                <MobileDateTimePicker
+                  {...field}
+                  label="End date"
+                  inputFormat="dd/MM/yyyy hh:mm a"
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      error={!!isDateError}
+                      helperText={
+                        isDateError && "End date must be later than start date"
+                      }
+                    />
+                  )}
+                />
+              )}
             />
-          )}
-        />
-
-        <RHFTextField name="address" label="Address" />
-        <RHFTextField name="addressLink" label="Address link" />
-
-        <Controller
-          name="textColor"
-          control={control}
-          render={({ field }) => (
-            <ColorSinglePicker
-              value={field.value}
-              onChange={field.onChange}
-              colors={COLOR_OPTIONS}
+          </Stack>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Typography variant="overline" sx={{ color: "text.secondary" }}>
+              Event Info
+            </Typography>
+            <RHFTextField
+              name="description"
+              label="Description"
+              multiline
+              rows={4}
             />
-          )}
-        />
-      </Stack>
+            <Controller
+              name="time"
+              control={control}
+              render={({ field }) => (
+                <MobileDateTimePicker
+                  {...field}
+                  label="Event time"
+                  inputFormat="dd/MM/yyyy hh:mm a"
+                  renderInput={(params) => <TextField {...params} fullWidth />}
+                />
+              )}
+            />
+
+            <RHFTextField name="address" label="Address" />
+            <RHFTextField name="addressLink" label="Address link" />
+
+            <Controller
+              name="textColor"
+              control={control}
+              render={({ field }) => (
+                <ColorSinglePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  colors={COLOR_OPTIONS}
+                />
+              )}
+            />
+          </Stack>
+        </Grid>
+      </Grid>
+
       <DialogActions>
         <Box sx={{ flexGrow: 1 }} />
 

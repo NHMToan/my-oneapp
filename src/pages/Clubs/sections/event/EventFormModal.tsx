@@ -20,7 +20,7 @@ const EventFormModal: FC<EventFormModalProps> = ({
   club,
 }) => {
   return (
-    <DialogAnimate open={isOpen} onClose={onClose}>
+    <DialogAnimate open={isOpen} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>{event ? "Edit Event" : "Add Event"}</DialogTitle>
 
       <EventForm
