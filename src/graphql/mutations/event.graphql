@@ -13,3 +13,20 @@ mutation UnVoteEvent($eventId: ID!) {
     ...eventMutationResponse
   }
 }
+
+mutation UpdateEvent($id: ID!, $updateEventInput: UpdateEventInput!) {
+  updateEvent(id: $id, updateEventInput: $updateEventInput) {
+    ...eventMutationResponse
+  }
+}
+
+mutation ChangeEventStatus($id: ID!, $status: Int!) {
+  changeEventStatus(id: $id, status: $status) {
+    ...eventMutationResponse
+  }
+}
+mutation DeleteEvent($id: ID!) {
+  deleteEvent(id: $id) {
+    ...eventMutationResponse
+  }
+}

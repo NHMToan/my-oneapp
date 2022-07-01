@@ -13,7 +13,10 @@ import {
 import { ColorSinglePicker } from "components/color-utils";
 import { FormProvider, RHFTextField } from "components/hook-form";
 import { isBefore } from "date-fns";
-import { useCreateEventMutation } from "generated/graphql";
+import {
+  useCreateEventMutation,
+  useUpdateEventMutation,
+} from "generated/graphql";
 import merge from "lodash/merge";
 import { useSnackbar } from "notistack";
 import { ClubData } from "pages/Clubs/data.t";
@@ -39,10 +42,11 @@ const getInitialValues = (event, range) => {
     address: "",
     addressLink: "",
     textColor: "#1890FF",
-    start: range ? new Date(range.start) : new Date(),
-    end: range ? new Date(range.end) : new Date(),
+    start: range ? new Date(range.start) : "",
+    end: range ? new Date(range.end) : "",
     time: null,
     slot: 0,
+    maxVote: 0,
   };
 
   if (event || range) {
@@ -59,7 +63,7 @@ interface EventFormProps {
   range?: any;
   onCancel: () => void;
   onPostSave: () => void;
-  club: ClubData;
+  club?: ClubData;
 }
 export default function EventForm({
   event,
@@ -68,10 +72,16 @@ export default function EventForm({
   onPostSave,
   club,
 }: EventFormProps) {
+  const [onUpdate] = useUpdateEventMutation({ fetchPolicy: "no-cache" });
+
   const { enqueueSnackbar } = useSnackbar();
   const [createEvent] = useCreateEventMutation();
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required("Title is required"),
+    start: Yup.string().required("Start is required"),
+    end: Yup.string().required("End is required"),
+    maxVote: Yup.string().required("Max vote is required"),
+    slot: Yup.string().required("Slot is required"),
     description: Yup.string().max(5000),
   });
 
@@ -96,27 +106,35 @@ export default function EventForm({
         description: data.description,
         color: data.textColor,
         slot: ~~data.slot,
+        maxVote: ~~data.maxVote,
         start: data.start,
         time: data.time,
         end: data.end,
         address: data.address,
         addressLink: data.addressLink,
         isInstant: false,
-        clubId: club.id,
+        clubId: club?.id,
       };
+      if (!club) delete newEvent.clubId;
+
       if (event.id) {
-        enqueueSnackbar("Update success!");
+        delete newEvent.isInstant;
+        const updateRes = await onUpdate({
+          variables: { updateEventInput: newEvent, id: event.id },
+        });
+        if (updateRes.data.updateEvent.success) {
+          enqueueSnackbar("Update success!");
+          onPostSave();
+        }
       } else {
-        const res = await createEvent({
+        const createRes = await createEvent({
           variables: { createEventInput: newEvent },
         });
-
-        console.log(res);
-        enqueueSnackbar("Create success!");
-        console.log(newEvent);
+        if (createRes.data.createEvent.success) {
+          enqueueSnackbar("Create success!");
+          onPostSave();
+        }
       }
-
-      onPostSave();
 
       onCancel();
       reset();
@@ -183,7 +201,7 @@ export default function EventForm({
         <Grid item xs={12} md={6}>
           <Stack spacing={3} sx={{ p: 3 }}>
             <Typography variant="overline" sx={{ color: "text.secondary" }}>
-              Event Info
+              More Information
             </Typography>
             <RHFTextField
               name="description"
@@ -230,7 +248,7 @@ export default function EventForm({
         </Button>
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          Add
+          {event ? "Save changes" : "Add"}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

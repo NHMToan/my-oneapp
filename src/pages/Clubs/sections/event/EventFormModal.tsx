@@ -24,7 +24,7 @@ const EventFormModal: FC<EventFormModalProps> = ({
       <DialogTitle>{event ? "Edit Event" : "Add Event"}</DialogTitle>
 
       <EventForm
-        event={event || {}}
+        event={event || null}
         range={range}
         onCancel={onClose}
         onPostSave={onPostSave}

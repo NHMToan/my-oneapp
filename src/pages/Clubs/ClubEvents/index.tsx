@@ -212,6 +212,9 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
             setSelectedEvent(null);
             setIsDetailsOpen(false);
           }}
+          onRefreshList={() => {
+            refetch();
+          }}
         />
       </Container>
     </Page>

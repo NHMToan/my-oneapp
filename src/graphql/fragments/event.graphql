@@ -35,6 +35,7 @@ fragment eventInfo on ClubEvent {
     value
   }
   time
+  maxVote
 }
 fragment voteInfo on Vote {
   id
