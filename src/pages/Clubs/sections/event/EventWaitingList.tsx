@@ -8,7 +8,7 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
-import { ClubEvent } from "pages/Clubs/data.t";
+import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC } from "react";
 import _mock from "_mock";
 import Iconify from "components/Iconify";
@@ -42,7 +42,7 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
         {data?.getVotes?.results.map((vote, index) => (
           <Voter
             key={vote.id}
-            vote={vote}
+            vote={vote as any}
             index={index}
             isAdmin={event.isAdmin}
           />
@@ -61,18 +61,21 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
 
 interface VoterProps {
   index: any;
-  vote: any;
+  vote: VoteData;
   isAdmin: boolean;
 }
 
 function Voter({ vote, index, isAdmin }: VoterProps) {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Avatar alt={vote.name} src={vote.avatar} />
+      <Avatar
+        alt={vote.member.profile.displayName}
+        src={vote.member.profile.avatar}
+      />
 
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2">
-          {vote.name} ({vote.value})
+          {vote.member.profile.displayName} ({vote.value})
         </Typography>
 
         <Typography

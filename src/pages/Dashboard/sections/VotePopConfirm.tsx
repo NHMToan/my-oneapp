@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  MenuItem,
   Stack,
 } from "@mui/material";
 import { FormProvider, RHFSelect } from "components/hook-form";
@@ -35,7 +34,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
     value: Yup.number()
       .max(3, "Allowed maximum is 3")
       .min(1, "Minimum atleast 1")
-      .required("Slot can not be over than 3"),
+      .required("Slot is required"),
   });
 
   const methods = useForm({
@@ -69,16 +68,27 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={onCancel}>
+    <Dialog open={isOpen} onClose={onCancel} maxWidth="xs">
       <DialogTitle>
         {isWaiting ? "Vote for waiting slot" : "Vote for slot"}
       </DialogTitle>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3} sx={{ p: 3 }}>
-          <RHFSelect name="value" label="Slots">
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+          <RHFSelect
+            name="value"
+            label="Slots"
+            InputLabelProps={{ shrink: true }}
+            sx={{ maxWidth: { md: 160 } }}
+          >
+            <option key={1} value={1}>
+              1
+            </option>
+            <option key={2} value={2}>
+              2
+            </option>
+            <option key={3} value={3}>
+              3
+            </option>
           </RHFSelect>
         </Stack>
 

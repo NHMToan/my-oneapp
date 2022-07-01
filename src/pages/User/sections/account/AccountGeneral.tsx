@@ -175,7 +175,6 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
               <RHFTextField name="displayName" label="Name" />
 
               <RHFSelect name="gender" label="Gender" placeholder="Gender">
-                <option value="" />
                 {genders.map((option) => (
                   <option key={option.code} value={option.label}>
                     {option.label}
@@ -186,7 +185,6 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
               <RHFTextField name="phoneNumber" label="Phone Number" />
 
               <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
                 {countries.map((option) => (
                   <option key={option.code} value={option.label}>
                     {option.label}

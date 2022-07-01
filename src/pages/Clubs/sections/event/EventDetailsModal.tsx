@@ -4,13 +4,16 @@ import {
   Container,
   Dialog,
   DialogTitle,
+  Divider,
   Grid,
   Link,
+  MenuItem,
   Stack,
   styled,
   Tooltip,
   Typography,
 } from "@mui/material";
+import DropdownMenu from "components/DropdownMenu";
 import Iconify from "components/Iconify";
 import { SimpleSkeleton } from "components/skeleton";
 import { useEventQuery } from "generated/graphql";
@@ -98,7 +101,40 @@ const Content = ({ eventId }) => {
         <Typography variant="h4" gutterBottom>
           {title}
         </Typography>
+        <DropdownMenu
+          actions={
+            <>
+              <MenuItem
+                onClick={async () => {
+                  try {
+                  } catch (e) {
+                    console.log(e);
+                  }
+                }}
+              >
+                <Iconify icon={"eva:checkmark-circle-2-fill"} />
+                Set sub-admin
+              </MenuItem>
+
+              <Divider sx={{ borderStyle: "dashed" }} />
+
+              <MenuItem
+                sx={{ color: "error.main" }}
+                onClick={async () => {
+                  try {
+                  } catch (e) {
+                    console.log(e);
+                  }
+                }}
+              >
+                <Iconify icon={"eva:trash-2-outline"} />
+                Delete
+              </MenuItem>
+            </>
+          }
+        />
       </DialogTitle>
+
       <Container sx={{ px: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>

@@ -10,7 +10,7 @@ import {
 import Iconify from "components/Iconify";
 import { SkeletonCommon } from "components/skeleton";
 import { useGetVotesQuery } from "generated/graphql";
-import { ClubEvent } from "pages/Clubs/data.t";
+import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC } from "react";
 import { fDateTime } from "utils/formatTime";
 
@@ -40,7 +40,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
         {data?.getVotes?.results.map((vote, index) => (
           <Voter
             key={vote.id}
-            vote={vote}
+            vote={vote as any}
             index={index}
             isAdmin={event.isAdmin}
           />
@@ -59,18 +59,21 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
 
 interface VoterProps {
   index: any;
-  vote: any;
+  vote: VoteData;
   isAdmin: any;
 }
 
 function Voter({ vote, index, isAdmin }: VoterProps) {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Avatar alt={vote.name} src={vote.avatar} />
+      <Avatar
+        alt={vote.member.profile.displayName}
+        src={vote.member.profile.avatar}
+      />
 
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2">
-          {vote.name} ({vote.value})
+          {vote.member.profile.displayName} ({vote.value})
         </Typography>
 
         <Typography
