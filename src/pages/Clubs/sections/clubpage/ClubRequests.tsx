@@ -1,7 +1,7 @@
 // @mui
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, Card, Grid, Stack, Typography } from "@mui/material";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import {
   useAcceptJoinClubMutation,
   useClubMembersQuery,
@@ -23,7 +23,7 @@ export default function ClubRequests({ club }: ClubRequestsProps) {
     fetchPolicy: "no-cache",
     skip: !club,
   });
-  if (loading) return <SkeletonCommon />;
+  if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
     <Box sx={{ mt: 5 }}>

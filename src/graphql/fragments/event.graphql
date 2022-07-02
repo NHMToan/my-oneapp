@@ -29,11 +29,6 @@ fragment eventInfo on ClubEvent {
   waitingCount
   isVoted
   isAdmin
-  vote {
-    id
-    status
-    value
-  }
   time
   maxVote
 }

@@ -13,10 +13,11 @@ const getIcon = (name) => (
 );
 
 const ICONS = {
-  dashboard: getIcon("ic_dashboard"),
+  dashboard: getIcon("ic_kanban"),
   blog: getIcon("ic_blog"),
   people: getIcon("ic_user"),
   chat: getIcon("ic_chat"),
+  club: getIcon("ic_menu_item"),
 };
 
 const navConfig = [
@@ -26,7 +27,7 @@ const navConfig = [
     subheader: "general",
     items: [
       {
-        title: "home",
+        title: "events",
         path: PATH_DASHBOARD.general.app,
         icon: ICONS.dashboard,
       },
@@ -41,7 +42,7 @@ const navConfig = [
       //   icon: ICONS.blog,
       // },
       // { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
-      { title: "club", path: PATH_DASHBOARD.club.root, icon: ICONS.blog },
+      { title: "clubs", path: PATH_DASHBOARD.club.root, icon: ICONS.club },
     ],
   },
 ];

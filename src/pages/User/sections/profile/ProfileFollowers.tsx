@@ -8,7 +8,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import {
   useFollowUserMutation,
   useGetFollowersQuery,
@@ -29,7 +29,7 @@ export default function ProfileFollowers({ profile }: ProfileFollowersProps) {
     variables: { profileId: profile?.id, limit: 50, offset: 0 },
     fetchPolicy: "no-cache",
   });
-  if (loading) return <SkeletonCommon />;
+  if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
     <Box sx={{ mt: 5 }}>

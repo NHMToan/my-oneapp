@@ -31,6 +31,7 @@ export interface ClubEvent {
   color: string;
   start: string;
   end: string;
+  time: string;
   isAdmin: boolean;
   address: string;
   addressLink: string;
@@ -45,6 +46,7 @@ export interface ClubEvent {
   waitingCount: number;
   isVoted: boolean;
   vote: VoteData;
+  maxVote: number;
 }
 export interface VoteData {
   id: string;

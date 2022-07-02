@@ -11,8 +11,11 @@ export default function useCountdown(date: any) {
   });
 
   useEffect(() => {
-    const interval = setInterval(() => setNewTime(), 1000);
-    return () => clearInterval(interval);
+    if (date) {
+      const interval = setInterval(() => setNewTime(), 1000);
+      return () => clearInterval(interval);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

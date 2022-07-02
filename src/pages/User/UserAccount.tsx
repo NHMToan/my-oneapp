@@ -1,7 +1,7 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { capitalCase } from "change-case";
 import Iconify from "components/Iconify";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import { useMyProfileQuery } from "generated/graphql";
 import {
   AccountChangePassword,
@@ -21,7 +21,7 @@ export default function UserAccount() {
 
   const { currentTab, onChangeTab } = useTabs("general");
 
-  if (loading) return <SkeletonCommon />;
+  if (loading) return <SimpleSkeleton />;
   if (!data) return <div>User error</div>;
 
   const ACCOUNT_TABS = [

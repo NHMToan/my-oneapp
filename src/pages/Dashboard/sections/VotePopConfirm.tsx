@@ -3,6 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Button,
+  Card,
   Dialog,
   DialogActions,
   DialogTitle,
@@ -19,6 +20,7 @@ interface VotePopConfirmProps {
   onClose: () => void;
   onPostSave: (count: number) => void;
   isWaiting?: boolean;
+  currentVoteCount?: number;
 }
 const VotePopConfirm: FC<VotePopConfirmProps> = ({
   event,
@@ -26,15 +28,13 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
   isOpen,
   onPostSave,
   isWaiting,
+  currentVoteCount,
 }) => {
   const defaultValues: any = {
     value: 1,
   };
   const EventSchema = Yup.object().shape({
-    value: Yup.number()
-      .max(3, "Allowed maximum is 3")
-      .min(1, "Minimum atleast 1")
-      .required("Slot is required"),
+    value: Yup.number().required("Slot is required"),
   });
 
   const methods = useForm({
@@ -66,31 +66,62 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
       console.error(error);
     }
   };
+  const maxVote = currentVoteCount
+    ? event.maxVote - currentVoteCount
+    : event.maxVote;
+  const array = new Array(maxVote).fill(0);
+
+  const renderWarning = () => {
+    if (currentVoteCount > 0) {
+      return (
+        <Stack sx={{ p: 3 }}>
+          <Card
+            sx={{
+              px: 2,
+              py: 1,
+              boxShadow: 0,
+              color: (theme: any) => theme.palette["warning"].darker,
+              bgcolor: (theme: any) => theme.palette["warning"].lighter,
+              width: "100%",
+              borderRadius: 1,
+            }}
+          >
+            You have already used <b>{currentVoteCount}</b>, have{" "}
+            <b>
+              {event.maxVote - currentVoteCount < 0
+                ? 0
+                : event.maxVote - currentVoteCount}
+            </b>{" "}
+            left!
+          </Card>
+        </Stack>
+      );
+    }
+  };
 
   return (
     <Dialog open={isOpen} onClose={onCancel} maxWidth="xs">
       <DialogTitle>
         {isWaiting ? "Vote for waiting slot" : "Vote for slot"}
       </DialogTitle>
+      {renderWarning()}
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={3} sx={{ p: 3 }}>
-          <RHFSelect
-            name="value"
-            label="Slots"
-            InputLabelProps={{ shrink: true }}
-            sx={{ maxWidth: { md: 160 } }}
-          >
-            <option key={1} value={1}>
-              1
-            </option>
-            <option key={2} value={2}>
-              2
-            </option>
-            <option key={3} value={3}>
-              3
-            </option>
-          </RHFSelect>
-        </Stack>
+        {maxVote > 0 && (
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <RHFSelect
+              name="value"
+              label="Slots"
+              InputLabelProps={{ shrink: true }}
+              sx={{ minWidth: { md: 160 } }}
+            >
+              {array.map((item, index) => (
+                <option key={index + 1} value={index + 1}>
+                  {index + 1}
+                </option>
+              ))}
+            </RHFSelect>
+          </Stack>
+        )}
 
         <DialogActions>
           <Box sx={{ flexGrow: 1 }} />
@@ -103,6 +134,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
             type="submit"
             variant="contained"
             loading={isSubmitting}
+            disabled={!maxVote}
           >
             Vote
           </LoadingButton>

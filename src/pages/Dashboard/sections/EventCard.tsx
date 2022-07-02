@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardHeader,
   Container,
@@ -11,20 +10,14 @@ import {
 import { Box } from "@mui/system";
 import { ApexOptions } from "apexcharts";
 import { BaseOptionChart } from "components/chart";
-import Iconify from "components/Iconify";
-import {
-  useCreateVoteEventMutation,
-  useEventVoteChangedSubscriptionSubscription,
-  useUnVoteEventMutation,
-} from "generated/graphql";
+import { useEventVoteChangedSubscriptionSubscription } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import merge from "lodash/merge";
-import { useSnackbar } from "notistack";
-import { ClubEvent, VoteData } from "pages/Clubs/data.t";
+import { ClubEvent } from "pages/Clubs/data.t";
 import { FC, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { fNumber } from "utils/formatNumber";
-import VotePopConfirm from "./VotePopConfirm";
+import EventActions from "./EventActions";
 interface EventCardProps {
   event: ClubEvent;
 }
@@ -33,9 +26,6 @@ const CountdownStyle = styled("div")({
   display: "flex",
   justifyContent: "center",
 });
-
-let myInterval,
-  disableOTPmilliseconds = 5000;
 
 const SeparatorStyle = styled(Typography)(({ theme }) => ({
   margin: theme.spacing(0, 1),
@@ -66,30 +56,13 @@ const RenderCountdown = ({ date }) => {
   );
 };
 const EventCard: FC<EventCardProps> = ({ event }) => {
-  const {
-    title,
-    description,
-    start,
-    end,
-    id,
-    vote,
-    voteCount,
-    waitingCount,
-    slot,
-  } = event;
+  const { title, description, start, end, id, voteCount, waitingCount, slot } =
+    event;
 
   const theme: any = useTheme();
-  const [eventVoted, setEventVoted] = useState<VoteData>(vote);
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
   const [eventWaitingCount, setEventWaitingCount] =
     useState<number>(waitingCount);
-  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [isVoteWaiting, setIsVoteWaiting] = useState<boolean>(false);
-
-  const [disableTimer, setDisableTimer] = useState<number>(0);
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const { data: voteCountData } = useEventVoteChangedSubscriptionSubscription({
     variables: {
@@ -121,9 +94,6 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
       setEventWaitingCount(waitingCountData.voteChanged.waitingCount || 0);
     }
   }, [waitingCountData]);
-
-  const [unVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
-  const [onVote] = useCreateVoteEventMutation({ fetchPolicy: "no-cache" });
 
   const currentDate = new Date();
   const colors = [[theme.palette.primary.light, theme.palette.primary.main]];
@@ -162,161 +132,22 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
     },
   });
   const data = [
-    { label: "Vote", value: eventVoteCount },
-    { label: "Waiting", value: eventWaitingCount },
+    { label: "Confirmed", value: eventVoteCount },
+    { label: "Waiting list", value: eventWaitingCount },
   ];
 
-  const handleDisableButton = () => {
-    setIsDisabled(true);
-
-    myInterval = setInterval(() => {
-      return setDisableTimer((prev) => prev - 1);
-    }, 1000);
-
-    setTimeout(() => {
-      setIsDisabled(false);
-      setDisableTimer(disableOTPmilliseconds / 1000); // using disableOTPmilliseconds variable to define or change the milliseconds.
-
-      clearInterval(myInterval);
-    }, disableOTPmilliseconds);
-  };
-  const handleUnVoteSave = async () => {
-    handleDisableButton();
-    try {
-      const unVoteRes = await unVote({ variables: { eventId: id } });
-      if (unVoteRes.data.unVoteEvent.success) {
-        enqueueSnackbar(`Unvote successfully`);
-        setEventVoted(unVoteRes.data.unVoteEvent.event.vote as any);
-      } else {
-        throw unVoteRes.data.unVoteEvent.message;
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const handleVoteSave = async (value) => {
-    handleDisableButton();
-    try {
-      if (isVoteWaiting) {
-        const waitingVoteRes = await onVote({
-          variables: {
-            createVoteInput: {
-              value: ~~value,
-              eventId: id,
-              status: 2,
-            },
-          },
-        });
-
-        if (waitingVoteRes.data.voteEvent.success) {
-          enqueueSnackbar(`You voted for ${value} waiting slot(s)`);
-          setEventVoted(waitingVoteRes.data.voteEvent.event.vote as any);
-        } else {
-          throw waitingVoteRes.data.voteEvent.message;
-        }
-      } else {
-        const waitingVoteRes = await onVote({
-          variables: {
-            createVoteInput: {
-              value: ~~value,
-              eventId: id,
-              status: 1,
-            },
-          },
-        });
-
-        if (waitingVoteRes.data.voteEvent.success) {
-          enqueueSnackbar(`You voted for ${value} slot(s)`);
-          setEventVoted(waitingVoteRes.data.voteEvent.event.vote as any);
-        } else {
-          throw waitingVoteRes.data.voteEvent.message;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const renderActions = () => {
-    if (eventVoted) {
-      return (
-        <Button
-          fullWidth
-          variant="contained"
-          color="error"
-          endIcon={<Iconify icon={"eva:close-circle-fill"} />}
-          onClick={handleUnVoteSave}
-          disabled={isDisabled}
-        >
-          You have voted for {eventVoted.value}{" "}
-          {eventVoted.status === 1 ? "" : "waiting"} slots. Wanna unvote?{" "}
-          {isDisabled && `(${disableTimer})`}
-        </Button>
-      );
-    }
-    return (
-      <Stack
-        direction="row"
-        spacing={2}
-        alignItems="flex-end"
-        sx={{ flexGrow: 1 }}
-      >
-        <Button
-          fullWidth
-          variant="contained"
-          endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
-          onClick={() => {
-            setIsFormOpen(true);
-            setIsVoteWaiting(false);
-          }}
-          disabled={
-            eventVoteCount === slot ||
-            start > currentDate.toISOString() ||
-            isDisabled
-          }
-        >
-          Vote {isDisabled && `(${disableTimer})`}
-        </Button>
-
-        <Button
-          fullWidth
-          variant="contained"
-          color="info"
-          endIcon={<Iconify icon={"fluent:people-queue-20-filled"} />}
-          onClick={() => {
-            setIsFormOpen(true);
-            setIsVoteWaiting(true);
-          }}
-          disabled={start > currentDate.toISOString() || isDisabled}
-        >
-          Waiting {isDisabled && `(${disableTimer})`}
-        </Button>
-      </Stack>
-    );
-  };
-
   const renderCountDown = () => {
-    if (start > currentDate.toISOString()) {
+    if (start < currentDate.toISOString()) {
       return (
         <Stack>
-          <span>Start in </span> <RenderCountdown date={start} />
+          <span>End after </span> <RenderCountdown date={end} />
         </Stack>
       );
     }
-    return (
-      <Stack>
-        <span>End in </span> <RenderCountdown date={end} />
-      </Stack>
-    );
   };
 
   return (
-    <Card
-      sx={{
-        color: eventVoted && theme.palette["primary"].darker,
-        bgcolor: eventVoted && theme.palette["primary"].lighter,
-      }}
-    >
+    <Card>
       <CardHeader
         title={title}
         subheader={description}
@@ -324,42 +155,36 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
         action={renderCountDown()}
       />
 
-      <div>
+      <div style={{ position: "relative" }}>
         <ReactApexChart
           type="radialBar"
           series={[chartSeries]}
           options={chartOptions}
           height={310}
         />
-        <Typography
-          variant="h3"
+        <Box
           sx={{
             flexGrow: 1,
             position: "absolute",
-            top: "calc(50% - 10px)",
+            top: "calc(50% + 15px)",
             left: "50%",
             transform: "translate(-50%, -50%)",
           }}
         >
-          {`${fNumber(eventVoteCount)}/${fNumber(slot)}`}
-        </Typography>
+          <Typography variant="h3">
+            {`${fNumber(eventVoteCount)}/${fNumber(slot)}`}
+          </Typography>
+        </Box>
       </div>
       <Stack spacing={2} sx={{ p: 3 }}>
         {data.map((item) => (
-          <Legend key={item.label} item={item} isVoted={!!eventVoted} />
+          <Legend key={item.label} item={item} />
         ))}
       </Stack>
 
-      <Container sx={{ p: 3 }}>{renderActions()}</Container>
-      <VotePopConfirm
-        isOpen={isFormOpen}
-        event={null}
-        onClose={() => {
-          setIsFormOpen(false);
-        }}
-        onPostSave={handleVoteSave}
-        isWaiting={isVoteWaiting}
-      />
+      <Container sx={{ p: 3 }}>
+        <EventActions event={event} />
+      </Container>
     </Card>
   );
 };

@@ -45,7 +45,15 @@ query GetVotes($limit: Int!, $offset: Int!, $status: Int!, $eventId: ID!) {
     }
   }
 }
-
+query GetMyVotes($eventId: ID!) {
+  getMyVotes(eventId: $eventId) {
+    totalCount
+    hasMore
+    results {
+      ...voteInfo
+    }
+  }
+}
 query GetVoteCount($id: ID!) {
   getVoteCount(id: $id)
 }

@@ -1,5 +1,5 @@
 import { Box, Divider, Stack } from "@mui/material";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import {
   useAddConversationMutation,
   useConversationQuery,
@@ -90,7 +90,7 @@ export default function ChatWindow() {
       <Box sx={{ flexGrow: 1, display: "flex", overflow: "hidden" }}>
         <Stack sx={{ flexGrow: 1 }}>
           {loading ? (
-            <SkeletonCommon />
+            <SimpleSkeleton />
           ) : (
             <ChatMessageList conversation={data?.getConversation as any} />
           )}

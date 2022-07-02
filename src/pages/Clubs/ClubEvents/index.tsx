@@ -30,9 +30,8 @@ const formatEvent = (event: ClubEvent) => {
   return {
     allDay: false,
     description: event.description,
-    end: event.description,
     id: event.id,
-    start: event.start,
+    start: event.time,
     textColor: event.color,
     title: event.title,
   };

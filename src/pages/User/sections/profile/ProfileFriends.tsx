@@ -1,6 +1,6 @@
 // @mui
 import { Avatar, Box, Card, Grid, Link, Typography } from "@mui/material";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import { useGetFriendsQuery } from "generated/graphql";
 import SocialsButton from "pages/People/sections/SocialsButton";
 import UserCardActions from "pages/People/sections/UserCardActions";
@@ -16,7 +16,7 @@ export default function ProfileFriends({ profile }: ProfileFriendsProps) {
     variables: { profileId: profile.id, limit: 50, offset: 0 },
     fetchPolicy: "no-cache",
   });
-  if (loading) return <SkeletonCommon />;
+  if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
     <Box sx={{ mt: 5 }}>

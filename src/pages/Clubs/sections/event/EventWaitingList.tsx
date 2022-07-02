@@ -1,21 +1,20 @@
 import {
-  CardHeader,
-  Stack,
-  Card,
   Avatar,
   Box,
-  Typography,
-  MenuItem,
+  Card,
+  CardHeader,
   Divider,
+  MenuItem,
+  Stack,
+  Typography,
 } from "@mui/material";
+import DropdownMenu from "components/DropdownMenu";
+import Iconify from "components/Iconify";
+import { SimpleSkeleton } from "components/skeleton";
+import { useGetVotesQuery } from "generated/graphql";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC } from "react";
-import _mock from "_mock";
-import Iconify from "components/Iconify";
 import { fDateTime } from "utils/formatTime";
-import DropdownMenu from "components/DropdownMenu";
-import { useGetVotesQuery } from "generated/graphql";
-import { SkeletonCommon } from "components/skeleton";
 
 interface EventWaitingListProps {
   event: ClubEvent;
@@ -28,7 +27,7 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
   });
 
   const renderList = () => {
-    if (loading) return <SkeletonCommon />;
+    if (loading) return <SimpleSkeleton />;
 
     if (!data || !data.getVotes || data?.getVotes?.totalCount === 0)
       return (

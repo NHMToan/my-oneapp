@@ -13,7 +13,7 @@ import {
 import DropdownMenu from "components/DropdownMenu";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import {
   useClubMembersQuery,
   useDeleteClubMemberMutation,
@@ -34,7 +34,7 @@ export default function ClubMembers({ club }: ClubMembersProps) {
     skip: !club,
   });
 
-  if (loading) return <SkeletonCommon />;
+  if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
     <Box sx={{ mt: 5 }}>

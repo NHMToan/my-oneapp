@@ -42,9 +42,9 @@ const getInitialValues = (event, range) => {
     address: "",
     addressLink: "",
     textColor: "#1890FF",
-    start: range ? new Date(range.start) : "",
-    end: range ? new Date(range.end) : "",
-    time: null,
+    start: range ? new Date(range.start) : new Date(),
+    end: range ? new Date(range.end) : new Date(),
+    time: "",
     slot: 0,
     maxVote: 0,
   };
@@ -78,8 +78,9 @@ export default function EventForm({
   const [createEvent] = useCreateEventMutation();
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required("Title is required"),
-    start: Yup.string().required("Start is required"),
-    end: Yup.string().required("End is required"),
+    start: Yup.date().required("Start is required"),
+    end: Yup.date().required("End is required"),
+    time: Yup.date().required("Time is required"),
     maxVote: Yup.string().required("Max vote is required"),
     slot: Yup.string().required("Slot is required"),
     description: Yup.string().max(5000),
@@ -115,9 +116,10 @@ export default function EventForm({
         isInstant: false,
         clubId: club?.id,
       };
+      console.log(data);
       if (!club) delete newEvent.clubId;
 
-      if (event.id) {
+      if (event?.id) {
         delete newEvent.isInstant;
         const updateRes = await onUpdate({
           variables: { updateEventInput: newEvent, id: event.id },

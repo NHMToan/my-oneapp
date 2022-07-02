@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Iconify from "components/Iconify";
-import { SkeletonCommon } from "components/skeleton";
+import { SimpleSkeleton } from "components/skeleton";
 import { useGetVotesQuery } from "generated/graphql";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC } from "react";
@@ -26,7 +26,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
   });
 
   const renderList = () => {
-    if (loading) return <SkeletonCommon />;
+    if (loading) return <SimpleSkeleton />;
 
     if (!data || !data.getVotes || data?.getVotes?.totalCount === 0)
       return (
