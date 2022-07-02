@@ -148,7 +148,7 @@ const Content: FC<EventDetailsContentProps> = ({
             {renderGeneral()}
           </Grid>
           <Grid item xs={12} md={6}>
-            <EventCard event={eventData} />
+            <EventCard event={eventData} hideInfo />
           </Grid>
         </Grid>
       ),

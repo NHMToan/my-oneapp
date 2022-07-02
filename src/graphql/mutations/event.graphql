@@ -13,7 +13,21 @@ mutation UnVoteEvent($voteId: ID!, $eventId: ID!, $eventSlot: Int!) {
     ...eventMutationResponse
   }
 }
-
+mutation ChangeEventVote(
+  $voteId: ID!
+  $eventId: ID!
+  $eventSlot: Int!
+  $newValue: Int!
+) {
+  changeEventVote(
+    voteId: $voteId
+    eventId: $eventId
+    eventSlot: $eventSlot
+    newValue: $newValue
+  ) {
+    ...eventMutationResponse
+  }
+}
 mutation UpdateEvent($id: ID!, $updateEventInput: UpdateEventInput!) {
   updateEvent(id: $id, updateEventInput: $updateEventInput) {
     ...eventMutationResponse

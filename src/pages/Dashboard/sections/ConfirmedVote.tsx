@@ -9,11 +9,15 @@ import {
 import DropdownMenu from "components/DropdownMenu";
 import Iconify from "components/Iconify";
 import PopConfirm from "components/PopConfirm";
-import { useUnVoteEventMutation } from "generated/graphql";
+import {
+  useChangeEventVoteMutation,
+  useUnVoteEventMutation,
+} from "generated/graphql";
 import { useSnackbar } from "notistack";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
-import { fSDateTime } from "utils/formatTime";
+import { fDate } from "utils/formatTime";
+import ChangeVoteConfirm from "./ChangeVoteConfirm";
 
 interface ConfirmedVoteProps {
   vote: VoteData;
@@ -28,6 +32,11 @@ const ConfirmedVote: FC<ConfirmedVoteProps> = ({
   const [onDeleteVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [onChangeVote] = useChangeEventVoteMutation({
+    fetchPolicy: "no-cache",
+  });
+  const [openChange, setOpenChange] = useState<boolean>(false);
+
   return (
     <Card
       sx={{
@@ -44,7 +53,7 @@ const ConfirmedVote: FC<ConfirmedVoteProps> = ({
         title={
           <Typography>
             Confirmed <b>{vote.value}</b> slot(s) at{" "}
-            <b>{fSDateTime(vote.createdAt)}</b>
+            <b>{fDate(vote.createdAt, "eeee HH:mm")}</b>
           </Typography>
         }
         sx={{
@@ -54,12 +63,18 @@ const ConfirmedVote: FC<ConfirmedVoteProps> = ({
           <DropdownMenu
             actions={
               <>
-                <MenuItem onClick={async () => {}}>
-                  <Iconify icon={"eva:checkmark-circle-2-fill"} />
-                  Change
-                </MenuItem>
+                {vote.value > 1 && (
+                  <MenuItem
+                    onClick={() => {
+                      setOpenChange(true);
+                    }}
+                  >
+                    <Iconify icon={"eva:checkmark-circle-2-fill"} />
+                    Change
+                  </MenuItem>
+                )}
 
-                <Divider sx={{ borderStyle: "dashed" }} />
+                {vote.value > 1 && <Divider sx={{ borderStyle: "dashed" }} />}
                 <PopConfirm
                   open={openDelete}
                   onClose={() => setOpenDelete(false)}
@@ -91,9 +106,7 @@ const ConfirmedVote: FC<ConfirmedVoteProps> = ({
                               },
                             });
                             if (deleteVoteRes?.data?.unVoteEvent?.success) {
-                              enqueueSnackbar(
-                                "Unvote waiting slot successfully!"
-                              );
+                              enqueueSnackbar("Unvote slot successfully!");
                               postActions();
                             }
                           } catch (e) {
@@ -120,6 +133,39 @@ const ConfirmedVote: FC<ConfirmedVoteProps> = ({
             }
           />
         }
+      />
+
+      <ChangeVoteConfirm
+        isOpen={openChange}
+        onClose={() => {
+          setOpenChange(false);
+        }}
+        currentVoteCount={vote.value}
+        onPostSave={async (value) => {
+          try {
+            const changeRes = await onChangeVote({
+              variables: {
+                eventId: event.id,
+                voteId: vote.id,
+                eventSlot: event.slot,
+                newValue: value,
+              },
+            });
+
+            if (changeRes?.data?.changeEventVote?.success) {
+              enqueueSnackbar("Vote's slot is changed!");
+              postActions();
+            } else {
+              enqueueSnackbar(
+                changeRes?.data?.changeEventVote?.message ||
+                  "Internal error server",
+                { variant: "error" }
+              );
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }}
       />
     </Card>
   );

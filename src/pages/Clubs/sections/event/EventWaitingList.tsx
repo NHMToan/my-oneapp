@@ -1,33 +1,39 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardHeader,
-  Divider,
-  MenuItem,
+  IconButton,
   Stack,
   Typography,
 } from "@mui/material";
-import DropdownMenu from "components/DropdownMenu";
 import Iconify from "components/Iconify";
+import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
-import { useGetVotesQuery } from "generated/graphql";
+import { useGetVotesQuery, useUnVoteEventMutation } from "generated/graphql";
+import { useSnackbar } from "notistack";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { fDateTime } from "utils/formatTime";
 
 interface EventWaitingListProps {
   event: ClubEvent;
 }
 const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
-  const { data, loading } = useGetVotesQuery({
+  const { data, loading, refetch } = useGetVotesQuery({
     fetchPolicy: "no-cache",
     skip: !event,
     variables: { status: 2, limit: 100, offset: 0, eventId: event.id },
   });
 
   const renderList = () => {
-    if (loading) return <SimpleSkeleton />;
+    if (loading)
+      return (
+        <Stack spacing={3} sx={{ p: 3 }}>
+          <SimpleSkeleton />
+        </Stack>
+      );
 
     if (!data || !data.getVotes || data?.getVotes?.totalCount === 0)
       return (
@@ -44,6 +50,10 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
             vote={vote as any}
             index={index}
             isAdmin={event.isAdmin}
+            postActions={() => {
+              refetch();
+            }}
+            event={event}
           />
         ))}
       </Stack>
@@ -51,7 +61,14 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
   };
   return (
     <Card>
-      <CardHeader title="Waiting List" />
+      <CardHeader
+        title="Waiting List"
+        action={
+          <IconButton onClick={() => refetch()}>
+            <Iconify icon={"ci:refresh-02"} width={20} height={20} />
+          </IconButton>
+        }
+      />
 
       {renderList()}
     </Card>
@@ -62,9 +79,14 @@ interface VoterProps {
   index: any;
   vote: VoteData;
   isAdmin: boolean;
+  event: ClubEvent;
+  postActions: () => void;
 }
 
-function Voter({ vote, index, isAdmin }: VoterProps) {
+function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
+  const [onDeleteVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const { enqueueSnackbar } = useSnackbar();
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Avatar
@@ -93,24 +115,57 @@ function Voter({ vote, index, isAdmin }: VoterProps) {
           {fDateTime(vote.createdAt)}
         </Typography>
       </Box>
+
       {isAdmin && (
-        <DropdownMenu
+        <PopConfirm
+          open={openDelete}
+          onClose={() => setOpenDelete(false)}
+          title={<CardHeader title="Are you sure to Delete this vote?" />}
           actions={
             <>
-              <MenuItem onClick={async () => {}}>
-                <Iconify icon={"eva:checkmark-circle-2-fill"} />
-                Set to vote
-              </MenuItem>
-
-              <Divider sx={{ borderStyle: "dashed" }} />
-
-              <MenuItem sx={{ color: "error.main" }} onClick={async () => {}}>
-                <Iconify icon={"eva:trash-2-outline"} />
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={() => setOpenDelete(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={async () => {
+                  try {
+                    const deleteVoteRes = await onDeleteVote({
+                      variables: {
+                        voteId: vote.id,
+                        eventId: event.id,
+                        eventSlot: event.slot,
+                      },
+                    });
+                    if (deleteVoteRes?.data?.unVoteEvent?.success) {
+                      enqueueSnackbar("Delete vote successfully!");
+                      postActions();
+                    }
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+              >
                 Delete
-              </MenuItem>
+              </Button>
             </>
           }
-        />
+        >
+          <Button
+            color="error"
+            variant="contained"
+            onClick={() => {
+              setOpenDelete(true);
+            }}
+          >
+            Delete
+          </Button>
+        </PopConfirm>
       )}
     </Stack>
   );

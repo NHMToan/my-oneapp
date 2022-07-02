@@ -2,6 +2,8 @@ import {
   Card,
   CardHeader,
   Container,
+  Divider,
+  Link,
   Stack,
   styled,
   Typography,
@@ -10,6 +12,7 @@ import {
 import { Box } from "@mui/system";
 import { ApexOptions } from "apexcharts";
 import { BaseOptionChart } from "components/chart";
+import Iconify from "components/Iconify";
 import { useEventVoteChangedSubscriptionSubscription } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import merge from "lodash/merge";
@@ -17,17 +20,26 @@ import { ClubEvent } from "pages/Clubs/data.t";
 import { FC, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { fNumber } from "utils/formatNumber";
+import { fDateTime } from "utils/formatTime";
 import EventActions from "./EventActions";
 interface EventCardProps {
   event: ClubEvent;
+  hideInfo?: boolean;
 }
 
 const CountdownStyle = styled("div")({
   display: "flex",
   justifyContent: "center",
 });
+const IconStyle = styled(Iconify)(({ theme }) => ({
+  width: 20,
+  height: 20,
+  marginTop: 1,
+  flexShrink: 0,
+  marginRight: theme.spacing(2),
+}));
 
-const SeparatorStyle = styled(Typography)(({ theme }) => ({
+const SeparatorStyle = styled(Typography)(({ theme }: { theme: any }) => ({
   margin: theme.spacing(0, 1),
   [theme.breakpoints.up("sm")]: {
     margin: theme.spacing(0, 0.5),
@@ -55,9 +67,8 @@ const RenderCountdown = ({ date }) => {
     </CountdownStyle>
   );
 };
-const EventCard: FC<EventCardProps> = ({ event }) => {
-  const { title, description, start, end, id, voteCount, waitingCount, slot } =
-    event;
+const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
+  const { title, start, end, id, voteCount, waitingCount, slot } = event;
 
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
@@ -73,6 +84,44 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
     fetchPolicy: "no-cache",
   });
 
+  const renderGeneral = () => {
+    if (hideInfo) return null;
+    const { address, time, maxVote, description } = event;
+    return (
+      <div>
+        <Stack spacing={2} sx={{ px: 3, pb: 3 }}>
+          <Typography variant="body2">{description}</Typography>
+          <Stack direction="row">
+            <IconStyle icon={"ic:baseline-how-to-vote"} />
+            <Typography variant="body2">
+              Max vote: &nbsp;
+              <b>{maxVote}</b>
+            </Typography>
+          </Stack>
+
+          <Stack direction="row">
+            <IconStyle icon={"clarity:alarm-clock-solid"} />
+            <Typography variant="body2">
+              Time: &nbsp;
+              <Link component="span" variant="subtitle2" color="text.primary">
+                {fDateTime(time)}
+              </Link>
+            </Typography>
+          </Stack>
+          <Stack direction="row">
+            <IconStyle icon={"eva:pin-fill"} />
+            <Typography variant="body2">
+              Address: &nbsp;
+              <Link component="span" variant="subtitle2" color="text.primary">
+                {address}
+              </Link>
+            </Typography>
+          </Stack>
+          <Divider />
+        </Stack>
+      </div>
+    );
+  };
   const { data: waitingCountData } =
     useEventVoteChangedSubscriptionSubscription({
       variables: {
@@ -148,13 +197,8 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
 
   return (
     <Card>
-      <CardHeader
-        title={title}
-        subheader={description}
-        sx={{ mb: 8 }}
-        action={renderCountDown()}
-      />
-
+      <CardHeader title={title} action={renderCountDown()} sx={{ mb: 2 }} />
+      {renderGeneral()}
       <div style={{ position: "relative" }}>
         <ReactApexChart
           type="radialBar"

@@ -311,6 +311,7 @@ export type Mutation = {
   addNewMessage: Scalars['Boolean'];
   cancelRequestClub: ClubMutationResponse;
   changeEventStatus: EventMutationResponse;
+  changeEventVote: EventMutationResponse;
   changePassword: UserMutationResponse;
   commentPost: CommentMutationResponse;
   createClub: ClubMutationResponse;
@@ -371,6 +372,14 @@ export type MutationCancelRequestClubArgs = {
 export type MutationChangeEventStatusArgs = {
   id: Scalars['ID'];
   status: Scalars['Int'];
+};
+
+
+export type MutationChangeEventVoteArgs = {
+  eventId: Scalars['ID'];
+  eventSlot: Scalars['Int'];
+  newValue: Scalars['Int'];
+  voteId: Scalars['ID'];
 };
 
 
@@ -1085,6 +1094,16 @@ export type UnVoteEventMutationVariables = Exact<{
 
 
 export type UnVoteEventMutation = { __typename?: 'Mutation', unVoteEvent: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type ChangeEventVoteMutationVariables = Exact<{
+  voteId: Scalars['ID'];
+  eventId: Scalars['ID'];
+  eventSlot: Scalars['Int'];
+  newValue: Scalars['Int'];
+}>;
+
+
+export type ChangeEventVoteMutation = { __typename?: 'Mutation', changeEventVote: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateEventMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2197,6 +2216,47 @@ export function useUnVoteEventMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UnVoteEventMutationHookResult = ReturnType<typeof useUnVoteEventMutation>;
 export type UnVoteEventMutationResult = Apollo.MutationResult<UnVoteEventMutation>;
 export type UnVoteEventMutationOptions = Apollo.BaseMutationOptions<UnVoteEventMutation, UnVoteEventMutationVariables>;
+export const ChangeEventVoteDocument = gql`
+    mutation ChangeEventVote($voteId: ID!, $eventId: ID!, $eventSlot: Int!, $newValue: Int!) {
+  changeEventVote(
+    voteId: $voteId
+    eventId: $eventId
+    eventSlot: $eventSlot
+    newValue: $newValue
+  ) {
+    ...eventMutationResponse
+  }
+}
+    ${EventMutationResponseFragmentDoc}`;
+export type ChangeEventVoteMutationFn = Apollo.MutationFunction<ChangeEventVoteMutation, ChangeEventVoteMutationVariables>;
+
+/**
+ * __useChangeEventVoteMutation__
+ *
+ * To run a mutation, you first call `useChangeEventVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeEventVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeEventVoteMutation, { data, loading, error }] = useChangeEventVoteMutation({
+ *   variables: {
+ *      voteId: // value for 'voteId'
+ *      eventId: // value for 'eventId'
+ *      eventSlot: // value for 'eventSlot'
+ *      newValue: // value for 'newValue'
+ *   },
+ * });
+ */
+export function useChangeEventVoteMutation(baseOptions?: Apollo.MutationHookOptions<ChangeEventVoteMutation, ChangeEventVoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeEventVoteMutation, ChangeEventVoteMutationVariables>(ChangeEventVoteDocument, options);
+      }
+export type ChangeEventVoteMutationHookResult = ReturnType<typeof useChangeEventVoteMutation>;
+export type ChangeEventVoteMutationResult = Apollo.MutationResult<ChangeEventVoteMutation>;
+export type ChangeEventVoteMutationOptions = Apollo.BaseMutationOptions<ChangeEventVoteMutation, ChangeEventVoteMutationVariables>;
 export const UpdateEventDocument = gql`
     mutation UpdateEvent($id: ID!, $updateEventInput: UpdateEventInput!) {
   updateEvent(id: $id, updateEventInput: $updateEventInput) {

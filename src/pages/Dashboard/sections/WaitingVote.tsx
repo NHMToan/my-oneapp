@@ -9,11 +9,15 @@ import {
 import DropdownMenu from "components/DropdownMenu";
 import Iconify from "components/Iconify";
 import PopConfirm from "components/PopConfirm";
-import { useUnVoteEventMutation } from "generated/graphql";
+import {
+  useChangeEventVoteMutation,
+  useUnVoteEventMutation,
+} from "generated/graphql";
 import { useSnackbar } from "notistack";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
-import { fSDateTime } from "utils/formatTime";
+import { fDate } from "utils/formatTime";
+import ChangeVoteConfirm from "./ChangeVoteConfirm";
 
 interface WaitingVoteProps {
   vote: VoteData;
@@ -22,6 +26,11 @@ interface WaitingVoteProps {
 }
 const WaitingVote: FC<WaitingVoteProps> = ({ vote, postActions, event }) => {
   const [onDeleteVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
+  const [onChangeVote] = useChangeEventVoteMutation({
+    fetchPolicy: "no-cache",
+  });
+  const [openChange, setOpenChange] = useState<boolean>(false);
+
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
   return (
@@ -39,8 +48,8 @@ const WaitingVote: FC<WaitingVoteProps> = ({ vote, postActions, event }) => {
       <CardHeader
         title={
           <Typography>
-            Waiting <b>{vote.value}</b> slot(s) at{" "}
-            <b>{fSDateTime(vote.createdAt)}</b>
+            Waiting <b>{vote.value}</b> slots at{" "}
+            <b>{fDate(vote.createdAt, "eeee HH:mm")}</b>
           </Typography>
         }
         sx={{
@@ -50,12 +59,18 @@ const WaitingVote: FC<WaitingVoteProps> = ({ vote, postActions, event }) => {
           <DropdownMenu
             actions={
               <>
-                <MenuItem onClick={async () => {}}>
-                  <Iconify icon={"eva:checkmark-circle-2-fill"} />
-                  Change
-                </MenuItem>
+                {vote.value > 1 && (
+                  <MenuItem
+                    onClick={() => {
+                      setOpenChange(true);
+                    }}
+                  >
+                    <Iconify icon={"eva:checkmark-circle-2-fill"} />
+                    Change
+                  </MenuItem>
+                )}
 
-                <Divider sx={{ borderStyle: "dashed" }} />
+                {vote.value > 1 && <Divider sx={{ borderStyle: "dashed" }} />}
                 <PopConfirm
                   open={openDelete}
                   onClose={() => setOpenDelete(false)}
@@ -113,6 +128,40 @@ const WaitingVote: FC<WaitingVoteProps> = ({ vote, postActions, event }) => {
             }
           />
         }
+      />
+
+      <ChangeVoteConfirm
+        isOpen={openChange}
+        onClose={() => {
+          setOpenChange(false);
+        }}
+        currentVoteCount={vote.value}
+        isWaiting={true}
+        onPostSave={async (value) => {
+          try {
+            const changeRes = await onChangeVote({
+              variables: {
+                eventId: event.id,
+                voteId: vote.id,
+                eventSlot: event.slot,
+                newValue: value,
+              },
+            });
+
+            if (changeRes?.data?.changeEventVote?.success) {
+              enqueueSnackbar("Vote's slot is changed!");
+              postActions();
+            } else {
+              enqueueSnackbar(
+                changeRes?.data?.changeEventVote?.message ||
+                  "Internal error server",
+                { variant: "error" }
+              );
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }}
       />
     </Card>
   );
