@@ -68,12 +68,10 @@ const RenderCountdown = ({ date }) => {
   );
 };
 const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
-  const { title, start, end, id, voteCount, waitingCount, slot } = event;
+  const { title, start, end, id, voteCount, slot } = event;
 
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
-  const [eventWaitingCount, setEventWaitingCount] =
-    useState<number>(waitingCount);
 
   const { data: voteCountData } = useEventVoteChangedSubscriptionSubscription({
     variables: {
@@ -122,27 +120,12 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
       </div>
     );
   };
-  const { data: waitingCountData } =
-    useEventVoteChangedSubscriptionSubscription({
-      variables: {
-        eventId: id,
-        status: 2,
-      },
-      skip: !id,
-      fetchPolicy: "no-cache",
-    });
 
   useEffect(() => {
     if (voteCountData?.voteChanged) {
       setEventVoteCount(voteCountData.voteChanged.voteCount || 0);
     }
   }, [voteCountData]);
-
-  useEffect(() => {
-    if (waitingCountData?.voteChanged) {
-      setEventWaitingCount(waitingCountData.voteChanged.waitingCount || 0);
-    }
-  }, [waitingCountData]);
 
   const currentDate = new Date();
   const colors = [[theme.palette.primary.light, theme.palette.primary.main]];
@@ -180,10 +163,6 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
       },
     },
   });
-  const data = [
-    { label: "Confirmed", value: eventVoteCount },
-    { label: "Waiting list", value: eventWaitingCount },
-  ];
 
   const renderCountDown = () => {
     if (start < currentDate.toISOString()) {
@@ -199,7 +178,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
     <Card>
       <CardHeader title={title} action={renderCountDown()} sx={{ mb: 2 }} />
       {renderGeneral()}
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", marginBottom: 12 }}>
         <ReactApexChart
           type="radialBar"
           series={[chartSeries]}
@@ -220,11 +199,6 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           </Typography>
         </Box>
       </div>
-      <Stack spacing={2} sx={{ p: 3 }}>
-        {data.map((item) => (
-          <Legend key={item.label} item={item} />
-        ))}
-      </Stack>
 
       <Container sx={{ p: 3 }}>
         <EventActions event={event} />
@@ -233,38 +207,38 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   );
 };
 
-interface LegendProps {
-  item: any;
-  isVoted?: boolean;
-}
-function Legend({ item, isVoted }: LegendProps) {
-  const theme: any = useTheme();
-  return (
-    <Stack direction="row" alignItems="center" justifyContent="space-between">
-      <Stack direction="row" alignItems="center" spacing={1}>
-        <Box
-          sx={{
-            width: 16,
-            height: 16,
-            borderRadius: 0.75,
-            bgcolor: "primary.main",
-            color: isVoted && theme.palette["primary"].darker,
-          }}
-        />
+// interface LegendProps {
+//   item: any;
+//   isVoted?: boolean;
+// }
+// function Legend({ item, isVoted }: LegendProps) {
+//   const theme: any = useTheme();
+//   return (
+//     <Stack direction="row" alignItems="center" justifyContent="space-between">
+//       <Stack direction="row" alignItems="center" spacing={1}>
+//         <Box
+//           sx={{
+//             width: 16,
+//             height: 16,
+//             borderRadius: 0.75,
+//             bgcolor: "primary.main",
+//             color: isVoted && theme.palette["primary"].darker,
+//           }}
+//         />
 
-        <Typography
-          variant="subtitle2"
-          sx={{
-            color: isVoted ? theme.palette["primary"].darker : "text.secondary",
-          }}
-        >
-          {item.label}
-        </Typography>
-      </Stack>
+//         <Typography
+//           variant="subtitle2"
+//           sx={{
+//             color: isVoted ? theme.palette["primary"].darker : "text.secondary",
+//           }}
+//         >
+//           {item.label}
+//         </Typography>
+//       </Stack>
 
-      <Typography variant="subtitle1"> {item.value} Slots</Typography>
-    </Stack>
-  );
-}
+//       <Typography variant="subtitle1"> {item.value} Slots</Typography>
+//     </Stack>
+//   );
+// }
 
 export default EventCard;

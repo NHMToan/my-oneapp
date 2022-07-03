@@ -28,6 +28,22 @@ mutation ChangeEventVote(
     ...eventMutationResponse
   }
 }
+
+mutation ChangeSlots(
+  $status: Int!
+  $eventId: ID!
+  $eventSlot: Int!
+  $newValue: Int!
+) {
+  changeSlots(
+    status: $status
+    eventId: $eventId
+    eventSlot: $eventSlot
+    newValue: $newValue
+  ) {
+    ...eventMutationResponse
+  }
+}
 mutation UpdateEvent($id: ID!, $updateEventInput: UpdateEventInput!) {
   updateEvent(id: $id, updateEventInput: $updateEventInput) {
     ...eventMutationResponse

@@ -313,6 +313,7 @@ export type Mutation = {
   changeEventStatus: EventMutationResponse;
   changeEventVote: EventMutationResponse;
   changePassword: UserMutationResponse;
+  changeSlots: EventMutationResponse;
   commentPost: CommentMutationResponse;
   createClub: ClubMutationResponse;
   createEvent: EventMutationResponse;
@@ -386,6 +387,14 @@ export type MutationChangeEventVoteArgs = {
 export type MutationChangePasswordArgs = {
   code: Scalars['String'];
   newPassword: Scalars['String'];
+};
+
+
+export type MutationChangeSlotsArgs = {
+  eventId: Scalars['ID'];
+  eventSlot: Scalars['Int'];
+  newValue: Scalars['Int'];
+  status: Scalars['Int'];
 };
 
 
@@ -656,6 +665,7 @@ export type Query = {
   getProfile?: Maybe<Profile>;
   getProfiles?: Maybe<Profiles>;
   getVoteCount: Scalars['Float'];
+  getVoteStats?: Maybe<VotCount>;
   getVotes?: Maybe<Votes>;
   getWaitingVote: Scalars['Float'];
   hello: Scalars['String'];
@@ -764,6 +774,11 @@ export type QueryGetProfilesArgs = {
 
 export type QueryGetVoteCountArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetVoteStatsArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -910,6 +925,13 @@ export type UserMutationResponse = IMutationResponse & {
   message?: Maybe<Scalars['String']>;
   success: Scalars['Boolean'];
   user?: Maybe<User>;
+};
+
+export type VotCount = {
+  __typename?: 'VotCount';
+  confirmed: Scalars['Float'];
+  total: Scalars['Float'];
+  waiting: Scalars['Float'];
 };
 
 export type Vote = {
@@ -1104,6 +1126,16 @@ export type ChangeEventVoteMutationVariables = Exact<{
 
 
 export type ChangeEventVoteMutation = { __typename?: 'Mutation', changeEventVote: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type ChangeSlotsMutationVariables = Exact<{
+  status: Scalars['Int'];
+  eventId: Scalars['ID'];
+  eventSlot: Scalars['Int'];
+  newValue: Scalars['Int'];
+}>;
+
+
+export type ChangeSlotsMutation = { __typename?: 'Mutation', changeSlots: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateEventMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1341,6 +1373,13 @@ export type GetVotesQueryVariables = Exact<{
 
 
 export type GetVotesQuery = { __typename?: 'Query', getVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean } } }> } | null };
+
+export type GetVoteStatsQueryVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
+
+
+export type GetVoteStatsQuery = { __typename?: 'Query', getVoteStats?: { __typename?: 'VotCount', confirmed: number, waiting: number, total: number } | null };
 
 export type GetMyVotesQueryVariables = Exact<{
   eventId: Scalars['ID'];
@@ -2257,6 +2296,47 @@ export function useChangeEventVoteMutation(baseOptions?: Apollo.MutationHookOpti
 export type ChangeEventVoteMutationHookResult = ReturnType<typeof useChangeEventVoteMutation>;
 export type ChangeEventVoteMutationResult = Apollo.MutationResult<ChangeEventVoteMutation>;
 export type ChangeEventVoteMutationOptions = Apollo.BaseMutationOptions<ChangeEventVoteMutation, ChangeEventVoteMutationVariables>;
+export const ChangeSlotsDocument = gql`
+    mutation ChangeSlots($status: Int!, $eventId: ID!, $eventSlot: Int!, $newValue: Int!) {
+  changeSlots(
+    status: $status
+    eventId: $eventId
+    eventSlot: $eventSlot
+    newValue: $newValue
+  ) {
+    ...eventMutationResponse
+  }
+}
+    ${EventMutationResponseFragmentDoc}`;
+export type ChangeSlotsMutationFn = Apollo.MutationFunction<ChangeSlotsMutation, ChangeSlotsMutationVariables>;
+
+/**
+ * __useChangeSlotsMutation__
+ *
+ * To run a mutation, you first call `useChangeSlotsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeSlotsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeSlotsMutation, { data, loading, error }] = useChangeSlotsMutation({
+ *   variables: {
+ *      status: // value for 'status'
+ *      eventId: // value for 'eventId'
+ *      eventSlot: // value for 'eventSlot'
+ *      newValue: // value for 'newValue'
+ *   },
+ * });
+ */
+export function useChangeSlotsMutation(baseOptions?: Apollo.MutationHookOptions<ChangeSlotsMutation, ChangeSlotsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeSlotsMutation, ChangeSlotsMutationVariables>(ChangeSlotsDocument, options);
+      }
+export type ChangeSlotsMutationHookResult = ReturnType<typeof useChangeSlotsMutation>;
+export type ChangeSlotsMutationResult = Apollo.MutationResult<ChangeSlotsMutation>;
+export type ChangeSlotsMutationOptions = Apollo.BaseMutationOptions<ChangeSlotsMutation, ChangeSlotsMutationVariables>;
 export const UpdateEventDocument = gql`
     mutation UpdateEvent($id: ID!, $updateEventInput: UpdateEventInput!) {
   updateEvent(id: $id, updateEventInput: $updateEventInput) {
@@ -3395,6 +3475,43 @@ export function useGetVotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetVotesQueryHookResult = ReturnType<typeof useGetVotesQuery>;
 export type GetVotesLazyQueryHookResult = ReturnType<typeof useGetVotesLazyQuery>;
 export type GetVotesQueryResult = Apollo.QueryResult<GetVotesQuery, GetVotesQueryVariables>;
+export const GetVoteStatsDocument = gql`
+    query GetVoteStats($eventId: ID!) {
+  getVoteStats(eventId: $eventId) {
+    confirmed
+    waiting
+    total
+  }
+}
+    `;
+
+/**
+ * __useGetVoteStatsQuery__
+ *
+ * To run a query within a React component, call `useGetVoteStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVoteStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVoteStatsQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useGetVoteStatsQuery(baseOptions: Apollo.QueryHookOptions<GetVoteStatsQuery, GetVoteStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetVoteStatsQuery, GetVoteStatsQueryVariables>(GetVoteStatsDocument, options);
+      }
+export function useGetVoteStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVoteStatsQuery, GetVoteStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetVoteStatsQuery, GetVoteStatsQueryVariables>(GetVoteStatsDocument, options);
+        }
+export type GetVoteStatsQueryHookResult = ReturnType<typeof useGetVoteStatsQuery>;
+export type GetVoteStatsLazyQueryHookResult = ReturnType<typeof useGetVoteStatsLazyQuery>;
+export type GetVoteStatsQueryResult = Apollo.QueryResult<GetVoteStatsQuery, GetVoteStatsQueryVariables>;
 export const GetMyVotesDocument = gql`
     query GetMyVotes($eventId: ID!) {
   getMyVotes(eventId: $eventId) {

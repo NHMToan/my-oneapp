@@ -1,16 +1,24 @@
-import { Box, Button, Card, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Divider,
+  Grid,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Iconify from "components/Iconify";
 import {
   useCreateVoteEventMutation,
-  useGetMyVotesQuery,
+  useGetVoteStatsQuery,
 } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import { useSnackbar } from "notistack";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { FC, useEffect, useState } from "react";
-import ConfirmedVote from "./ConfirmedVote";
+import { fNumber } from "utils/formatNumber";
+import ChangeVoteModal from "./ChangeVoteModal";
 import VotePopConfirm from "./VotePopConfirm";
-import WaitingVote from "./WaitingVote";
 
 interface EventActionsProps {
   event: ClubEvent;
@@ -27,19 +35,20 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
 }));
 const EventActions: FC<EventActionsProps> = ({ event }) => {
   const current = new Date();
+  const { data: statsData, refetch } = useGetVoteStatsQuery({
+    fetchPolicy: "no-cache",
+    variables: { eventId: event.id },
+    skip: !event,
+  });
 
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isFormChangeOpen, setIsFormChangeOpen] = useState<boolean>(false);
   const [isVoteWaiting, setIsVoteWaiting] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const [renderCountDown, setRenderCountDown] = useState<boolean>(
     event.start > current.toISOString()
   );
-  const { data, refetch } = useGetMyVotesQuery({
-    fetchPolicy: "no-cache",
-    variables: { eventId: event.id },
-    skip: renderCountDown,
-  });
 
   const [onVote] = useCreateVoteEventMutation({ fetchPolicy: "no-cache" });
 
@@ -77,7 +86,9 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
         refetch();
         enqueueSnackbar(`Waiting ${value} slot(s)`);
       } else {
-        throw voteRes?.data?.voteEvent?.message || "Internal error";
+        enqueueSnackbar(voteRes?.data?.voteEvent?.message || "Internal error", {
+          variant: "error",
+        });
       }
     } catch (e) {
       console.error(e);
@@ -134,70 +145,72 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
           >
             Event is closed!
           </Card>
-
-          {data?.getMyVotes?.results?.map((vote: any, index) => {
-            if (vote.status === 1) {
-              return (
-                <ConfirmedVote
-                  vote={vote}
-                  key={index}
-                  postActions={() => {
-                    refetch();
-                  }}
-                  event={event}
-                />
-              );
-            }
-            return (
-              <WaitingVote
-                vote={vote}
-                key={index}
-                postActions={() => {
-                  refetch();
-                }}
-                event={event}
-              />
-            );
-          })}
         </Stack>
       </>
     );
   if (renderCountDown) return <RenderCountdown />;
 
-  if (data?.getMyVotes?.totalCount > 0) {
-    const currentVoteCount = data.getMyVotes.results.reduce(
-      (previousValue, currentValue) => {
-        return previousValue + currentValue.value;
-      },
-      0
-    );
-    return (
-      <Box>
-        <Stack direction="column" spacing={2}>
-          {data.getMyVotes.results.map((vote: any, index) => {
-            if (vote.status === 1) {
-              return (
-                <ConfirmedVote
-                  vote={vote}
-                  key={index}
-                  postActions={() => {
-                    refetch();
-                  }}
-                  event={event}
-                />
-              );
-            }
-            return (
-              <WaitingVote
-                vote={vote}
-                key={index}
-                postActions={() => {
-                  refetch();
-                }}
-                event={event}
-              />
-            );
-          })}
+  return (
+    <Grid container spacing={1.5}>
+      <Grid item xs={12}>
+        <Card
+          sx={{
+            p: 1,
+            boxShadow: 0,
+            textAlign: "center",
+            color: (theme: any) => theme.palette["info"].darker,
+            bgcolor: (theme: any) => theme.palette["info"].lighter,
+            borderRadius: 2,
+          }}
+          key="message"
+        >
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem />}
+          >
+            <Stack width={1} direction="row" justifyContent="center">
+              <Typography variant="body2" sx={{ color: "text.success" }}>
+                Confimed:{" "}
+                <b>{fNumber(statsData?.getVoteStats?.confirmed || 0)}</b>
+              </Typography>
+            </Stack>
+
+            <Stack
+              width={1}
+              direction="row"
+              textAlign="center"
+              justifyContent="center"
+            >
+              <Typography variant="body2" sx={{ color: "text.info" }}>
+                Waiting: <b>{fNumber(statsData?.getVoteStats?.waiting || 0)}</b>
+              </Typography>
+            </Stack>
+          </Stack>
+        </Card>
+      </Grid>
+      <Grid item xs={12}>
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="flex-end"
+          sx={{ flexGrow: 1 }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
+            onClick={() => {
+              if (statsData?.getVoteStats?.confirmed) {
+                setIsFormChangeOpen(true);
+                setIsVoteWaiting(false);
+              } else {
+                setIsFormOpen(true);
+                setIsVoteWaiting(false);
+              }
+            }}
+          >
+            {statsData?.getVoteStats?.confirmed ? `Change` : "Vote"}
+          </Button>
 
           <Button
             fullWidth
@@ -205,11 +218,16 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
             color="info"
             endIcon={<Iconify icon={"fluent:people-queue-20-filled"} />}
             onClick={() => {
-              setIsFormOpen(true);
-              setIsVoteWaiting(true);
+              if (statsData?.getVoteStats?.waiting) {
+                setIsFormChangeOpen(true);
+                setIsVoteWaiting(true);
+              } else {
+                setIsFormOpen(true);
+                setIsVoteWaiting(true);
+              }
             }}
           >
-            Waiting
+            {statsData?.getVoteStats?.waiting ? `Change` : "Vote"}
           </Button>
           <VotePopConfirm
             isOpen={isFormOpen}
@@ -217,65 +235,35 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
             onClose={() => {
               setIsFormOpen(false);
             }}
-            currentVoteCount={currentVoteCount}
             onPostSave={(value) => {
               if (isVoteWaiting) {
                 handleWaitingVote(value);
+              } else {
+                handleVote(value);
               }
             }}
             isWaiting={isVoteWaiting}
           />
+          <ChangeVoteModal
+            isOpen={isFormChangeOpen}
+            event={event}
+            onClose={() => {
+              setIsFormChangeOpen(false);
+              setIsVoteWaiting(false);
+            }}
+            postActions={() => {
+              refetch();
+            }}
+            isWaiting={isVoteWaiting}
+            currentVoteCount={
+              isVoteWaiting
+                ? statsData?.getVoteStats?.waiting
+                : statsData?.getVoteStats?.confirmed
+            }
+          />
         </Stack>
-      </Box>
-    );
-  }
-  return (
-    <Stack
-      direction="row"
-      spacing={2}
-      alignItems="flex-end"
-      sx={{ flexGrow: 1 }}
-    >
-      <Button
-        fullWidth
-        variant="contained"
-        endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
-        onClick={() => {
-          setIsFormOpen(true);
-          setIsVoteWaiting(false);
-        }}
-      >
-        Vote
-      </Button>
-
-      <Button
-        fullWidth
-        variant="contained"
-        color="info"
-        endIcon={<Iconify icon={"fluent:people-queue-20-filled"} />}
-        onClick={() => {
-          setIsFormOpen(true);
-          setIsVoteWaiting(true);
-        }}
-      >
-        Waiting
-      </Button>
-      <VotePopConfirm
-        isOpen={isFormOpen}
-        event={event}
-        onClose={() => {
-          setIsFormOpen(false);
-        }}
-        onPostSave={(value) => {
-          if (isVoteWaiting) {
-            handleWaitingVote(value);
-          } else {
-            handleVote(value);
-          }
-        }}
-        isWaiting={isVoteWaiting}
-      />
-    </Stack>
+      </Grid>
+    </Grid>
   );
 };
 
