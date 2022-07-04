@@ -52,7 +52,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
   if (!data) return <div>User error</div>;
 
   const { club } = data;
-  const { isAdmin, isMember } = club;
+  const { isAdmin, isMember, isSubAdmin } = club;
   const Club_TABS = [
     {
       value: "general",
@@ -79,7 +79,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
       ),
     },
     {
-      hidden: !isAdmin,
+      hidden: !isSubAdmin && !isAdmin,
       value: "requesting",
       icon: (
         <Iconify

@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardHeader,
-  Divider,
   Grid,
   Stack,
   Typography,
@@ -132,21 +131,11 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
           {renderAction()}
 
           <Card sx={{ py: 3 }}>
-            <Stack
-              direction="row"
-              divider={<Divider orientation="vertical" flexItem />}
-            >
+            <Stack direction="row">
               <Stack width={1} textAlign="center">
                 <Typography variant="h4">{fNumber(memberCount)}</Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Members
-                </Typography>
-              </Stack>
-
-              <Stack width={1} textAlign="center">
-                <Typography variant="h4">{fNumber(1000)}</Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Following
                 </Typography>
               </Stack>
             </Stack>

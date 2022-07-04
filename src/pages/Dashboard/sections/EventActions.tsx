@@ -170,7 +170,7 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
           >
             <Stack width={1} direction="row" justifyContent="center">
               <Typography variant="body2" sx={{ color: "text.success" }}>
-                Confimed:{" "}
+                Confirmed:{" "}
                 <b>{fNumber(statsData?.getVoteStats?.confirmed || 0)}</b>
               </Typography>
             </Stack>
@@ -209,7 +209,7 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
               }
             }}
           >
-            {statsData?.getVoteStats?.confirmed ? `Change` : "Vote"}
+            {statsData?.getVoteStats?.confirmed ? `Change` : "Register"}
           </Button>
 
           <Button
@@ -227,7 +227,7 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
               }
             }}
           >
-            {statsData?.getVoteStats?.waiting ? `Change` : "Vote"}
+            {statsData?.getVoteStats?.waiting ? `Change` : "Queue"}
           </Button>
           <VotePopConfirm
             isOpen={isFormOpen}

@@ -182,7 +182,7 @@ export default function ClubFormContent({
                     label="Club key (Only admin has it)"
                   />
                 )}
-                <RHFTextField name="title" label="CLub Name" />
+                <RHFTextField name="title" label="Club Name" />
 
                 <div>
                   <LabelStyle>Description</LabelStyle>
