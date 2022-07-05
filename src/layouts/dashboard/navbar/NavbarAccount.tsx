@@ -1,6 +1,7 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Link, Stack, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
+import BadgeStatus from "components/BadgeStatus";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
 // components
@@ -62,9 +63,12 @@ export default function NavbarAccount({ isCollapse }: INavbarAccount) {
           <Typography variant="subtitle2" noWrap>
             {user?.displayName}
           </Typography>
-          <Typography variant="body2" noWrap sx={{ color: "text.secondary" }}>
-            {user?.role}
-          </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <BadgeStatus size="large" status="online" />
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              Online
+            </Typography>
+          </Stack>
         </Box>
       </RootStyle>
     </Link>

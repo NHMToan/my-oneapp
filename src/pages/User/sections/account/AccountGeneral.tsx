@@ -3,12 +3,14 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Card, Grid, Stack, Typography } from "@mui/material";
 import {
   FormProvider,
+  RHFDatePicker,
   RHFSelect,
   RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
   RHFUploadSingleFile,
 } from "components/hook-form";
+
 import { AuthContext } from "contexts/JWTContext";
 import { useUpdateProfileMutation } from "generated/graphql";
 import useAuth from "hooks/useAuth";
@@ -18,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { IProfile } from "types/user";
 import { fData } from "utils/formatNumber";
 import * as Yup from "yup";
-import { countries, genders } from "_mock";
+import { genders } from "_mock";
 // ----------------------------------------------------------------------
 interface IAccountGeneral {
   profile: IProfile;
@@ -26,7 +28,7 @@ interface IAccountGeneral {
 
 export default function AccountGeneral({ profile }: IAccountGeneral) {
   const { enqueueSnackbar } = useSnackbar();
-  const [updateProfile, _] = useUpdateProfileMutation();
+  const [updateProfile] = useUpdateProfileMutation();
   const { user } = useAuth();
   const { refreshUser } = useContext(AuthContext);
   const UpdateUserSchema = Yup.object().shape({
@@ -45,6 +47,7 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
     company: profile?.company || "",
     position: profile?.position || "",
     role: profile?.role || "",
+    dob: profile?.dob || null,
     isPublic: user?.isPublic || false,
   };
 
@@ -71,7 +74,11 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
       delete values.isPublic;
 
       const res = await updateProfile({
-        variables: { updateProfileInput: values },
+        variables: {
+          updateProfileInput: {
+            ...values,
+          },
+        },
       });
       if (res.data?.updateProfile?.success) {
         enqueueSnackbar("Update success!");
@@ -184,40 +191,12 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
 
               <RHFTextField name="phoneNumber" label="Phone Number" />
 
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
+              <RHFDatePicker name="dob" label="Date of birth" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <RHFTextField name="about" multiline rows={4} label="About" />
             </Stack>
-          </Card>
-
-          <Card sx={{ p: 3, mt: 3 }}>
-            <Box
-              sx={{
-                display: "grid",
-                rowGap: 3,
-                columnGap: 2,
-                gridTemplateColumns: {
-                  xs: "repeat(1, 1fr)",
-                  sm: "repeat(2, 1fr)",
-                },
-              }}
-            >
-              <RHFTextField name="school" label="School" />
-
-              <RHFTextField name="company" label="Company" />
-
-              <RHFTextField name="role" label="Role" />
-
-              <RHFTextField name="position" label="Position" />
-            </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton

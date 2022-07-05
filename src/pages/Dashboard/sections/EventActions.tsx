@@ -22,6 +22,7 @@ import VotePopConfirm from "./VotePopConfirm";
 
 interface EventActionsProps {
   event: ClubEvent;
+  isFull: boolean;
 }
 const CountdownStyle = styled("div")({
   display: "flex",
@@ -33,7 +34,7 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
     margin: theme.spacing(0, 0.5),
   },
 }));
-const EventActions: FC<EventActionsProps> = ({ event }) => {
+const EventActions: FC<EventActionsProps> = ({ event, isFull }) => {
   const current = new Date();
   const { data: statsData, refetch } = useGetVoteStatsQuery({
     fetchPolicy: "no-cache",
@@ -51,6 +52,9 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
   );
 
   const [onVote] = useCreateVoteEventMutation({ fetchPolicy: "no-cache" });
+
+  const isChangeVote = statsData?.getVoteStats?.confirmed > 0;
+  const isChangeWaitingVote = statsData?.getVoteStats?.waiting > 0;
 
   const handleVote = async (value) => {
     try {
@@ -115,8 +119,12 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
       >
         <CountdownStyle>
           <Typography sx={{ marginRight: "6px" }}>
-            Polling will start after
+            Registration will be open in
           </Typography>
+          <div>
+            <Typography>{countdown.hours}</Typography>
+          </div>
+          <SeparatorStyle>:</SeparatorStyle>
           <div>
             <Typography>{countdown.minutes}</Typography>
           </div>
@@ -208,8 +216,9 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
                 setIsVoteWaiting(false);
               }
             }}
+            disabled={!isChangeVote && isFull}
           >
-            {statsData?.getVoteStats?.confirmed ? `Change` : "Register"}
+            {isChangeVote ? `Change` : "Register"}
           </Button>
 
           <Button
@@ -226,8 +235,12 @@ const EventActions: FC<EventActionsProps> = ({ event }) => {
                 setIsVoteWaiting(true);
               }
             }}
+            disabled={
+              !isChangeWaitingVote &&
+              statsData?.getVoteStats?.total >= event.maxVote
+            }
           >
-            {statsData?.getVoteStats?.waiting ? `Change` : "Queue"}
+            {isChangeWaitingVote ? `Change` : "Queue"}
           </Button>
           <VotePopConfirm
             isOpen={isFormOpen}

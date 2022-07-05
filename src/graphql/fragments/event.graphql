@@ -31,6 +31,7 @@ fragment eventInfo on ClubEvent {
   isAdmin
   time
   maxVote
+  price
 }
 fragment voteInfo on Vote {
   id

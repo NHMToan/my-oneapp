@@ -1,8 +1,10 @@
-import { Card, CardHeader, Link, Stack, Typography } from "@mui/material";
+import { Card, CardHeader, Stack, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
 // components
 import Iconify from "components/Iconify";
+import { IProfile } from "types/user";
+import { fDate } from "utils/formatTime";
 
 // ----------------------------------------------------------------------
 
@@ -17,10 +19,10 @@ const IconStyle = styled(Iconify)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 interface IProfileAbout {
-  profile: any;
+  profile: IProfile;
 }
 export default function ProfileAbout({ profile }: IProfileAbout) {
-  const { about, country, role, company, school } = profile;
+  const { about, dob, phoneNumber, gender } = profile;
 
   return (
     <Card>
@@ -30,32 +32,25 @@ export default function ProfileAbout({ profile }: IProfileAbout) {
         <Typography variant="body2">{about}</Typography>
 
         <Stack direction="row">
-          <IconStyle icon={"eva:pin-fill"} />
+          <IconStyle icon={"tabler:gender-transgender"} />
           <Typography variant="body2">
-            Live at &nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {country}
-            </Link>
+            Gender: &nbsp;
+            <b>{gender || "-"}</b>
+          </Typography>
+        </Stack>
+        <Stack direction="row">
+          <IconStyle icon={"icon-park-solid:birthday-cake"} />
+          <Typography variant="body2">
+            Date of birth: &nbsp;
+            <b>{dob ? fDate(dob, "dd MMMM yyyy") : "-"}</b>
           </Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={"ic:round-business-center"} />
+          <IconStyle icon={"bi:phone-fill"} />
           <Typography variant="body2">
-            {role} at &nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {company}
-            </Link>
-          </Typography>
-        </Stack>
-
-        <Stack direction="row">
-          <IconStyle icon={"ic:round-business-center"} />
-          <Typography variant="body2">
-            Studied at &nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {school}
-            </Link>
+            Phone: &nbsp;
+            <b>{phoneNumber || "-"}</b>
           </Typography>
         </Stack>
       </Stack>

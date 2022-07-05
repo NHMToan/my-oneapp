@@ -192,6 +192,7 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
               datesSet={(arg) => {
                 setCurrentRange([fFullTime(arg.start), fFullTime(arg.end)]);
               }}
+              weekNumberCalculation="ISO"
             />
           </CalendarStyle>
         </Card>

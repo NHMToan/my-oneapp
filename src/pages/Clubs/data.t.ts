@@ -47,6 +47,7 @@ export interface ClubEvent {
   isVoted: boolean;
   vote: VoteData;
   maxVote: number;
+  price: number | string;
 }
 export interface VoteData {
   id: string;

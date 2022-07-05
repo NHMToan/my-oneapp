@@ -13,6 +13,7 @@ import { Box } from "@mui/system";
 import { ApexOptions } from "apexcharts";
 import { BaseOptionChart } from "components/chart";
 import Iconify from "components/Iconify";
+import { differenceInHours } from "date-fns";
 import { useEventVoteChangedSubscriptionSubscription } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import merge from "lodash/merge";
@@ -68,7 +69,7 @@ const RenderCountdown = ({ date }) => {
   );
 };
 const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
-  const { title, start, end, id, voteCount, slot } = event;
+  const { title, start, end, id, voteCount, slot, status, price } = event;
 
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
@@ -113,6 +114,13 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
               <Link component="span" variant="subtitle2" color="text.primary">
                 {address}
               </Link>
+            </Typography>
+          </Stack>
+          <Stack direction="row">
+            <IconStyle icon={"bxs:dollar-circle"} />
+            <Typography variant="body2">
+              Price: &nbsp;
+              <b>{fNumber(price || 0)} VND</b>
             </Typography>
           </Stack>
           <Divider />
@@ -165,6 +173,13 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   });
 
   const renderCountDown = () => {
+    if (status === 2) return null;
+    console.log(differenceInHours(new Date(end), currentDate));
+    if (
+      differenceInHours(new Date(end), currentDate) > 24 ||
+      differenceInHours(new Date(end), currentDate) < 0
+    )
+      return null;
     if (start < currentDate.toISOString()) {
       return (
         <Stack>
@@ -201,7 +216,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
       </div>
 
       <Container sx={{ p: 3 }}>
-        <EventActions event={event} />
+        <EventActions event={event} isFull={eventVoteCount >= event.slot} />
       </Container>
     </Card>
   );

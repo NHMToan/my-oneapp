@@ -5,7 +5,9 @@ import { format, formatDistanceToNow, getTime } from "date-fns";
 export function fDate(date, formatDate = "dd MMMM yyyy") {
   return format(new Date(date), formatDate);
 }
-
+export function fSDate(date, formatDate = "dd/MM/yyyy") {
+  return format(new Date(date), formatDate);
+}
 export function fDateTime(date) {
   return format(new Date(date), "eeee dd MMM yyyy, HH:mm");
 }

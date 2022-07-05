@@ -24,4 +24,5 @@ fragment profileInfo on Profile {
   isFriend
   isFriendRequest
   isFriendSending
+  dob
 }

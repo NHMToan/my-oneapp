@@ -36,7 +36,6 @@ export default function AuthSocial() {
           fields="name,email,picture"
           callback={responseFacebook}
           disableMobileRedirect={true}
-          isMobile={false}
           render={(renderProps) => {
             return (
               <Button
@@ -56,15 +55,6 @@ export default function AuthSocial() {
             );
           }}
         />
-
-        <Button fullWidth size="large" color="inherit" variant="outlined">
-          <IconBox
-            icon="eva:google-fill"
-            color="#DF3E30"
-            width={22}
-            height={22}
-          />
-        </Button>
       </Stack>
 
       <Divider sx={{ my: 3 }}>

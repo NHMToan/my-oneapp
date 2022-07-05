@@ -6,6 +6,7 @@ import {
   Button,
   DialogActions,
   Grid,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -42,11 +43,12 @@ const getInitialValues = (event, range) => {
     address: "",
     addressLink: "",
     textColor: "#1890FF",
-    start: range ? new Date(range.start) : new Date(),
-    end: range ? new Date(range.end) : new Date(),
-    time: "",
+    start: "",
+    end: "",
+    time: range ? new Date(range.start) : new Date(),
     slot: 0,
     maxVote: 0,
+    price: 0,
   };
 
   if (event || range) {
@@ -96,7 +98,8 @@ export default function EventForm({
     watch,
     control,
     handleSubmit,
-
+    getValues,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
@@ -115,6 +118,7 @@ export default function EventForm({
         addressLink: data.addressLink,
         isInstant: false,
         clubId: club?.id,
+        price: data?.price || 0,
       };
       console.log(data);
       if (!club) delete newEvent.clubId;
@@ -211,6 +215,23 @@ export default function EventForm({
               multiline
               rows={4}
             />
+            <RHFTextField
+              name="price"
+              label="Price"
+              placeholder="0.00"
+              value={getValues("price") === 0 ? "" : getValues("price")}
+              onChange={(event) =>
+                setValue("price", Number(event.target.value))
+              }
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">VND</InputAdornment>
+                ),
+                type: "number",
+              }}
+            />
+
             <Controller
               name="time"
               control={control}
@@ -225,7 +246,6 @@ export default function EventForm({
             />
 
             <RHFTextField name="address" label="Address" />
-            <RHFTextField name="addressLink" label="Address link" />
 
             <Controller
               name="textColor"

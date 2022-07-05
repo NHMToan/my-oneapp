@@ -17,7 +17,7 @@ interface ClubCardProps {
   club: ClubData;
 }
 export default function ClubCard({ club, index }: ClubCardProps) {
-  const { cover, title, id, admin } = club;
+  const { cover, title, id, admin, memberCount } = club;
 
   return (
     <Card>
@@ -48,7 +48,7 @@ export default function ClubCard({ club, index }: ClubCardProps) {
         <Image alt="cover" src={cover} ratio="16/9" />
       </Box>
 
-      <ClubContent id={id} title={title} />
+      <ClubContent id={id} title={title} member={memberCount} />
     </Card>
   );
 }
@@ -57,12 +57,12 @@ export default function ClubCard({ club, index }: ClubCardProps) {
 interface ClubContentProps {
   id: string;
   title: string;
-  index?: any;
+  member: number;
 }
-export function ClubContent({ id, title, index }: ClubContentProps) {
+export function ClubContent({ id, title, member }: ClubContentProps) {
   const linkTo = PATH_DASHBOARD.club.view(paramCase(id));
 
-  const POST_INFO = [{ number: 100, icon: "eva:share-fill" }];
+  const POST_INFO = [{ number: member, icon: "heroicons-solid:user-group" }];
 
   return (
     <CardContent
@@ -82,7 +82,6 @@ export function ClubContent({ id, title, index }: ClubContentProps) {
         direction="row"
         justifyContent="flex-end"
         sx={{
-          mt: 3,
           color: "text.disabled",
         }}
       >

@@ -23,7 +23,7 @@ const RootStyle = styled("div")<IRootStyle>(({ theme, active }) => ({
           zIndex: 9,
           content: "''",
           width: "100%",
-          height: "100%",
+          height: "87%",
           position: "absolute",
         }
       : {
@@ -31,7 +31,7 @@ const RootStyle = styled("div")<IRootStyle>(({ theme, active }) => ({
           zIndex: 9,
           content: "''",
           width: "100%",
-          height: "100%",
+          height: "87%",
           position: "absolute",
         },
 }));
@@ -76,7 +76,14 @@ export default function ClubCover({ club }: ClubCoverProps) {
       <Image
         alt="profile cover"
         src={cover}
-        sx={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: "87%",
+        }}
       />
     </RootStyle>
   );

@@ -53,7 +53,7 @@ export default function ClubFormContent({
   const NewClubSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
-    key: Yup.string().required("Key is required"),
+    key: isEdit ? Yup.string() : Yup.string().required("Key is required"),
     coverFile: Yup.mixed().required("Cover is required"),
   });
   const defaultValues: any = useMemo(
@@ -92,7 +92,7 @@ export default function ClubFormContent({
         if (typeof values.coverFile === "string") {
           delete values.coverFile;
         }
-
+        delete values.key;
         updateClub({
           variables: {
             id: currentClub.id,
@@ -182,7 +182,7 @@ export default function ClubFormContent({
                     label="Club key (Only admin has it)"
                   />
                 )}
-                <RHFTextField name="title" label="Club Name" />
+                <RHFTextField name="title" label="Club name" />
 
                 <div>
                   <LabelStyle>Description</LabelStyle>

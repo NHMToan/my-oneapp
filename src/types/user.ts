@@ -4,6 +4,7 @@ export interface IProfile {
   avatar: string;
   cover: string;
   gender: string;
+  dob: string;
   country: string;
   role: string;
   company: string;

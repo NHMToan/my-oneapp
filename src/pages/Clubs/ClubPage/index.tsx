@@ -104,7 +104,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
         <Card
           sx={{
             mb: 3,
-            height: isDesktop ? 350 : 280,
+            height: isDesktop ? 450 : 280,
             position: "relative",
           }}
         >

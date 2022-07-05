@@ -31,6 +31,7 @@ import { useSnackbar } from "notistack";
 import { ClubEvent } from "pages/Clubs/data.t";
 import EventCard from "pages/Dashboard/sections/EventCard";
 import { FC, useState } from "react";
+import { fNumber } from "utils/formatNumber";
 import { fDateTime } from "utils/formatTime";
 import EventDetailsVotesTab from "./EventDetailsVotesTab";
 import EventForm from "./EventForm";
@@ -83,7 +84,8 @@ const Content: FC<EventDetailsContentProps> = ({
   const { title, status, isAdmin } = data.getEvent;
 
   const renderGeneral = () => {
-    const { description, start, end, address, time, maxVote } = data.getEvent;
+    const { description, start, end, address, time, maxVote, price } =
+      data.getEvent;
     return (
       <Card>
         <CardHeader title="Event info" />
@@ -131,6 +133,13 @@ const Content: FC<EventDetailsContentProps> = ({
               <Link component="span" variant="subtitle2" color="text.primary">
                 {address}
               </Link>
+            </Typography>
+          </Stack>
+          <Stack direction="row">
+            <IconStyle icon={"bxs:dollar-circle"} />
+            <Typography variant="body2">
+              Price: &nbsp;
+              <b>{fNumber(price || 0)} VND</b>
             </Typography>
           </Stack>
         </Stack>

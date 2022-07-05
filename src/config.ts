@@ -48,13 +48,19 @@ export const allLangs = [
     label: "English",
     value: "en",
     systemValue: enUS,
-    icon: "/assets/icons/flags/ic_flag_en.svg",
+    icon: "emojione-v1:flag-for-united-kingdom",
   },
   {
-    label: "Vietnamese",
+    label: "Tiếng việt",
     value: "vn",
     systemValue: viVN,
-    icon: "/assets/icons/flags/ic_flag_vn.svg",
+    icon: "twemoji:flag-vietnam",
+  },
+  {
+    label: "Chinese",
+    value: "cn",
+    systemValue: viVN,
+    icon: "twemoji:flag-china",
   },
 ];
 
