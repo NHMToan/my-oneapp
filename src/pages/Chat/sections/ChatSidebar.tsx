@@ -101,7 +101,6 @@ export default function ChatSidebar() {
           ...conversations,
         ].filter((v, i, a) => a.findIndex((v2) => v2.id === v.id) === i)
       );
-      console.log(conversationChanged);
     }
     // eslint-disable-next-line consistent-return
   }, [conversationChanged]);

@@ -12,7 +12,6 @@ export default function AuthSocial() {
   const [onFBLogin] = useFbLoginMutation();
   const { postLogin } = useAuth();
   const responseFacebook = async (res) => {
-    console.log(res);
     try {
       const loginRes = await onFBLogin({
         variables: {

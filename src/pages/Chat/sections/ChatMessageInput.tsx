@@ -142,7 +142,7 @@ export default function ChatMessageInput({
             });
             files.push(file);
           }
-          console.log(files);
+
           setImages(files);
         }}
       />

@@ -312,6 +312,7 @@ export type Mutation = {
   addNewConversation: ConversationMutationResponse;
   addNewMessage: Scalars['Boolean'];
   cancelRequestClub: ClubMutationResponse;
+  changeAdmin: ClubMutationResponse;
   changeEventStatus: EventMutationResponse;
   changeEventVote: EventMutationResponse;
   changePassword: UserMutationResponse;
@@ -369,6 +370,12 @@ export type MutationAddNewMessageArgs = {
 
 export type MutationCancelRequestClubArgs = {
   clubId: Scalars['ID'];
+};
+
+
+export type MutationChangeAdminArgs = {
+  clubId: Scalars['ID'];
+  memberId: Scalars['ID'];
 };
 
 
@@ -671,7 +678,7 @@ export type Query = {
   getVoteStats?: Maybe<VotCount>;
   getVotes?: Maybe<Votes>;
   getWaitingVote: Scalars['Float'];
-  hello: Scalars['String'];
+  hello: Scalars['Float'];
   me?: Maybe<User>;
   myEvents?: Maybe<Events>;
   myProfile?: Maybe<Profile>;
@@ -1063,6 +1070,14 @@ export type UpdateClubMutationVariables = Exact<{
 
 export type UpdateClubMutation = { __typename?: 'Mutation', updateClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
+export type ChangeAdminMutationVariables = Exact<{
+  memberId: Scalars['ID'];
+  clubId: Scalars['ID'];
+}>;
+
+
+export type ChangeAdminMutation = { __typename?: 'Mutation', changeAdmin: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type RequestJoinClubMutationVariables = Exact<{
   clubId: Scalars['ID'];
 }>;
@@ -1432,6 +1447,11 @@ export type GetProfileQueryVariables = Exact<{
 
 
 export type GetProfileQuery = { __typename?: 'Query', getProfile?: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } | null };
+
+export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HelloQuery = { __typename?: 'Query', hello: number };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1995,6 +2015,40 @@ export function useUpdateClubMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateClubMutationHookResult = ReturnType<typeof useUpdateClubMutation>;
 export type UpdateClubMutationResult = Apollo.MutationResult<UpdateClubMutation>;
 export type UpdateClubMutationOptions = Apollo.BaseMutationOptions<UpdateClubMutation, UpdateClubMutationVariables>;
+export const ChangeAdminDocument = gql`
+    mutation ChangeAdmin($memberId: ID!, $clubId: ID!) {
+  changeAdmin(memberId: $memberId, clubId: $clubId) {
+    ...clubMutationResponse
+  }
+}
+    ${ClubMutationResponseFragmentDoc}`;
+export type ChangeAdminMutationFn = Apollo.MutationFunction<ChangeAdminMutation, ChangeAdminMutationVariables>;
+
+/**
+ * __useChangeAdminMutation__
+ *
+ * To run a mutation, you first call `useChangeAdminMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeAdminMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeAdminMutation, { data, loading, error }] = useChangeAdminMutation({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *      clubId: // value for 'clubId'
+ *   },
+ * });
+ */
+export function useChangeAdminMutation(baseOptions?: Apollo.MutationHookOptions<ChangeAdminMutation, ChangeAdminMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeAdminMutation, ChangeAdminMutationVariables>(ChangeAdminDocument, options);
+      }
+export type ChangeAdminMutationHookResult = ReturnType<typeof useChangeAdminMutation>;
+export type ChangeAdminMutationResult = Apollo.MutationResult<ChangeAdminMutation>;
+export type ChangeAdminMutationOptions = Apollo.BaseMutationOptions<ChangeAdminMutation, ChangeAdminMutationVariables>;
 export const RequestJoinClubDocument = gql`
     mutation RequestJoinClub($clubId: ID!) {
   requestJoinClub(id: $clubId) {
@@ -3749,6 +3803,38 @@ export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
 export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
 export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
+export const HelloDocument = gql`
+    query Hello {
+  hello
+}
+    `;
+
+/**
+ * __useHelloQuery__
+ *
+ * To run a query within a React component, call `useHelloQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHelloQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHelloQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHelloQuery(baseOptions?: Apollo.QueryHookOptions<HelloQuery, HelloQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HelloQuery, HelloQueryVariables>(HelloDocument, options);
+      }
+export function useHelloLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HelloQuery, HelloQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HelloQuery, HelloQueryVariables>(HelloDocument, options);
+        }
+export type HelloQueryHookResult = ReturnType<typeof useHelloQuery>;
+export type HelloLazyQueryHookResult = ReturnType<typeof useHelloLazyQuery>;
+export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

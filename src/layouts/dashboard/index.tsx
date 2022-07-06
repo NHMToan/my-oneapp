@@ -9,6 +9,7 @@ import useCollapseDrawer from "../../hooks/useCollapseDrawer";
 import useResponsive from "../../hooks/useResponsive";
 // hooks
 import useSettings from "../../hooks/useSettings";
+import MobileBottomNavigation from "./bottom-navigation/BottomNavigation";
 //
 import DashboardHeader from "./header";
 import NavbarHorizontal from "./navbar/NavbarHorizontal";
@@ -108,6 +109,7 @@ export default function DashboardLayout() {
 
       <MainStyle collapseClick={collapseClick}>
         <Outlet />
+        {!isDesktop && <MobileBottomNavigation />}
       </MainStyle>
     </Box>
   );

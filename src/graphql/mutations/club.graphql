@@ -15,6 +15,12 @@ mutation UpdateClub($id: String!, $updateClubInput: UpdateClubInput!) {
     ...clubMutationResponse
   }
 }
+
+mutation ChangeAdmin($memberId: ID!, $clubId: ID!) {
+  changeAdmin(memberId: $memberId, clubId: $clubId) {
+    ...clubMutationResponse
+  }
+}
 mutation RequestJoinClub($clubId: ID!) {
   requestJoinClub(id: $clubId) {
     ...clubMutationResponse

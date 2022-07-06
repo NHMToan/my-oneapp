@@ -54,7 +54,6 @@ export default function ChatWindow() {
 
     if (mode === "DETAIL") {
       try {
-        console.log(value.images?.length > 0 && value.images[0]);
         const res = await onAddMessage({
           variables: {
             messageInput: {

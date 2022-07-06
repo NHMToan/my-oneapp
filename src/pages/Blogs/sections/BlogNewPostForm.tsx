@@ -131,7 +131,6 @@ export default function BlogNewPostForm({
   }, [isEdit, currentPost]);
 
   const onSubmit = async (values) => {
-    console.log(values);
     try {
       if (isEdit) {
         if (typeof values.coverFile === "string") {

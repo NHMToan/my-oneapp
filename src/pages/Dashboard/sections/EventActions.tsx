@@ -23,6 +23,7 @@ import VotePopConfirm from "./VotePopConfirm";
 interface EventActionsProps {
   event: ClubEvent;
   isFull: boolean;
+  isClose?: boolean;
 }
 const CountdownStyle = styled("div")({
   display: "flex",
@@ -34,7 +35,7 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
     margin: theme.spacing(0, 0.5),
   },
 }));
-const EventActions: FC<EventActionsProps> = ({ event, isFull }) => {
+const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
   const current = new Date();
   const { data: statsData, refetch } = useGetVoteStatsQuery({
     fetchPolicy: "no-cache",
@@ -112,6 +113,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull }) => {
       <Card
         sx={{
           py: 2,
+          px: 2,
           boxShadow: 0,
           color: (theme: any) => theme.palette["info"].darker,
           bgcolor: (theme: any) => theme.palette["info"].lighter,
@@ -136,10 +138,45 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull }) => {
       </Card>
     );
   };
-  if (event.end < current.toISOString() || event.status === 2)
+  if (isClose || event.end < current.toISOString() || event.status === 2)
     return (
       <>
         <Stack direction="column" spacing={2}>
+          <Card
+            sx={{
+              p: 1,
+              boxShadow: 0,
+              textAlign: "center",
+              color: (theme: any) => theme.palette["info"].darker,
+              bgcolor: (theme: any) => theme.palette["info"].lighter,
+              borderRadius: 2,
+            }}
+            key="stats"
+          >
+            <Stack
+              direction="row"
+              divider={<Divider orientation="vertical" flexItem />}
+            >
+              <Stack width={1} direction="row" justifyContent="center">
+                <Typography variant="body2" sx={{ color: "text.success" }}>
+                  Confirmed:{" "}
+                  <b>{fNumber(statsData?.getVoteStats?.confirmed || 0)}</b>
+                </Typography>
+              </Stack>
+
+              <Stack
+                width={1}
+                direction="row"
+                textAlign="center"
+                justifyContent="center"
+              >
+                <Typography variant="body2" sx={{ color: "text.info" }}>
+                  Waiting:{" "}
+                  <b>{fNumber(statsData?.getVoteStats?.waiting || 0)}</b>
+                </Typography>
+              </Stack>
+            </Stack>
+          </Card>
           <Card
             sx={{
               p: 1,
@@ -151,7 +188,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull }) => {
             }}
             key="message"
           >
-            Event is closed!
+            Voting is closed!
           </Card>
         </Stack>
       </>

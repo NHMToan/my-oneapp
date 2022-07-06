@@ -46,8 +46,14 @@ const SeparatorStyle = styled(Typography)(({ theme }: { theme: any }) => ({
     margin: theme.spacing(0, 0.5),
   },
 }));
-const RenderCountdown = ({ date }) => {
+const RenderCountdown = ({ date, onEnd }) => {
   const countdown = useCountdown(new Date(date));
+  useEffect(() => {
+    const now = new Date();
+    if (now > new Date(date)) {
+      onEnd();
+    }
+  }, [countdown]);
   return (
     <CountdownStyle>
       <div>
@@ -73,6 +79,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
 
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
+  const [isClose, setIsClose] = useState<boolean>(new Date() > new Date(end));
 
   const { data: voteCountData } = useEventVoteChangedSubscriptionSubscription({
     variables: {
@@ -173,8 +180,9 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   });
 
   const renderCountDown = () => {
+    if (isClose) return null;
     if (status === 2) return null;
-    console.log(differenceInHours(new Date(end), currentDate));
+
     if (
       differenceInHours(new Date(end), currentDate) > 24 ||
       differenceInHours(new Date(end), currentDate) < 0
@@ -183,7 +191,13 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
     if (start < currentDate.toISOString()) {
       return (
         <Stack>
-          <span>End after </span> <RenderCountdown date={end} />
+          <span>End after </span>{" "}
+          <RenderCountdown
+            date={end}
+            onEnd={() => {
+              setIsClose(true);
+            }}
+          />
         </Stack>
       );
     }
@@ -216,7 +230,11 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
       </div>
 
       <Container sx={{ p: 3 }}>
-        <EventActions event={event} isFull={eventVoteCount >= event.slot} />
+        <EventActions
+          event={event}
+          isFull={eventVoteCount >= event.slot}
+          isClose={isClose}
+        />
       </Container>
     </Card>
   );

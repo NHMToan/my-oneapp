@@ -9,7 +9,7 @@ export default function GeneralApp() {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="General: App">
+    <Page title="Home">
       <Container maxWidth={themeStretch ? false : "xl"}>
         <EventList />
       </Container>

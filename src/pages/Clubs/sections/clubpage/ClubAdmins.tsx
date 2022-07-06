@@ -2,6 +2,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Divider,
   Grid,
@@ -14,15 +15,19 @@ import DropdownMenu from "components/DropdownMenu";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
 import Label from "components/Label";
+import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
 import {
+  useChangeAdminMutation,
   useClubMembersQuery,
   useDeleteClubMemberMutation,
   useSetRoleMutation,
 } from "generated/graphql";
+import { useSnackbar } from "notistack";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
 import SocialsButton from "pages/People/sections/SocialsButton";
-import { Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
 // ----------------------------------------------------------------------
 
@@ -65,6 +70,7 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
                 member={member as any}
                 refetch={refetch}
                 showAction={club.isAdmin}
+                clubId={club?.id}
               />
             </Grid>
           ))}
@@ -78,8 +84,15 @@ interface AdminCardProps {
   isAdmin?: boolean;
   showAction?: boolean;
   refetch: any;
+  clubId?: string;
 }
-function AdminCard({ member, isAdmin, showAction, refetch }: AdminCardProps) {
+function AdminCard({
+  member,
+  isAdmin,
+  showAction,
+  refetch,
+  clubId,
+}: AdminCardProps) {
   const {
     profile: {
       displayName,
@@ -92,8 +105,12 @@ function AdminCard({ member, isAdmin, showAction, refetch }: AdminCardProps) {
     },
     id,
   } = member;
+  const [openChangeAdmin, setOpenChangeAdmin] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [onSetRole] = useSetRoleMutation({ fetchPolicy: "no-cache" });
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
+  const [onSetAdmin] = useChangeAdminMutation({ fetchPolicy: "no-cache" });
+  const { enqueueSnackbar } = useSnackbar();
 
   const SOCIALS = [
     {
@@ -121,6 +138,22 @@ function AdminCard({ member, isAdmin, showAction, refetch }: AdminCardProps) {
       path: twitterLink,
     },
   ];
+
+  const handleChangeAdmin = async () => {
+    try {
+      const res = await onSetAdmin({
+        variables: { memberId: id, clubId: clubId },
+      });
+      if (res?.data?.changeAdmin?.success) {
+        enqueueSnackbar("Club delete successfully!");
+        navigate(PATH_DASHBOARD.club.root);
+      } else {
+        enqueueSnackbar(res?.data?.changeAdmin?.message || "Internal error");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <Card
       sx={{
@@ -184,7 +217,42 @@ function AdminCard({ member, isAdmin, showAction, refetch }: AdminCardProps) {
                 <Iconify icon={"eva:checkmark-circle-2-fill"} />
                 Set to member
               </MenuItem>
-
+              <Divider sx={{ borderStyle: "dashed" }} />
+              {clubId && (
+                <PopConfirm
+                  open={openChangeAdmin}
+                  onClose={() => setOpenChangeAdmin(false)}
+                  title={
+                    <Typography>
+                      Are you sure you want to change the club admin to{" "}
+                      {displayName}?
+                    </Typography>
+                  }
+                  actions={
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => setOpenChangeAdmin(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button variant="contained" onClick={handleChangeAdmin}>
+                        Change
+                      </Button>
+                    </>
+                  }
+                >
+                  <MenuItem
+                    onClick={() => {
+                      setOpenChangeAdmin(true);
+                    }}
+                  >
+                    <Iconify icon={"clarity:administrator-solid"} />
+                    Set to Admin
+                  </MenuItem>
+                </PopConfirm>
+              )}
               <Divider sx={{ borderStyle: "dashed" }} />
 
               <MenuItem

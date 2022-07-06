@@ -120,7 +120,7 @@ export default function EventForm({
         clubId: club?.id,
         price: data?.price || 0,
       };
-      console.log(data);
+
       if (!club) delete newEvent.clubId;
 
       if (event?.id) {
