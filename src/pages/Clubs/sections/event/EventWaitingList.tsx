@@ -15,7 +15,7 @@ import { useGetVotesQuery, useUnVoteEventMutation } from "generated/graphql";
 import { useSnackbar } from "notistack";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
-import { fDateTime } from "utils/formatTime";
+import { fSDateTime } from "utils/formatTime";
 
 interface EventWaitingListProps {
   event: ClubEvent;
@@ -112,7 +112,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
             icon={"ant-design:calendar-filled"}
             sx={{ width: 16, height: 16, mr: 0.5 }}
           />
-          {fDateTime(vote.createdAt)}
+          {fSDateTime(vote.createdAt)}
         </Typography>
       </Box>
 

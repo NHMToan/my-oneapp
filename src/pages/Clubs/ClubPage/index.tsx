@@ -5,11 +5,12 @@ import Iconify from "components/Iconify";
 import Page from "components/Page";
 import SkeletonProfile from "components/skeleton/SkeletonProfile";
 import { useClubQuery } from "generated/graphql";
+import { useNavigateSearch } from "hooks/useNavigateSearch";
 import useResponsive from "hooks/useResponsive";
 import useSettings from "hooks/useSettings";
-import useTabs from "hooks/useTabs";
 import { FC } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { getValueFromUrlParams } from "utils/location";
 import ClubEvents from "../ClubEvents";
 import { ClubFormContent } from "../sections";
 import ClubAdmins from "../sections/clubpage/ClubAdmins";
@@ -37,7 +38,10 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 const ClubPage: FC<ClubPageProps> = (props) => {
   const { themeStretch } = useSettings();
   const { id } = useParams();
-  const { currentTab, onChangeTab } = useTabs("general");
+  const location = useLocation();
+  const currentTab = getValueFromUrlParams(location.search, "tab") || "general";
+  const navigateSearch = useNavigateSearch();
+
   const isDesktop = useResponsive("up", "md");
 
   const { data, loading, refetch } = useClubQuery({
@@ -116,7 +120,9 @@ const ClubPage: FC<ClubPageProps> = (props) => {
               variant="scrollable"
               scrollButtons="auto"
               value={currentTab}
-              onChange={onChangeTab}
+              onChange={(event, newValue) => {
+                navigateSearch(location.pathname, { tab: newValue });
+              }}
             >
               {Club_TABS.filter((item) => !item.hidden).map((tab) => (
                 <Tab

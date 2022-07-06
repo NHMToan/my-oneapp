@@ -9,11 +9,11 @@ export function fSDate(date, formatDate = "dd/MM/yyyy") {
   return format(new Date(date), formatDate);
 }
 export function fDateTime(date) {
-  return format(new Date(date), "eeee dd MMM yyyy, HH:mm");
+  return format(new Date(date), "eee, dd MMM yyyy, HH:mm");
 }
 
 export function fSDateTime(date) {
-  return format(new Date(date), "eeee d/M, HH:mm");
+  return format(new Date(date), "eee d/M, HH:mm:ss");
 }
 
 export function fFullTime(date) {
