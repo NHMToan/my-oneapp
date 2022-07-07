@@ -14,6 +14,10 @@ query Clubs($limit: Int!, $offset: Int!, $ordering: String) {
   }
 }
 
+query GetClubRequestingNumber($clubId: ID!) {
+  getClubRequestingNumber(clubId: $clubId)
+}
+
 query ClubMembers(
   $limit: Int
   $offset: Int

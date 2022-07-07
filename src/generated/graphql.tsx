@@ -664,6 +664,7 @@ export type Query = {
   clubmembers?: Maybe<Clubmembers>;
   clubs?: Maybe<Clubs>;
   comments?: Maybe<Comments>;
+  getClubRequestingNumber?: Maybe<Scalars['Float']>;
   getConversation?: Maybe<Conversation>;
   getConversations?: Maybe<Conversations>;
   getEvent?: Maybe<ClubEvent>;
@@ -714,6 +715,11 @@ export type QueryCommentsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   ordering?: InputMaybe<Scalars['String']>;
   postId: Scalars['ID'];
+};
+
+
+export type QueryGetClubRequestingNumberArgs = {
+  clubId: Scalars['ID'];
 };
 
 
@@ -1339,6 +1345,13 @@ export type ClubsQueryVariables = Exact<{
 
 
 export type ClubsQuery = { __typename?: 'Query', clubs?: { __typename?: 'Clubs', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } }> } | null };
+
+export type GetClubRequestingNumberQueryVariables = Exact<{
+  clubId: Scalars['ID'];
+}>;
+
+
+export type GetClubRequestingNumberQuery = { __typename?: 'Query', getClubRequestingNumber?: number | null };
 
 export type ClubMembersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -3281,6 +3294,39 @@ export function useClubsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Club
 export type ClubsQueryHookResult = ReturnType<typeof useClubsQuery>;
 export type ClubsLazyQueryHookResult = ReturnType<typeof useClubsLazyQuery>;
 export type ClubsQueryResult = Apollo.QueryResult<ClubsQuery, ClubsQueryVariables>;
+export const GetClubRequestingNumberDocument = gql`
+    query GetClubRequestingNumber($clubId: ID!) {
+  getClubRequestingNumber(clubId: $clubId)
+}
+    `;
+
+/**
+ * __useGetClubRequestingNumberQuery__
+ *
+ * To run a query within a React component, call `useGetClubRequestingNumberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClubRequestingNumberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClubRequestingNumberQuery({
+ *   variables: {
+ *      clubId: // value for 'clubId'
+ *   },
+ * });
+ */
+export function useGetClubRequestingNumberQuery(baseOptions: Apollo.QueryHookOptions<GetClubRequestingNumberQuery, GetClubRequestingNumberQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClubRequestingNumberQuery, GetClubRequestingNumberQueryVariables>(GetClubRequestingNumberDocument, options);
+      }
+export function useGetClubRequestingNumberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClubRequestingNumberQuery, GetClubRequestingNumberQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClubRequestingNumberQuery, GetClubRequestingNumberQueryVariables>(GetClubRequestingNumberDocument, options);
+        }
+export type GetClubRequestingNumberQueryHookResult = ReturnType<typeof useGetClubRequestingNumberQuery>;
+export type GetClubRequestingNumberLazyQueryHookResult = ReturnType<typeof useGetClubRequestingNumberLazyQuery>;
+export type GetClubRequestingNumberQueryResult = Apollo.QueryResult<GetClubRequestingNumberQuery, GetClubRequestingNumberQueryVariables>;
 export const ClubMembersDocument = gql`
     query ClubMembers($limit: Int, $offset: Int, $clubId: ID!, $status: Int!, $role: Int) {
   clubmembers(

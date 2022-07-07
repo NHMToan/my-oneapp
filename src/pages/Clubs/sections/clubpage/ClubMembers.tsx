@@ -29,7 +29,7 @@ interface ClubMembersProps {
 }
 export default function ClubMembers({ club }: ClubMembersProps) {
   const { data, loading, error, refetch } = useClubMembersQuery({
-    variables: { clubId: club?.id, status: 2, role: 1, limit: 50, offset: 0 },
+    variables: { clubId: club?.id, status: 2, role: 1, limit: 200, offset: 0 },
     fetchPolicy: "no-cache",
     skip: !club,
   });

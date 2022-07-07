@@ -16,8 +16,9 @@ import Iconify from "../../../../components/Iconify";
 
 interface ClubRequestsProps {
   club: ClubData;
+  postActions?: () => void;
 }
-export default function ClubRequests({ club }: ClubRequestsProps) {
+export default function ClubRequests({ club, postActions }: ClubRequestsProps) {
   const { data, loading, error, refetch } = useClubMembersQuery({
     variables: { clubId: club?.id, status: 1, limit: 50, offset: 0 },
     fetchPolicy: "no-cache",
@@ -34,7 +35,13 @@ export default function ClubRequests({ club }: ClubRequestsProps) {
       <Grid container spacing={3}>
         {data?.clubmembers?.results?.map((member) => (
           <Grid key={member.id} item xs={12} md={4}>
-            <RequestMemberCard member={member as any} refresh={refetch} />
+            <RequestMemberCard
+              member={member as any}
+              refresh={() => {
+                refetch();
+                postActions();
+              }}
+            />
           </Grid>
         ))}
       </Grid>

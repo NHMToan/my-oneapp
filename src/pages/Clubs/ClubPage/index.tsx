@@ -2,9 +2,13 @@ import { Box, Card, Container, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { capitalCase } from "change-case";
 import Iconify from "components/Iconify";
+import Label from "components/Label";
 import Page from "components/Page";
 import SkeletonProfile from "components/skeleton/SkeletonProfile";
-import { useClubQuery } from "generated/graphql";
+import {
+  useClubQuery,
+  useGetClubRequestingNumberQuery,
+} from "generated/graphql";
 import { useNavigateSearch } from "hooks/useNavigateSearch";
 import useResponsive from "hooks/useResponsive";
 import useSettings from "hooks/useSettings";
@@ -51,12 +55,17 @@ const ClubPage: FC<ClubPageProps> = (props) => {
     },
     skip: !id,
   });
-
+  const { data: requestCount, refetch: refetchRequestCount } =
+    useGetClubRequestingNumberQuery({
+      fetchPolicy: "no-cache",
+      variables: { clubId: id },
+    });
   if (loading) return <SkeletonProfile />;
   if (!data) return <div>User error</div>;
 
   const { club } = data;
   const { isAdmin, isMember, isSubAdmin } = club;
+
   const Club_TABS = [
     {
       value: "general",
@@ -92,7 +101,19 @@ const ClubPage: FC<ClubPageProps> = (props) => {
           height={20}
         />
       ),
-      component: <ClubRequests club={club as any} />,
+      component: (
+        <ClubRequests
+          club={club as any}
+          postActions={() => {
+            refetchRequestCount();
+          }}
+        />
+      ),
+      waning: requestCount?.getClubRequestingNumber && (
+        <Label color="error" sx={{ marginLeft: 1 }}>
+          {requestCount?.getClubRequestingNumber || 0}
+        </Label>
+      ),
     },
     {
       hidden: !isAdmin,
@@ -130,7 +151,12 @@ const ClubPage: FC<ClubPageProps> = (props) => {
                   key={tab.value}
                   value={tab.value}
                   icon={tab.icon}
-                  label={capitalCase(tab.value)}
+                  label={
+                    <>
+                      {capitalCase(tab.value)}
+                      {tab.waning || null}
+                    </>
+                  }
                 />
               ))}
             </Tabs>

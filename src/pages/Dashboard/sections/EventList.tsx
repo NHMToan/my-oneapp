@@ -1,5 +1,6 @@
 import { Container, Stack } from "@mui/material";
 import { SeoIllustration } from "assets";
+import { SimpleSkeleton } from "components/skeleton";
 import { useMyEventsQuery } from "generated/graphql";
 import useAuth from "hooks/useAuth";
 import { FC } from "react";
@@ -8,8 +9,10 @@ import EventCard from "./EventCard";
 
 interface EventListProps {}
 const EventList: FC<EventListProps> = (props) => {
-  const { data } = useMyEventsQuery({ fetchPolicy: "no-cache" });
+  const { data, loading } = useMyEventsQuery({ fetchPolicy: "no-cache" });
   const { user } = useAuth();
+
+  if (loading) return <SimpleSkeleton />;
   if (!data || data?.myEvents?.totalCount === 0)
     return (
       <AppWelcome
