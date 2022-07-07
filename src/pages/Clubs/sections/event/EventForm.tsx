@@ -128,22 +128,33 @@ export default function EventForm({
         const updateRes = await onUpdate({
           variables: { updateEventInput: newEvent, id: event.id },
         });
-        if (updateRes.data.updateEvent.success) {
+        if (updateRes?.data?.updateEvent?.success) {
           enqueueSnackbar("Update success!");
           onPostSave();
+          onCancel();
+          reset();
+        } else {
+          enqueueSnackbar(
+            updateRes?.data?.updateEvent?.message || "Internal error",
+            { variant: "error" }
+          );
         }
       } else {
         const createRes = await createEvent({
           variables: { createEventInput: newEvent },
         });
-        if (createRes.data.createEvent.success) {
+        if (createRes?.data?.createEvent?.success) {
           enqueueSnackbar("Create success!");
           onPostSave();
+          onCancel();
+          reset();
+        } else {
+          enqueueSnackbar(
+            createRes?.data?.createEvent?.message || "Internal error",
+            { variant: "error" }
+          );
         }
       }
-
-      onCancel();
-      reset();
     } catch (error) {
       console.error(error);
     }

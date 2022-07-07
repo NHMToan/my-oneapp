@@ -3,6 +3,7 @@ import {
   CardHeader,
   Container,
   Divider,
+  IconButton,
   Link,
   Stack,
   styled,
@@ -18,6 +19,7 @@ import { useEventVoteChangedSubscriptionSubscription } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import merge from "lodash/merge";
 import { ClubEvent } from "pages/Clubs/data.t";
+import { EventDetailsModal } from "pages/Clubs/sections/event";
 import { FC, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { fNumber } from "utils/formatNumber";
@@ -30,7 +32,6 @@ interface EventCardProps {
 
 const CountdownStyle = styled("div")({
   display: "flex",
-  justifyContent: "center",
 });
 const IconStyle = styled(Iconify)(({ theme }) => ({
   width: 20,
@@ -76,7 +77,7 @@ const RenderCountdown = ({ date, onEnd }) => {
 };
 const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   const { title, start, end, id, voteCount, slot, status, price } = event;
-
+  const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
   const [isClose, setIsClose] = useState<boolean>(new Date() > new Date(end));
@@ -184,14 +185,24 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
     if (status === 2) return null;
 
     if (
-      differenceInHours(new Date(end), currentDate) > 24 ||
+      // differenceInHours(new Date(end), currentDate) > 24 ||
       differenceInHours(new Date(end), currentDate) < 0
     )
       return null;
+
     if (start < currentDate.toISOString()) {
       return (
-        <Stack>
-          <span>End after </span>{" "}
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            flexGrow: 1,
+            position: "absolute",
+            top: "calc(50% + 48px)",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
           <RenderCountdown
             date={end}
             onEnd={() => {
@@ -205,14 +216,31 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
 
   return (
     <Card>
-      <CardHeader title={title} action={renderCountDown()} sx={{ mb: 2 }} />
+      <CardHeader
+        title={title}
+        action={
+          <>
+            {!hideInfo && (
+              <IconButton
+                onClick={() => {
+                  setIsDetailsOpen(true);
+                }}
+              >
+                <Iconify icon={"akar-icons:info-fill"} width={20} height={20} />
+              </IconButton>
+            )}
+          </>
+        }
+        sx={{ mb: 2 }}
+      />
       {renderGeneral()}
       <div style={{ position: "relative", marginBottom: 12 }}>
+        {renderCountDown()}
         <ReactApexChart
           type="radialBar"
           series={[chartSeries]}
           options={chartOptions}
-          height={310}
+          height={300}
         />
         <Box
           sx={{
@@ -236,42 +264,18 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           isClose={isClose}
         />
       </Container>
+
+      {!hideInfo && (
+        <EventDetailsModal
+          open={isDetailsOpen}
+          eventId={event.id}
+          onClose={() => {
+            setIsDetailsOpen(false);
+          }}
+        />
+      )}
     </Card>
   );
 };
-
-// interface LegendProps {
-//   item: any;
-//   isVoted?: boolean;
-// }
-// function Legend({ item, isVoted }: LegendProps) {
-//   const theme: any = useTheme();
-//   return (
-//     <Stack direction="row" alignItems="center" justifyContent="space-between">
-//       <Stack direction="row" alignItems="center" spacing={1}>
-//         <Box
-//           sx={{
-//             width: 16,
-//             height: 16,
-//             borderRadius: 0.75,
-//             bgcolor: "primary.main",
-//             color: isVoted && theme.palette["primary"].darker,
-//           }}
-//         />
-
-//         <Typography
-//           variant="subtitle2"
-//           sx={{
-//             color: isVoted ? theme.palette["primary"].darker : "text.secondary",
-//           }}
-//         >
-//           {item.label}
-//         </Typography>
-//       </Stack>
-
-//       <Typography variant="subtitle1"> {item.value} Slots</Typography>
-//     </Stack>
-//   );
-// }
 
 export default EventCard;

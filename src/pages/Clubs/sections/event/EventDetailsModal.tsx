@@ -7,6 +7,7 @@ import {
   Dialog,
   Divider,
   Grid,
+  IconButton,
   Link,
   MenuItem,
   Stack,
@@ -43,17 +44,10 @@ const IconStyle = styled(Iconify)(({ theme }) => ({
   marginRight: theme.spacing(2),
 }));
 
-interface EventDetailsModalProps {
-  eventId: string;
-  open: boolean;
-  onClose: () => void;
-  onRefreshList: () => void;
-}
-
 interface EventDetailsContentProps {
   eventId: string;
   onClose: () => void;
-  onRefreshList: () => void;
+  onRefreshList?: () => void;
 }
 const Content: FC<EventDetailsContentProps> = ({
   eventId,
@@ -191,6 +185,113 @@ const Content: FC<EventDetailsContentProps> = ({
         />
       </>
     );
+  const renderActions = () => {
+    if (!onRefreshList) return null;
+    if (!isAdmin) return null;
+
+    return (
+      <DropdownMenu
+        actions={
+          <>
+            <MenuItem
+              onClick={async () => {
+                setIsEditing(true);
+              }}
+              key="edit"
+            >
+              <Iconify icon={"bxs:pencil"} />
+              Edit
+            </MenuItem>
+
+            <MenuItem
+              onClick={async () => {
+                try {
+                  if (status === 1) {
+                    const res = await onChangeStatus({
+                      variables: { id: eventData.id, status: 2 },
+                    });
+                    if (res.data.changeEventStatus.success) {
+                      enqueueSnackbar("Event changed to hidden!");
+                      refetch();
+                    }
+                  }
+
+                  if (status === 2) {
+                    const res = await onChangeStatus({
+                      variables: { id: eventData.id, status: 1 },
+                    });
+                    if (res.data.changeEventStatus.success) {
+                      enqueueSnackbar("Event changed to visible!");
+                      refetch();
+                    }
+                  }
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
+              key="setShow"
+            >
+              <Iconify icon={"bxs:hide"} />
+              {status === 1 ? "Hide event" : "Show Event"}
+            </MenuItem>
+
+            <Divider sx={{ borderStyle: "dashed" }} />
+            <PopConfirm
+              open={openDelete}
+              onClose={() => {}}
+              title={
+                <Typography>
+                  Are you sure you want to delete the event?
+                </Typography>
+              }
+              actions={
+                <>
+                  <Button
+                    variant="outlined"
+                    color="inherit"
+                    onClick={() => setOpenDelete(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={async () => {
+                      try {
+                        const res = await onDelete({
+                          variables: { id: eventData.id },
+                        });
+                        if (res.data.deleteEvent.success) {
+                          enqueueSnackbar("Event delete successfully!");
+                          onClose();
+                          onRefreshList();
+                        }
+                      } catch (e) {
+                        console.log(e);
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              }
+            >
+              <MenuItem
+                sx={{ color: "error.main" }}
+                key="delete"
+                onClick={() => {
+                  setOpenDelete(true);
+                }}
+              >
+                <Iconify icon={"eva:trash-2-outline"} />
+                Delete
+              </MenuItem>
+            </PopConfirm>
+          </>
+        }
+      />
+    );
+  };
   return (
     <>
       <CardHeader
@@ -211,108 +312,16 @@ const Content: FC<EventDetailsContentProps> = ({
         }
         sx={{ p: "12px 24px 6px" }}
         action={
-          isAdmin && (
-            <DropdownMenu
-              actions={
-                <>
-                  <MenuItem
-                    onClick={async () => {
-                      setIsEditing(true);
-                    }}
-                    key="edit"
-                  >
-                    <Iconify icon={"bxs:pencil"} />
-                    Edit
-                  </MenuItem>
-
-                  <MenuItem
-                    onClick={async () => {
-                      try {
-                        if (status === 1) {
-                          const res = await onChangeStatus({
-                            variables: { id: eventData.id, status: 2 },
-                          });
-                          if (res.data.changeEventStatus.success) {
-                            enqueueSnackbar("Event changed to hidden!");
-                            refetch();
-                          }
-                        }
-
-                        if (status === 2) {
-                          const res = await onChangeStatus({
-                            variables: { id: eventData.id, status: 1 },
-                          });
-                          if (res.data.changeEventStatus.success) {
-                            enqueueSnackbar("Event changed to visible!");
-                            refetch();
-                          }
-                        }
-                      } catch (e) {
-                        console.log(e);
-                      }
-                    }}
-                    key="setShow"
-                  >
-                    <Iconify icon={"bxs:hide"} />
-                    {status === 1 ? "Hide event" : "Show Event"}
-                  </MenuItem>
-
-                  <Divider sx={{ borderStyle: "dashed" }} />
-                  <PopConfirm
-                    open={openDelete}
-                    onClose={() => {}}
-                    title={
-                      <Typography>
-                        Are you sure you want to delete the event?
-                      </Typography>
-                    }
-                    actions={
-                      <>
-                        <Button
-                          variant="outlined"
-                          color="inherit"
-                          onClick={() => setOpenDelete(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={async () => {
-                            try {
-                              const res = await onDelete({
-                                variables: { id: eventData.id },
-                              });
-                              if (res.data.deleteEvent.success) {
-                                enqueueSnackbar("Event delete successfully!");
-                                onClose();
-                                onRefreshList();
-                              }
-                            } catch (e) {
-                              console.log(e);
-                            }
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </>
-                    }
-                  >
-                    <MenuItem
-                      sx={{ color: "error.main" }}
-                      key="delete"
-                      onClick={() => {
-                        setOpenDelete(true);
-                      }}
-                    >
-                      <Iconify icon={"eva:trash-2-outline"} />
-                      Delete
-                    </MenuItem>
-                  </PopConfirm>
-                </>
-              }
-            />
-          )
+          <Stack direction="row" spacing={1}>
+            {renderActions()}
+            <IconButton
+              onClick={() => {
+                onClose();
+              }}
+            >
+              <Iconify icon={"akar-icons:cross"} width={20} height={20} />
+            </IconButton>
+          </Stack>
         }
       />
 
@@ -344,6 +353,13 @@ const Content: FC<EventDetailsContentProps> = ({
     </>
   );
 };
+interface EventDetailsModalProps {
+  eventId: string;
+  open: boolean;
+  onClose: () => void;
+  onRefreshList?: () => void;
+}
+
 const EventDetailsModal: FC<EventDetailsModalProps> = ({
   eventId,
   open,
