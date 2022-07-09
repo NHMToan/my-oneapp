@@ -1,6 +1,7 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Page from "components/Page";
+import useLocales from "hooks/useLocales";
 import AuthSocial from "sections/auth/AuthSocial";
 import { LoginForm } from "sections/auth/login";
 // ----------------------------------------------------------------------
@@ -24,6 +25,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
+  const { translate } = useLocales();
   return (
     <Page title="Login">
       <RootStyle>
@@ -32,10 +34,7 @@ export default function Login() {
             <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography variant="h4" gutterBottom>
-                  Sign in to VSG
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}>
-                  Enter your details below.
+                  {translate("auth.login.title")}
                 </Typography>
               </Box>
             </Stack>

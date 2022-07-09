@@ -4,8 +4,8 @@ import { Avatar, Box, Card, Grid, Stack, Typography } from "@mui/material";
 import { SimpleSkeleton } from "components/skeleton";
 import {
   useAcceptJoinClubMutation,
+  useCancelRequestMutation,
   useClubMembersQuery,
-  useDeleteClubMemberMutation,
 } from "generated/graphql";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
 import { useState } from "react";
@@ -59,7 +59,7 @@ function RequestMemberCard({ member, refresh }: RequestMemberCardProps) {
   const { profile, createdAt, id } = member;
 
   const [onAccept] = useAcceptJoinClubMutation({ fetchPolicy: "no-cache" });
-  const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
+  const [onRemove] = useCancelRequestMutation({ fetchPolicy: "no-cache" });
   const [submiting, setSubmitting] = useState<boolean>(false);
 
   return (
@@ -121,10 +121,10 @@ function RequestMemberCard({ member, refresh }: RequestMemberCardProps) {
                 setSubmitting(true);
                 const res = await onRemove({
                   variables: {
-                    clubMemId: id,
+                    memId: id,
                   },
                 });
-                if (res.data.deleteClubMember.success) {
+                if (res.data.cancelRequest.success) {
                   refresh();
                 }
                 setSubmitting(false);

@@ -71,6 +71,7 @@ export type ClubMember = {
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   isAdmin: Scalars['Boolean'];
+  isKicked?: Maybe<Scalars['Boolean']>;
   profile: Profile;
   role?: Maybe<Scalars['Float']>;
   status: Scalars['Float'];
@@ -311,6 +312,7 @@ export type Mutation = {
   addFriend: FriendMutaionResponse;
   addNewConversation: ConversationMutationResponse;
   addNewMessage: Scalars['Boolean'];
+  cancelRequest: ClubMutationResponse;
   cancelRequestClub: ClubMutationResponse;
   changeAdmin: ClubMutationResponse;
   changeEventStatus: EventMutationResponse;
@@ -365,6 +367,11 @@ export type MutationAddNewConversationArgs = {
 
 export type MutationAddNewMessageArgs = {
   messageInput: MessageInput;
+};
+
+
+export type MutationCancelRequestArgs = {
+  memId: Scalars['ID'];
 };
 
 
@@ -1119,6 +1126,13 @@ export type CancelRequestClubMutationVariables = Exact<{
 
 
 export type CancelRequestClubMutation = { __typename?: 'Mutation', cancelRequestClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type CancelRequestMutationVariables = Exact<{
+  memId: Scalars['ID'];
+}>;
+
+
+export type CancelRequestMutation = { __typename?: 'Mutation', cancelRequest: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CreateEventMutationVariables = Exact<{
   createEventInput: CreateEventInput;
@@ -2228,6 +2242,39 @@ export function useCancelRequestClubMutation(baseOptions?: Apollo.MutationHookOp
 export type CancelRequestClubMutationHookResult = ReturnType<typeof useCancelRequestClubMutation>;
 export type CancelRequestClubMutationResult = Apollo.MutationResult<CancelRequestClubMutation>;
 export type CancelRequestClubMutationOptions = Apollo.BaseMutationOptions<CancelRequestClubMutation, CancelRequestClubMutationVariables>;
+export const CancelRequestDocument = gql`
+    mutation CancelRequest($memId: ID!) {
+  cancelRequest(memId: $memId) {
+    ...clubMutationResponse
+  }
+}
+    ${ClubMutationResponseFragmentDoc}`;
+export type CancelRequestMutationFn = Apollo.MutationFunction<CancelRequestMutation, CancelRequestMutationVariables>;
+
+/**
+ * __useCancelRequestMutation__
+ *
+ * To run a mutation, you first call `useCancelRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelRequestMutation, { data, loading, error }] = useCancelRequestMutation({
+ *   variables: {
+ *      memId: // value for 'memId'
+ *   },
+ * });
+ */
+export function useCancelRequestMutation(baseOptions?: Apollo.MutationHookOptions<CancelRequestMutation, CancelRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelRequestMutation, CancelRequestMutationVariables>(CancelRequestDocument, options);
+      }
+export type CancelRequestMutationHookResult = ReturnType<typeof useCancelRequestMutation>;
+export type CancelRequestMutationResult = Apollo.MutationResult<CancelRequestMutation>;
+export type CancelRequestMutationOptions = Apollo.BaseMutationOptions<CancelRequestMutation, CancelRequestMutationVariables>;
 export const CreateEventDocument = gql`
     mutation CreateEvent($createEventInput: CreateEventInput!) {
   createEvent(createEventInput: $createEventInput) {

@@ -85,7 +85,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
             }
           }}
         >
-          Cancel requesting?
+          Cancel request?
         </LoadingButton>
       );
     if (isMember)

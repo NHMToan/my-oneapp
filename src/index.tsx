@@ -33,7 +33,7 @@ import { AuthProvider } from "./contexts/JWTContext";
 // contexts
 import { SettingsProvider } from "./contexts/SettingsContext";
 import apolloClient from "./lib/apolloClient";
-import "./locales/i18n";
+import "./i18n";
 // redux
 import { persistor, store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";

@@ -49,3 +49,8 @@ mutation CancelRequestClub($clubId: ID!) {
     ...clubMutationResponse
   }
 }
+mutation CancelRequest($memId: ID!) {
+  cancelRequest(memId: $memId) {
+    ...clubMutationResponse
+  }
+}
