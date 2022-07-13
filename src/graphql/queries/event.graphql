@@ -68,3 +68,6 @@ query GetVoteCount($id: ID!) {
 query GetWaitingVote($id: ID!) {
   getWaitingVote(id: $id)
 }
+query GetEventIsVoted($eventId: ID!) {
+  getEventIsVoted(eventId: $eventId)
+}

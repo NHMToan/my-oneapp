@@ -1,7 +1,181 @@
 {
   "auth": {
     "login": {
-      "title": "Đăng nhập vào VSG"
+      "title": "Đăng nhập vào VSG",
+      "form": {
+        "email": "Email",
+        "forgot_password": "Quên mật khẩu?",
+        "login": "Đăng nhập",
+        "password": "Mật khẩu",
+        "register_now": "Đăng ký ngay"
+      }
+    },
+    "forgot_password": {
+      "btn_send": "Gửi yêu cầu",
+      "email": "Email",
+      "sub_title": "Vui lòng nhập địa chỉ email của tài khoản, VSG sẽ gửi cho bạn mã số thay đổi mật khẩu về email. Trong trường hợp không nhận được mail, vui lòng kiểm tra thông tin spam mail.",
+      "title": "Quên mật khẩu"
+    },
+    "register": {
+      "form": {
+        "email": "Email",
+        "fist_name": "Họ và tên đệm",
+        "last_name": "Tên",
+        "login": "Đăng nhập",
+        "login_warning": "Đã có tài khoản VSG?",
+        "password": "Mật khẩu",
+        "register": "Đăng ký"
+      },
+      "title": "Đăng ký tài khoản"
     }
+  },
+  "account_menu": {
+    "profile": "Thông tin cá nhân",
+    "settings": "Cài đặt",
+    "home": "Trang chủ",
+    "logout": "Đăng suất"
+  },
+  "club": {
+    "details": {
+      "events": {
+        "btn": {
+          "agenda": "Trong ngày",
+          "day": "Ngày",
+          "month": "Tháng",
+          "new_event": "Thêm sự kiện",
+          "today": "Hôm nay",
+          "week": "Tuần"
+        },
+        "menu_label": "Sự kiện",
+        "title": "Sự kiện"
+      },
+      "general": {
+        "about": "Thông tin",
+        "btn": {
+          "cancel_request": "Hủy yêu cầu",
+          "join": "Tham gia nhóm"
+        },
+        "members": "Thành viên",
+        "menu_label": "Thông tin chung"
+      },
+      "members": {
+        "menu_label": "Thành viên"
+      },
+      "requesting": {
+        "menu_label": "Yêu cầu"
+      },
+      "settings": {
+        "menu_label": "Chỉnh sửa"
+      }
+    },
+    "event": {
+      "delete": {
+        "confirmation": "Đồng ý xóa sự kiện?",
+        "success": "Sự kiện đã được xóa"
+      },
+      "details": {
+        "address": "Địa chỉ",
+        "confirmed": "Xác nhận",
+        "event_info": "Thông tin sự kiện",
+        "max_vote": "Vote tối đa",
+        "price": "Giá",
+        "reg_will_open": "Đăng ký sẽ mở sau",
+        "slot": "Slots",
+        "tab_general": {
+          "title": "Thông tin"
+        },
+        "tab_vote_info": {
+          "confirm_list": {
+            "delete": {
+              "confirmation": "Dồng ý xóa vote này?",
+              "sub_confirmation": "Sau khi xóa vote, các vote chờ sẽ được đẩy lên.",
+              "success": "Vote đã được xóa"
+            },
+            "no_data": "Chưa có xác nhận slot nào",
+            "title": "Danh xách xác nhận"
+          },
+          "title": "Danh sách",
+          "waiting_list": {
+            "delete": {
+              "confirmation": "Đồng ý xóa slot chờ này không?",
+              "success": "Vote đã được xóa!"
+            },
+            "no_data": "Chưa có slot chờ nào",
+            "title": "Danh sách chờ"
+          }
+        },
+        "time": "Thời gian",
+        "vote": {
+          "change_confirmed_title": "Thay đổi slot đăng ký",
+          "change_waiting_title": "Thay đổi slot chờ",
+          "confirmed_change_success": "Xác nhận slot đã được thay đổi thành {{count}}",
+          "confirmed_success": "Xác nhận {{count}} slot(s)",
+          "vote_confirmed_title": "Đăng ký",
+          "vote_waiting_title": "Đăng ký chờ",
+          "waiting_change_success": "Slot chờ đã thay đổi thành {{count}}",
+          "waiting_success": "Đăng ký chờ {{count}} slot(s)",
+          "confirmed_full_message": "Hết slot rồi, đăng ký chờ đi!"
+        },
+        "vote_close": "Đăng ký đã đóng!",
+        "vote_end_at": "Kết thúc",
+        "vote_start_at": "Bắt đầu",
+        "waiting": "Chờ"
+      },
+      "form": {
+        "add_title": "Thêm sự kiện",
+        "address": "Địa chỉ",
+        "create_success": "Sự kiện đã thêm thành công",
+        "description": "Mô tả",
+        "edit_title": "Thay đổi thông tin sự kiện",
+        "end_date": "Kết thúc",
+        "event_time": "Thời gian",
+        "info_section": "Thông tin sự kiện",
+        "max_vote": "Vote tối đa",
+        "more_section": "Thông tin thêm",
+        "name": "Tên sự kiện",
+        "price": "Giá",
+        "slot": "Slots",
+        "start_date": "Bắt đầu",
+        "title": "Thêm sự kiện",
+        "update_success": "Sự kiện đã được thay đổi!"
+      },
+      "status": {
+        "hidden": "Che lại"
+      }
+    },
+    "list": {
+      "btn_new_club": "Tạo câu lạc bộ",
+      "title": "Câu lạc bộ"
+    },
+    "member": {
+      "status": {
+        "admin": "Admin",
+        "member": "Thành viên",
+        "sub_admin": "Trợ lý"
+      }
+    }
+  },
+  "common": {
+    "btn": {
+      "add": "Thêm",
+      "back": "Quay lại",
+      "cancel": "Hủy",
+      "change": "Thay đổi",
+      "delete": "Xóa",
+      "edit": "Sửa",
+      "queue": "Chờ",
+      "save_changes": "Lưu thay đổi",
+      "vote": "Đăng ký",
+      "register": "Đăng ký"
+    },
+    "word": {
+      "prepositions": {
+        "on": "hoặc"
+      }
+    }
+  },
+  "menu": {
+    "clubs": "Câu lạc bộ",
+    "events": "Sự kiện"
   }
 }

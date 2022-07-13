@@ -675,6 +675,7 @@ export type Query = {
   getConversation?: Maybe<Conversation>;
   getConversations?: Maybe<Conversations>;
   getEvent?: Maybe<ClubEvent>;
+  getEventIsVoted: Scalars['Boolean'];
   getEvents?: Maybe<Events>;
   getFollowers?: Maybe<Profiles>;
   getFriends?: Maybe<Profiles>;
@@ -743,6 +744,11 @@ export type QueryGetConversationsArgs = {
 
 export type QueryGetEventArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetEventIsVotedArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -1448,6 +1454,13 @@ export type GetWaitingVoteQueryVariables = Exact<{
 
 
 export type GetWaitingVoteQuery = { __typename?: 'Query', getWaitingVote: number };
+
+export type GetEventIsVotedQueryVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
+
+
+export type GetEventIsVotedQuery = { __typename?: 'Query', getEventIsVoted: boolean };
 
 export type GetFollowersQueryVariables = Exact<{
   profileId: Scalars['String'];
@@ -3771,6 +3784,39 @@ export function useGetWaitingVoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetWaitingVoteQueryHookResult = ReturnType<typeof useGetWaitingVoteQuery>;
 export type GetWaitingVoteLazyQueryHookResult = ReturnType<typeof useGetWaitingVoteLazyQuery>;
 export type GetWaitingVoteQueryResult = Apollo.QueryResult<GetWaitingVoteQuery, GetWaitingVoteQueryVariables>;
+export const GetEventIsVotedDocument = gql`
+    query GetEventIsVoted($eventId: ID!) {
+  getEventIsVoted(eventId: $eventId)
+}
+    `;
+
+/**
+ * __useGetEventIsVotedQuery__
+ *
+ * To run a query within a React component, call `useGetEventIsVotedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventIsVotedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventIsVotedQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useGetEventIsVotedQuery(baseOptions: Apollo.QueryHookOptions<GetEventIsVotedQuery, GetEventIsVotedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEventIsVotedQuery, GetEventIsVotedQueryVariables>(GetEventIsVotedDocument, options);
+      }
+export function useGetEventIsVotedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventIsVotedQuery, GetEventIsVotedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEventIsVotedQuery, GetEventIsVotedQueryVariables>(GetEventIsVotedDocument, options);
+        }
+export type GetEventIsVotedQueryHookResult = ReturnType<typeof useGetEventIsVotedQuery>;
+export type GetEventIsVotedLazyQueryHookResult = ReturnType<typeof useGetEventIsVotedLazyQuery>;
+export type GetEventIsVotedQueryResult = Apollo.QueryResult<GetEventIsVotedQuery, GetEventIsVotedQueryVariables>;
 export const GetFollowersDocument = gql`
     query GetFollowers($profileId: String!, $limit: Int, $offset: Int) {
   getFollowers(limit: $limit, offset: $offset, profileId: $profileId) {

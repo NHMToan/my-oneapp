@@ -4,6 +4,7 @@ import Iconify from "components/Iconify";
 import Page from "components/Page";
 import { SkeletonPostItem } from "components/skeleton";
 import { useClubsQuery } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import useSettings from "hooks/useSettings";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
@@ -11,6 +12,7 @@ import ClubCard from "../sections/ClubCard";
 // ----------------------------------------------------------------------
 
 export default function CLubsList() {
+  const { translate } = useLocales();
   const { themeStretch } = useSettings();
   const { data: dataclubs, loading } = useClubsQuery({
     variables: { limit: 50, offset: 0 },
@@ -22,7 +24,7 @@ export default function CLubsList() {
     <Page title="Club: List">
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading="Clubs"
+          heading={translate("club.list.title")}
           action={
             <Button
               variant="contained"
@@ -30,7 +32,7 @@ export default function CLubsList() {
               to={PATH_DASHBOARD.club.new}
               startIcon={<Iconify icon={"eva:plus-fill"} />}
             >
-              New Club
+              {translate("club.list.btn_new_club")}
             </Button>
           }
         />

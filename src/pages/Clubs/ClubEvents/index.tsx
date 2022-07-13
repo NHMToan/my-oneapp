@@ -9,8 +9,8 @@ import timelinePlugin from "@fullcalendar/timeline";
 import { Button, Card, Container } from "@mui/material";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
-import Page from "components/Page";
 import { useEventsQuery } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import useResponsive from "hooks/useResponsive";
 import useSettings from "hooks/useSettings";
 import { FC, useEffect, useRef, useState } from "react";
@@ -43,7 +43,7 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
   const [selectedRange, setSelectedRange] = useState<any>({});
   const [currentRange, setCurrentRange] = useState<[string, string]>();
   const isDesktop = useResponsive("up", "sm");
-
+  const { translate } = useLocales();
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
 
   const [selectedEvent, setSelectedEvent] = useState<string>(null);
@@ -131,93 +131,91 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
   };
 
   return (
-    <Page title="Calendar">
-      <Container maxWidth={themeStretch ? false : "xl"}>
-        <HeaderBreadcrumbs
-          heading="Event"
-          action={
-            (isAdmin || isSubAdmin) && (
-              <Button
-                variant="contained"
-                startIcon={
-                  <Iconify icon={"eva:plus-fill"} width={20} height={20} />
-                }
-                onClick={handleAddEvent}
-              >
-                New Event
-              </Button>
-            )
-          }
-        />
-
-        <Card>
-          <CalendarStyle>
-            <CalendarToolbar
-              date={date}
-              view={view}
-              onNextDate={handleClickDateNext}
-              onPrevDate={handleClickDatePrev}
-              onToday={handleClickToday}
-              onChangeView={handleChangeView}
-            />
-            <FullCalendar
-              weekends
-              editable
-              droppable
-              selectable
-              events={
-                data?.getEvents?.results?.map((event: any) =>
-                  formatEvent(event)
-                ) || []
+    <Container maxWidth={themeStretch ? false : "xl"}>
+      <HeaderBreadcrumbs
+        heading={translate("club.details.events.title")}
+        action={
+          (isAdmin || isSubAdmin) && (
+            <Button
+              variant="contained"
+              startIcon={
+                <Iconify icon={"eva:plus-fill"} width={20} height={20} />
               }
-              ref={calendarRef}
-              rerenderDelay={10}
-              initialDate={date}
-              initialView={view}
-              dayMaxEventRows={3}
-              eventDisplay="block"
-              headerToolbar={false}
-              allDayMaintainDuration
-              eventResizableFromStart
-              select={handleSelectRange}
-              eventClick={handleSelectEvent}
-              height={isDesktop ? 720 : "auto"}
-              plugins={[
-                listPlugin,
-                dayGridPlugin,
-                timelinePlugin,
-                timeGridPlugin,
-                interactionPlugin,
-              ]}
-              datesSet={(arg) => {
-                setCurrentRange([fFullTime(arg.start), fFullTime(arg.end)]);
-              }}
-              weekNumberCalculation="ISO"
-            />
-          </CalendarStyle>
-        </Card>
-        <EventFormModal
-          isOpen={isFormOpen}
-          onClose={() => setIsFormOpen(false)}
-          range={selectedRange}
-          club={club}
-          onPostSave={() => {
-            refetch();
-          }}
-        />
-        <EventDetailsModal
-          open={isDetailsOpen}
-          eventId={selectedEvent}
-          onClose={() => {
-            setSelectedEvent(null);
-            setIsDetailsOpen(false);
-          }}
-          onRefreshList={() => {
-            refetch();
-          }}
-        />
-      </Container>
-    </Page>
+              onClick={handleAddEvent}
+            >
+              {translate("club.details.events.btn.new_event")}
+            </Button>
+          )
+        }
+      />
+
+      <Card>
+        <CalendarStyle>
+          <CalendarToolbar
+            date={date}
+            view={view}
+            onNextDate={handleClickDateNext}
+            onPrevDate={handleClickDatePrev}
+            onToday={handleClickToday}
+            onChangeView={handleChangeView}
+          />
+          <FullCalendar
+            weekends
+            editable
+            droppable
+            selectable
+            events={
+              data?.getEvents?.results?.map((event: any) =>
+                formatEvent(event)
+              ) || []
+            }
+            ref={calendarRef}
+            rerenderDelay={10}
+            initialDate={date}
+            initialView={view}
+            dayMaxEventRows={3}
+            eventDisplay="block"
+            headerToolbar={false}
+            allDayMaintainDuration
+            eventResizableFromStart
+            select={handleSelectRange}
+            eventClick={handleSelectEvent}
+            height={isDesktop ? 720 : "auto"}
+            plugins={[
+              listPlugin,
+              dayGridPlugin,
+              timelinePlugin,
+              timeGridPlugin,
+              interactionPlugin,
+            ]}
+            datesSet={(arg) => {
+              setCurrentRange([fFullTime(arg.start), fFullTime(arg.end)]);
+            }}
+            weekNumberCalculation="ISO"
+          />
+        </CalendarStyle>
+      </Card>
+      <EventFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        range={selectedRange}
+        club={club}
+        onPostSave={() => {
+          refetch();
+        }}
+      />
+      <EventDetailsModal
+        open={isDetailsOpen}
+        eventId={selectedEvent}
+        onClose={() => {
+          setSelectedEvent(null);
+          setIsDetailsOpen(false);
+        }}
+        onRefreshList={() => {
+          refetch();
+        }}
+      />
+    </Container>
   );
 };
 export default ClubEvents;

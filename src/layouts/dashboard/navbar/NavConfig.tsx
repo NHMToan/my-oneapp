@@ -24,10 +24,9 @@ const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
-    subheader: "general",
     items: [
       {
-        title: "events",
+        title: "menu.events",
         path: PATH_DASHBOARD.general.app,
         icon: ICONS.dashboard,
       },
@@ -42,7 +41,7 @@ const navConfig = [
       //   icon: ICONS.blog,
       // },
       // { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
-      { title: "clubs", path: PATH_DASHBOARD.club.root, icon: ICONS.club },
+      { title: "menu.clubs", path: PATH_DASHBOARD.club.root, icon: ICONS.club },
     ],
   },
 ];

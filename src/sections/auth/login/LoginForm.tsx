@@ -12,6 +12,7 @@ import { FormProvider, RHFTextField } from "components/hook-form";
 import Iconify from "components/Iconify";
 import useAuth from "hooks/useAuth";
 import useIsMountedRef from "hooks/useIsMountedRef";
+import useLocales from "hooks/useLocales";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink } from "react-router-dom";
@@ -23,7 +24,7 @@ export default function LoginForm() {
   const { login } = useAuth();
 
   const isMountedRef = useIsMountedRef();
-
+  const { translate } = useLocales();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -72,11 +73,11 @@ export default function LoginForm() {
           </Alert>
         )}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label={translate("auth.login.form.email")} />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label={translate("auth.login.form.password")}
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -102,13 +103,12 @@ export default function LoginForm() {
         sx={{ my: 2 }}
       >
         <Typography variant="body2" align="center">
-          Don’t have an account?{" "}
           <Link
             variant="subtitle2"
             component={RouterLink}
             to={PATH_AUTH.register}
           >
-            Register now
+            {translate("auth.login.form.register_now")}
           </Link>
         </Typography>
         <Link
@@ -116,7 +116,7 @@ export default function LoginForm() {
           variant="subtitle2"
           to={PATH_AUTH.resetPassword}
         >
-          Forgot password?
+          {translate("auth.login.form.forgot_password")}
         </Link>
       </Stack>
 
@@ -127,7 +127,7 @@ export default function LoginForm() {
         variant="contained"
         loading={isSubmitting}
       >
-        Login
+        {translate("auth.login.form.login")}
       </LoadingButton>
     </FormProvider>
   );

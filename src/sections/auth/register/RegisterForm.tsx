@@ -20,13 +20,14 @@ import Iconify from "../../../components/Iconify";
 import { Link as RouterLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
+import useLocales from "hooks/useLocales";
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
   const { register } = useAuth();
 
   const isMountedRef = useIsMountedRef();
-
+  const { translate } = useLocales();
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
@@ -77,15 +78,24 @@ export default function RegisterForm() {
         )}
 
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <RHFTextField name="firstName" label="First name" />
-          <RHFTextField name="lastName" label="Last name" />
+          <RHFTextField
+            name="firstName"
+            label={translate("auth.register.form.fist_name")}
+          />
+          <RHFTextField
+            name="lastName"
+            label={translate("auth.register.form.last_name")}
+          />
         </Stack>
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField
+          name="email"
+          label={translate("auth.register.form.email")}
+        />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label={translate("auth.register.form.password")}
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -109,9 +119,9 @@ export default function RegisterForm() {
           sx={{ my: 2 }}
         >
           <Typography variant="body2" sx={{ mt: { md: -2 } }}>
-            Already have an account? {""}
+            {translate("auth.register.form.login_warning")}{" "}
             <Link variant="subtitle2" component={RouterLink} to="/auth/login">
-              Login
+              {translate("auth.register.form.login")}
             </Link>
           </Typography>
         </Stack>
@@ -122,7 +132,7 @@ export default function RegisterForm() {
           variant="contained"
           loading={isSubmitting}
         >
-          Register
+          {translate("auth.register.form.register")}
         </LoadingButton>
       </Stack>
     </FormProvider>

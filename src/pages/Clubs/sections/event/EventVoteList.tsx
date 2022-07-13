@@ -12,6 +12,7 @@ import Iconify from "components/Iconify";
 import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
 import { useGetVotesQuery, useUnVoteEventMutation } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
@@ -27,7 +28,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
     skip: !event,
     variables: { status: 1, limit: 100, offset: 0, eventId: event.id },
   });
-
+  const { translate } = useLocales();
   const renderList = () => {
     if (loading)
       return (
@@ -39,7 +40,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
     if (!data || !data.getVotes || data?.getVotes?.totalCount === 0)
       return (
         <Typography sx={{ p: 3, color: "text.secondary" }}>
-          No confirmed vote found
+          {translate("club.event.details.tab_vote_info.confirm_list.no_data")}
         </Typography>
       );
 
@@ -63,7 +64,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
   return (
     <Card>
       <CardHeader
-        title="Confirmed List"
+        title={translate("club.event.details.tab_vote_info.confirm_list.title")}
         action={
           <IconButton onClick={() => refetch()}>
             <Iconify icon={"ci:refresh-02"} width={20} height={20} />
@@ -88,6 +89,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   const [onDeleteVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
+  const { translate } = useLocales();
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Avatar
@@ -123,8 +125,12 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
           onClose={() => setOpenDelete(false)}
           title={
             <CardHeader
-              title="Are you sure to Delete this vote?"
-              subheader="If the event is FULL, it may be full-filled by waiting list after this action!"
+              title={translate(
+                "club.event.details.tab_vote_info.confirm_list.delete.confirmation"
+              )}
+              subheader={translate(
+                "club.event.details.tab_vote_info.confirm_list.delete.sub_confirmation"
+              )}
             />
           }
           actions={
@@ -134,7 +140,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                 color="inherit"
                 onClick={() => setOpenDelete(false)}
               >
-                Cancel
+                {translate("common.btn.cancel")}
               </Button>
               <Button
                 variant="contained"
@@ -149,7 +155,11 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                       },
                     });
                     if (deleteVoteRes?.data?.unVoteEvent?.success) {
-                      enqueueSnackbar("Delete vote successfully!");
+                      enqueueSnackbar(
+                        translate(
+                          "club.event.details.tab_vote_info.confirm_list.delete.success"
+                        )
+                      );
                       postActions();
                     }
                   } catch (e) {
@@ -157,7 +167,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                   }
                 }}
               >
-                Delete
+                {translate("common.btn.delete")}
               </Button>
             </>
           }
@@ -169,7 +179,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
               setOpenDelete(true);
             }}
           >
-            Delete
+            {translate("common.btn.delete")}
           </Button>
         </PopConfirm>
       )}

@@ -1,14 +1,13 @@
 import { Box, Card, Container, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { capitalCase } from "change-case";
 import Iconify from "components/Iconify";
 import Label from "components/Label";
-import Page from "components/Page";
 import SkeletonProfile from "components/skeleton/SkeletonProfile";
 import {
   useClubQuery,
   useGetClubRequestingNumberQuery,
 } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { useNavigateSearch } from "hooks/useNavigateSearch";
 import useResponsive from "hooks/useResponsive";
 import useSettings from "hooks/useSettings";
@@ -45,7 +44,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
   const location = useLocation();
   const currentTab = getValueFromUrlParams(location.search, "tab") || "general";
   const navigateSearch = useNavigateSearch();
-
+  const { translate } = useLocales();
   const isDesktop = useResponsive("up", "md");
 
   const { data, loading, refetch } = useClubQuery({
@@ -69,18 +68,21 @@ const ClubPage: FC<ClubPageProps> = (props) => {
   const Club_TABS = [
     {
       value: "general",
+      label: translate("club.details.general.menu_label"),
       icon: <Iconify icon={"ic:round-account-box"} width={20} height={20} />,
       component: <ClubGeneral club={club as any} refreshClub={refetch} />,
     },
     {
       hidden: !isMember,
       value: "events",
+      label: translate("club.details.events.menu_label"),
       icon: <Iconify icon={"bxs:calendar-star"} width={20} height={20} />,
       component: <ClubEvents club={club as any} />,
     },
     {
       hidden: !isMember,
       value: "members",
+      label: translate("club.details.members.menu_label"),
       icon: (
         <Iconify icon={"gridicons:multiple-users"} width={20} height={20} />
       ),
@@ -94,6 +96,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
     {
       hidden: !isSubAdmin && !isAdmin,
       value: "requesting",
+      label: translate("club.details.requesting.menu_label"),
       icon: (
         <Iconify
           icon={"fluent:task-list-square-add-20-filled"}
@@ -118,57 +121,56 @@ const ClubPage: FC<ClubPageProps> = (props) => {
     {
       hidden: !isAdmin,
       value: "settings",
+      label: translate("club.details.settings.menu_label"),
       icon: <Iconify icon={"mdi:archive-cog-outline"} width={20} height={20} />,
       component: <ClubFormContent currentClub={club as any} isEdit />,
     },
   ];
 
   return (
-    <Page title="Club: Details">
-      <Container maxWidth={themeStretch ? false : "lg"}>
-        <Card
-          sx={{
-            mb: 3,
-            height: isDesktop ? 450 : 280,
-            position: "relative",
-          }}
-        >
-          <ClubCover club={club as any} />
+    <Container maxWidth={themeStretch ? false : "lg"}>
+      <Card
+        sx={{
+          mb: 3,
+          height: isDesktop ? 450 : 280,
+          position: "relative",
+        }}
+      >
+        <ClubCover club={club as any} />
 
-          <TabsWrapperStyle>
-            <Tabs
-              allowScrollButtonsMobile
-              variant="scrollable"
-              scrollButtons="auto"
-              value={currentTab}
-              onChange={(event, newValue) => {
-                navigateSearch(location.pathname, { tab: newValue });
-              }}
-            >
-              {Club_TABS.filter((item) => !item.hidden).map((tab) => (
-                <Tab
-                  disableRipple
-                  key={tab.value}
-                  value={tab.value}
-                  icon={tab.icon}
-                  label={
-                    <>
-                      {capitalCase(tab.value)}
-                      {tab.waning || null}
-                    </>
-                  }
-                />
-              ))}
-            </Tabs>
-          </TabsWrapperStyle>
-        </Card>
+        <TabsWrapperStyle>
+          <Tabs
+            allowScrollButtonsMobile
+            variant="scrollable"
+            scrollButtons="auto"
+            value={currentTab}
+            onChange={(event, newValue) => {
+              navigateSearch(location.pathname, { tab: newValue });
+            }}
+          >
+            {Club_TABS.filter((item) => !item.hidden).map((tab) => (
+              <Tab
+                disableRipple
+                key={tab.value}
+                value={tab.value}
+                icon={tab.icon}
+                label={
+                  <>
+                    {tab.label}
+                    {tab.waning || null}
+                  </>
+                }
+              />
+            ))}
+          </Tabs>
+        </TabsWrapperStyle>
+      </Card>
 
-        {Club_TABS.map((tab) => {
-          const isMatched = tab.value === currentTab;
-          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
-        })}
-      </Container>
-    </Page>
+      {Club_TABS.map((tab) => {
+        const isMatched = tab.value === currentTab;
+        return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+      })}
+    </Container>
   );
 };
 

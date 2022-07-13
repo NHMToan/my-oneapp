@@ -7,6 +7,7 @@ import { fNumber } from "../../../../utils/formatNumber";
 // components
 import { BaseOptionChart } from "components/chart";
 import { ClubEvent } from "pages/Clubs/data.t";
+import useLocales from "hooks/useLocales";
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +19,7 @@ export default function EventChart({ event }: EventChartProps) {
   const total = event.slot;
   const theme = useTheme();
   const chartSeries = (event.voteCount / total) * 100;
-
+  const { translate } = useLocales();
   const chartOptions: any = merge(BaseOptionChart(), {
     legend: { show: false },
     grid: {
@@ -42,7 +43,7 @@ export default function EventChart({ event }: EventChartProps) {
           name: { offsetY: -16 },
           value: { offsetY: 8 },
           total: {
-            label: "Slot",
+            label: translate("club.event.details.slot"),
             formatter: () => `${fNumber(event.voteCount)}/${fNumber(total)}`,
           },
         },

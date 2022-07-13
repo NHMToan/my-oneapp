@@ -1,7 +1,8 @@
-import { Container, Link, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
 import Page from "components/Page";
+import useLocales from "hooks/useLocales";
 import AuthSocial from "sections/auth/AuthSocial";
 import { RegisterForm } from "sections/auth/register";
 // ----------------------------------------------------------------------
@@ -25,38 +26,18 @@ const ContentStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Register() {
+  const { translate } = useLocales();
   return (
     <Page title="Register">
       <RootStyle>
         <Container>
           <ContentStyle>
             <Typography variant="h4" gutterBottom>
-              Register to join with us.
+              {translate("auth.register.title")}
             </Typography>
-
-            <Typography sx={{ color: "text.secondary", mb: 5 }}>
-              Viet Sportmates Group
-            </Typography>
-
             <AuthSocial />
 
             <RegisterForm />
-
-            <Typography
-              variant="body2"
-              align="center"
-              sx={{ color: "text.secondary", mt: 3 }}
-            >
-              By registering, I agree to VSG&nbsp;
-              <Link underline="always" color="text.primary" href="#">
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link underline="always" color="text.primary" href="#">
-                Privacy Policy
-              </Link>
-              .
-            </Typography>
           </ContentStyle>
         </Container>
       </RootStyle>

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { FormProvider, RHFSelect } from "components/hook-form";
 import { useChangeSlotsMutation } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { FC, useEffect } from "react";
@@ -36,6 +37,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
   const defaultValues: any = {
     value: currentVoteCount,
   };
+  const { translate } = useLocales();
   const EventSchema = Yup.object().shape({
     value: Yup.number().required("Slot is required"),
   });
@@ -80,8 +82,12 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
       });
       if (changeRes?.data?.changeSlots?.success) {
         const message = isWaiting
-          ? `Waiting slot is changed to ${params.value}`
-          : `Confirmed slot is changed to ${params.value}`;
+          ? translate("club.event.details.vote.waiting_change_success", {
+              count: params.value,
+            })
+          : translate("club.event.details.vote.confirmed_change_success", {
+              count: params.value,
+            });
         enqueueSnackbar(message);
         postActions();
       } else {
@@ -105,14 +111,16 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
   return (
     <Dialog open={isOpen} onClose={onCancel} maxWidth="xs">
       <DialogTitle>
-        {isWaiting ? "Change waiting slot" : "Change confirmed slot"}
+        {isWaiting
+          ? translate("club.event.details.vote.change_waiting_title")
+          : translate("club.event.details.vote.change_confirmed_title")}
       </DialogTitle>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3} sx={{ p: 3 }}>
           <RHFSelect
             name="value"
-            label="Slots"
+            label={translate("club.event.details.slot")}
             InputLabelProps={{ shrink: true }}
             sx={{ minWidth: { md: 160 } }}
           >
@@ -128,7 +136,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
           <Box sx={{ flexGrow: 1 }} />
 
           <Button variant="outlined" color="inherit" onClick={onCancel}>
-            Cancel
+            {translate("common.btn.cancel")}
           </Button>
 
           <LoadingButton
@@ -137,7 +145,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
             loading={isSubmitting}
             disabled={!maxVote}
           >
-            Change
+            {translate("common.btn.change")}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

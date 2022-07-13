@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Stack } from "@mui/material";
 import { useForgotpasswordMutation } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PATH_AUTH } from "Router/paths";
@@ -13,6 +14,7 @@ import { FormProvider, RHFTextField } from "../../../components/hook-form";
 export default function ResetPasswordForm() {
   const navigate = useNavigate();
   const [onResetPassword] = useForgotpasswordMutation();
+  const { translate } = useLocales();
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .email("Email must be a valid email address")
@@ -47,7 +49,10 @@ export default function ResetPasswordForm() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField
+          name="email"
+          label={translate("auth.forgot_password.email")}
+        />
 
         <LoadingButton
           fullWidth
@@ -56,7 +61,7 @@ export default function ResetPasswordForm() {
           variant="contained"
           loading={isSubmitting}
         >
-          Send Request
+          {translate("auth.forgot_password.btn_send")}
         </LoadingButton>
       </Stack>
     </FormProvider>

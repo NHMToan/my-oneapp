@@ -1,6 +1,7 @@
 import { Box, Divider, MenuItem, Stack, Typography } from "@mui/material";
 // @mui
 import { alpha } from "@mui/material/styles";
+import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ export default function AccountPopover() {
   const navigate = useNavigate();
 
   const { user, logout } = useAuth();
-
+  const { translate } = useLocales();
   const isMountedRef = useIsMountedRef();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -52,15 +53,15 @@ export default function AccountPopover() {
   };
   const MENU_OPTIONS = [
     {
-      label: "Home",
+      label: "account_menu.home",
       linkTo: "/",
     },
     {
-      label: "Profile",
+      label: "account_menu.profile",
       linkTo: PATH_DASHBOARD.user.profile(user?.profile.id),
     },
     {
-      label: "Settings",
+      label: "account_menu.settings",
       linkTo: PATH_DASHBOARD.user.account,
     },
   ];
@@ -119,7 +120,7 @@ export default function AccountPopover() {
               component={RouterLink}
               onClick={handleClose}
             >
-              {option.label}
+              {translate(option.label)}
             </MenuItem>
           ))}
         </Stack>
@@ -127,7 +128,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
+          {translate("account_menu.logout")}
         </MenuItem>
       </MenuPopover>
     </>

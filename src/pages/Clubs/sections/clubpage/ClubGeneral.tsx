@@ -13,6 +13,7 @@ import {
   useCancelRequestClubMutation,
   useRequestJoinClubMutation,
 } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { ClubData } from "pages/Clubs/data.t";
 import { useState } from "react";
 import { fNumber } from "utils/formatNumber";
@@ -32,7 +33,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
     memberCount,
   } = club;
   const [submiting, setSubmitting] = useState<boolean>(false);
-
+  const { translate } = useLocales();
   const [onRequest] = useRequestJoinClubMutation();
   const [onCancel] = useCancelRequestClubMutation();
 
@@ -45,7 +46,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
           endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
           color="warning"
         >
-          Admin
+          {translate("club.member.status.admin")}
         </Button>
       );
     if (isSubAdmin)
@@ -56,7 +57,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
           endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
           color="warning"
         >
-          Sub-admin
+          {translate("club.member.status.sub_admin")}
         </Button>
       );
     if (isRequesting)
@@ -85,7 +86,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
             }
           }}
         >
-          Cancel request?
+          {translate("club.details.general.btn.cancel_request")}
         </LoadingButton>
       );
     if (isMember)
@@ -95,7 +96,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
           variant="contained"
           endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
         >
-          Member
+          {translate("club.member.status.member")}
         </Button>
       );
     return (
@@ -120,7 +121,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
           }
         }}
       >
-        Join club?
+        {translate("club.details.general.btn.join")}
       </LoadingButton>
     );
   };
@@ -135,7 +136,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
               <Stack width={1} textAlign="center">
                 <Typography variant="h4">{fNumber(memberCount)}</Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Members
+                  {translate("club.details.general.members")}
                 </Typography>
               </Stack>
             </Stack>
@@ -146,7 +147,7 @@ export default function ClubGeneral({ club, refreshClub }: ClubGeneralProps) {
       <Grid item xs={12} md={8}>
         <Stack spacing={3}>
           <Card>
-            <CardHeader title="About" />
+            <CardHeader title={translate("club.details.general.about")} />
 
             <Stack spacing={2} sx={{ p: 3 }}>
               <Markdown children={description} />

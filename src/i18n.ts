@@ -12,7 +12,7 @@ const resources = {
   en: {
     translation: transEN,
   },
-  sv: {
+  vn: {
     translation: transVN,
   },
 };

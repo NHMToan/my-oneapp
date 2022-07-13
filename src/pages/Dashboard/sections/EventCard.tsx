@@ -15,8 +15,12 @@ import { ApexOptions } from "apexcharts";
 import { BaseOptionChart } from "components/chart";
 import Iconify from "components/Iconify";
 import { differenceInHours } from "date-fns";
-import { useEventVoteChangedSubscriptionSubscription } from "generated/graphql";
+import {
+  useEventVoteChangedSubscriptionSubscription,
+  useGetEventIsVotedQuery,
+} from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
+import useLocales from "hooks/useLocales";
 import merge from "lodash/merge";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { EventDetailsModal } from "pages/Clubs/sections/event";
@@ -77,10 +81,17 @@ const RenderCountdown = ({ date, onEnd }) => {
 };
 const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   const { title, start, end, id, voteCount, slot, status, price } = event;
+
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
   const [isClose, setIsClose] = useState<boolean>(new Date() > new Date(end));
+  const { translate } = useLocales();
+
+  const { data: isVotedData, refetch: refetchVoted } = useGetEventIsVotedQuery({
+    fetchPolicy: "no-cache",
+    variables: { eventId: id },
+  });
 
   const { data: voteCountData } = useEventVoteChangedSubscriptionSubscription({
     variables: {
@@ -101,15 +112,17 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           <Stack direction="row">
             <IconStyle icon={"ic:baseline-how-to-vote"} />
             <Typography variant="body2">
-              Max vote: &nbsp;
-              <b>{maxVote}</b>
+              {translate("club.event.details.max_vote")}: &nbsp;
+              <Link component="span" variant="subtitle2" color="text.primary">
+                {maxVote}{" "}
+              </Link>
             </Typography>
           </Stack>
 
           <Stack direction="row">
             <IconStyle icon={"clarity:alarm-clock-solid"} />
             <Typography variant="body2">
-              Time: &nbsp;
+              {translate("club.event.details.time")}: &nbsp;
               <Link component="span" variant="subtitle2" color="text.primary">
                 {fDateTime(time)}
               </Link>
@@ -118,7 +131,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           <Stack direction="row">
             <IconStyle icon={"eva:pin-fill"} />
             <Typography variant="body2">
-              Address: &nbsp;
+              {translate("club.event.details.address")}: &nbsp;
               <Link component="span" variant="subtitle2" color="text.primary">
                 {address}
               </Link>
@@ -127,8 +140,10 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           <Stack direction="row">
             <IconStyle icon={"bxs:dollar-circle"} />
             <Typography variant="body2">
-              Price: &nbsp;
-              <b>{fNumber(price || 0)} VND</b>
+              {translate("club.event.details.price")}: &nbsp;
+              <Link component="span" variant="subtitle2" color="text.primary">
+                {fNumber(price || 0)} VND
+              </Link>
             </Typography>
           </Stack>
           <Divider />
@@ -173,7 +188,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             show: false,
           },
           total: {
-            label: "Slots",
+            label: translate("club.event.details.slot"),
           },
         },
       },
@@ -215,7 +230,14 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   };
 
   return (
-    <Card>
+    <Card
+      sx={
+        isVotedData?.getEventIsVoted && {
+          color: (theme: any) => theme.palette["success"].darker,
+          bgcolor: (theme: any) => theme.palette["success"].lighter,
+        }
+      }
+    >
       <CardHeader
         title={title}
         action={
@@ -262,6 +284,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           event={event}
           isFull={eventVoteCount >= event.slot}
           isClose={isClose}
+          refetchVoted={refetchVoted}
         />
       </Container>
 

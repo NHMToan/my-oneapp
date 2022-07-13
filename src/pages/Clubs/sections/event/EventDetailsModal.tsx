@@ -16,7 +16,6 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { capitalCase } from "change-case";
 import DropdownMenu from "components/DropdownMenu";
 import Iconify from "components/Iconify";
 import Label from "components/Label";
@@ -27,6 +26,7 @@ import {
   useDeleteEventMutation,
   useEventQuery,
 } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import useTabs from "hooks/useTabs";
 import { useSnackbar } from "notistack";
 import { ClubEvent } from "pages/Clubs/data.t";
@@ -63,7 +63,7 @@ const Content: FC<EventDetailsContentProps> = ({
   const [onDelete] = useDeleteEventMutation({ fetchPolicy: "no-cache" });
 
   const { currentTab, onChangeTab } = useTabs("general");
-
+  const { translate } = useLocales();
   const [onChangeStatus] = useChangeEventStatusMutation({
     fetchPolicy: "no-cache",
   });
@@ -82,7 +82,7 @@ const Content: FC<EventDetailsContentProps> = ({
       data.getEvent;
     return (
       <Card>
-        <CardHeader title="Event info" />
+        <CardHeader title={translate("club.event.details.event_info")} />
 
         <Stack spacing={2} sx={{ p: "12px 24px 24px" }}>
           <Typography variant="body2">{description}</Typography>
@@ -91,7 +91,7 @@ const Content: FC<EventDetailsContentProps> = ({
             <IconStyle icon={"fluent:clock-48-filled"} />
 
             <Typography variant="body2">
-              Vote start at: &nbsp;
+              {translate("club.event.details.vote_start_at")}: &nbsp;
               <b>{fDateTime(start)}</b>
             </Typography>
           </Stack>
@@ -99,14 +99,14 @@ const Content: FC<EventDetailsContentProps> = ({
             <IconStyle icon={"fluent:clock-dismiss-20-filled"} />
 
             <Typography variant="body2">
-              Vote end at: &nbsp;
+              {translate("club.event.details.vote_end_at")}: &nbsp;
               <b>{fDateTime(end)}</b>
             </Typography>
           </Stack>
           <Stack direction="row">
             <IconStyle icon={"ic:baseline-how-to-vote"} />
             <Typography variant="body2">
-              Max vote: &nbsp;
+              {translate("club.event.details.max_vote")}: &nbsp;
               <b>{maxVote}</b>
             </Typography>
           </Stack>
@@ -114,7 +114,7 @@ const Content: FC<EventDetailsContentProps> = ({
           <Stack direction="row">
             <IconStyle icon={"clarity:alarm-clock-solid"} />
             <Typography variant="body2">
-              Time: &nbsp;
+              {translate("club.event.details.time")}: &nbsp;
               <Link component="span" variant="subtitle2" color="text.primary">
                 {fDateTime(time)}
               </Link>
@@ -123,7 +123,7 @@ const Content: FC<EventDetailsContentProps> = ({
           <Stack direction="row">
             <IconStyle icon={"eva:pin-fill"} />
             <Typography variant="body2">
-              Address: &nbsp;
+              {translate("club.event.details.address")}: &nbsp;
               <Link component="span" variant="subtitle2" color="text.primary">
                 {address}
               </Link>
@@ -132,7 +132,7 @@ const Content: FC<EventDetailsContentProps> = ({
           <Stack direction="row">
             <IconStyle icon={"bxs:dollar-circle"} />
             <Typography variant="body2">
-              Price: &nbsp;
+              {translate("club.event.details.price")}: &nbsp;
               <b>{fNumber(price || 0)} VND</b>
             </Typography>
           </Stack>
@@ -143,6 +143,7 @@ const Content: FC<EventDetailsContentProps> = ({
 
   const TABS = [
     {
+      title: translate("club.event.details.tab_general.title"),
       value: "general",
       icon: <Iconify icon={"fluent:info-24-filled"} width={20} height={20} />,
       component: (
@@ -157,7 +158,8 @@ const Content: FC<EventDetailsContentProps> = ({
       ),
     },
     {
-      value: "Votes info",
+      title: translate("club.event.details.tab_vote_info.title"),
+      value: "vote_info",
       icon: (
         <Iconify
           icon={"fluent:task-list-square-person-20-filled"}
@@ -172,7 +174,10 @@ const Content: FC<EventDetailsContentProps> = ({
   if (isEditing)
     return (
       <>
-        <CardHeader title="Edit Event" sx={{ p: "12px 24px 12px" }} />
+        <CardHeader
+          title={translate("club.event.form.edit_title")}
+          sx={{ p: "12px 24px 12px" }}
+        />
         <EventForm
           event={data.getEvent as any}
           onCancel={() => {
@@ -200,7 +205,7 @@ const Content: FC<EventDetailsContentProps> = ({
               key="edit"
             >
               <Iconify icon={"bxs:pencil"} />
-              Edit
+              {translate("common.btn.edit")}
             </MenuItem>
 
             <MenuItem
@@ -211,7 +216,9 @@ const Content: FC<EventDetailsContentProps> = ({
                       variables: { id: eventData.id, status: 2 },
                     });
                     if (res.data.changeEventStatus.success) {
-                      enqueueSnackbar("Event changed to hidden!");
+                      enqueueSnackbar(
+                        translate("club.event.form.update_success")
+                      );
                       refetch();
                     }
                   }
@@ -221,7 +228,9 @@ const Content: FC<EventDetailsContentProps> = ({
                       variables: { id: eventData.id, status: 1 },
                     });
                     if (res.data.changeEventStatus.success) {
-                      enqueueSnackbar("Event changed to visible!");
+                      enqueueSnackbar(
+                        translate("club.event.form.update_success")
+                      );
                       refetch();
                     }
                   }
@@ -241,7 +250,7 @@ const Content: FC<EventDetailsContentProps> = ({
               onClose={() => {}}
               title={
                 <Typography>
-                  Are you sure you want to delete the event?
+                  {translate("club.event.delete.confirmation")}
                 </Typography>
               }
               actions={
@@ -251,7 +260,7 @@ const Content: FC<EventDetailsContentProps> = ({
                     color="inherit"
                     onClick={() => setOpenDelete(false)}
                   >
-                    Cancel
+                    {translate("common.btn.cancel")}
                   </Button>
                   <Button
                     variant="contained"
@@ -262,7 +271,9 @@ const Content: FC<EventDetailsContentProps> = ({
                           variables: { id: eventData.id },
                         });
                         if (res.data.deleteEvent.success) {
-                          enqueueSnackbar("Event delete successfully!");
+                          enqueueSnackbar(
+                            translate("club.event.delete.success")
+                          );
                           onClose();
                           onRefreshList();
                         }
@@ -271,7 +282,7 @@ const Content: FC<EventDetailsContentProps> = ({
                       }
                     }}
                   >
-                    Delete
+                    {translate("common.btn.delete")}
                   </Button>
                 </>
               }
@@ -284,7 +295,7 @@ const Content: FC<EventDetailsContentProps> = ({
                 }}
               >
                 <Iconify icon={"eva:trash-2-outline"} />
-                Delete
+                {translate("common.btn.delete")}
               </MenuItem>
             </PopConfirm>
           </>
@@ -305,7 +316,7 @@ const Content: FC<EventDetailsContentProps> = ({
                   textTransform: "uppercase",
                 }}
               >
-                Hidden
+                {translate("club.event.status.hidden")}
               </Label>
             )}
           </Stack>
@@ -337,7 +348,7 @@ const Content: FC<EventDetailsContentProps> = ({
             <Tab
               disableRipple
               key={tab.value}
-              label={capitalCase(tab.value)}
+              label={tab.title}
               icon={tab.icon}
               value={tab.value}
             />

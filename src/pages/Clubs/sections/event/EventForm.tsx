@@ -18,6 +18,7 @@ import {
   useCreateEventMutation,
   useUpdateEventMutation,
 } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import merge from "lodash/merge";
 import { useSnackbar } from "notistack";
 import { ClubData } from "pages/Clubs/data.t";
@@ -75,7 +76,7 @@ export default function EventForm({
   club,
 }: EventFormProps) {
   const [onUpdate] = useUpdateEventMutation({ fetchPolicy: "no-cache" });
-
+  const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const [createEvent] = useCreateEventMutation();
   const EventSchema = Yup.object().shape({
@@ -129,7 +130,7 @@ export default function EventForm({
           variables: { updateEventInput: newEvent, id: event.id },
         });
         if (updateRes?.data?.updateEvent?.success) {
-          enqueueSnackbar("Update success!");
+          enqueueSnackbar(translate("club.event.form.update_success"));
           onPostSave();
           onCancel();
           reset();
@@ -144,7 +145,7 @@ export default function EventForm({
           variables: { createEventInput: newEvent },
         });
         if (createRes?.data?.createEvent?.success) {
-          enqueueSnackbar("Create success!");
+          enqueueSnackbar(translate("club.event.form.create_success"));
           onPostSave();
           onCancel();
           reset();
@@ -170,14 +171,25 @@ export default function EventForm({
         <Grid item xs={12} md={6}>
           <Stack spacing={3} sx={{ p: 3 }}>
             <Typography variant="overline" sx={{ color: "text.secondary" }}>
-              Event Info
+              {translate("club.event.form.info_section")}
             </Typography>
 
-            <RHFTextField name="title" label="Title" />
+            <RHFTextField
+              name="title"
+              label={translate("club.event.form.name")}
+            />
 
-            <RHFTextField name="slot" label="Slots" type="number" />
+            <RHFTextField
+              name="slot"
+              label={translate("club.event.form.slot")}
+              type="number"
+            />
 
-            <RHFTextField name="maxVote" label="Max vote" type="number" />
+            <RHFTextField
+              name="maxVote"
+              label={translate("club.event.form.max_vote")}
+              type="number"
+            />
 
             <Controller
               name="start"
@@ -185,7 +197,7 @@ export default function EventForm({
               render={({ field }) => (
                 <MobileDateTimePicker
                   {...field}
-                  label="Start date"
+                  label={translate("club.event.form.start_date")}
                   inputFormat="dd/MM/yyyy hh:mm a"
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
@@ -198,7 +210,7 @@ export default function EventForm({
               render={({ field }) => (
                 <MobileDateTimePicker
                   {...field}
-                  label="End date"
+                  label={translate("club.event.form.end_date")}
                   inputFormat="dd/MM/yyyy hh:mm a"
                   renderInput={(params) => (
                     <TextField
@@ -218,17 +230,17 @@ export default function EventForm({
         <Grid item xs={12} md={6}>
           <Stack spacing={3} sx={{ p: 3 }}>
             <Typography variant="overline" sx={{ color: "text.secondary" }}>
-              More Information
+              {translate("club.event.form.more_section")}
             </Typography>
             <RHFTextField
               name="description"
-              label="Description"
+              label={translate("club.event.form.description")}
               multiline
               rows={4}
             />
             <RHFTextField
               name="price"
-              label="Price"
+              label={translate("club.event.form.price")}
               placeholder="0.00"
               value={getValues("price") === 0 ? "" : getValues("price")}
               onChange={(event) =>
@@ -249,14 +261,17 @@ export default function EventForm({
               render={({ field }) => (
                 <MobileDateTimePicker
                   {...field}
-                  label="Event time"
+                  label={translate("club.event.form.event_time")}
                   inputFormat="dd/MM/yyyy hh:mm a"
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               )}
             />
 
-            <RHFTextField name="address" label="Address" />
+            <RHFTextField
+              name="address"
+              label={translate("club.event.form.address")}
+            />
 
             <Controller
               name="textColor"
@@ -277,11 +292,13 @@ export default function EventForm({
         <Box sx={{ flexGrow: 1 }} />
 
         <Button variant="outlined" color="inherit" onClick={onCancel}>
-          Cancel
+          {translate("common.btn.cancel")}
         </Button>
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          {event ? "Save changes" : "Add"}
+          {event
+            ? translate("common.btn.save_changes")
+            : translate("common.btn.add")}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

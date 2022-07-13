@@ -1,5 +1,6 @@
 import { Button, Container, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import useLocales from "hooks/useLocales";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_AUTH } from "Router/paths";
 import Page from "../../components/Page";
@@ -21,6 +22,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ResetPassword() {
+  const { translate } = useLocales();
   return (
     <Page title="Reset Password">
       <LogoOnlyLayout />
@@ -28,12 +30,11 @@ export default function ResetPassword() {
       <Container>
         <ContentStyle sx={{ textAlign: "center" }}>
           <Typography variant="h3" paragraph>
-            Forgot your password?
+            {translate("auth.forgot_password.title")}
           </Typography>
 
           <Typography sx={{ color: "text.secondary", mb: 5 }}>
-            Please enter the email address associated with your account and We
-            will email you a link to reset your password.
+            {translate("auth.forgot_password.sub_title")}
           </Typography>
 
           <ResetPasswordForm />
@@ -45,7 +46,7 @@ export default function ResetPassword() {
             to={PATH_AUTH.login}
             sx={{ mt: 1 }}
           >
-            Back
+            {translate("common.btn.back")}
           </Button>
         </ContentStyle>
       </Container>

@@ -5,12 +5,14 @@ import IconBox from "../../components/IconBox";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { useFbLoginMutation } from "generated/graphql";
 import useAuth from "hooks/useAuth";
+import useLocales from "hooks/useLocales";
 
 // ----------------------------------------------------------------------
 
 export default function AuthSocial() {
   const [onFBLogin] = useFbLoginMutation();
   const { postLogin } = useAuth();
+  const { translate } = useLocales();
   const responseFacebook = async (res) => {
     try {
       const loginRes = await onFBLogin({
@@ -57,8 +59,11 @@ export default function AuthSocial() {
       </Stack>
 
       <Divider sx={{ my: 3 }}>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          OR
+        <Typography
+          variant="body2"
+          sx={{ color: "text.secondary", textTransform: "uppercase" }}
+        >
+          {translate("common.word.prepositions.on")}
         </Typography>
       </Divider>
     </>

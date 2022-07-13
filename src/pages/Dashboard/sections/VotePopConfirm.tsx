@@ -10,6 +10,7 @@ import {
   Stack,
 } from "@mui/material";
 import { FormProvider, RHFSelect } from "components/hook-form";
+import useLocales from "hooks/useLocales";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -36,7 +37,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
   const EventSchema = Yup.object().shape({
     value: Yup.number().required("Slot is required"),
   });
-
+  const { translate } = useLocales();
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues,
@@ -102,7 +103,9 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
   return (
     <Dialog open={isOpen} onClose={onCancel} maxWidth="xs">
       <DialogTitle>
-        {isWaiting ? "Vote for waiting slot" : "Vote for slot"}
+        {isWaiting
+          ? translate("club.event.details.vote.vote_waiting_title")
+          : translate("club.event.details.vote.vote_confirmed_title")}
       </DialogTitle>
       {renderWarning()}
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -127,7 +130,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
           <Box sx={{ flexGrow: 1 }} />
 
           <Button variant="outlined" color="inherit" onClick={onCancel}>
-            Cancel
+            {translate("common.btn.cancel")}
           </Button>
 
           <LoadingButton
@@ -136,7 +139,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
             loading={isSubmitting}
             disabled={!maxVote}
           >
-            Vote
+            {translate("common.btn.vote")}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

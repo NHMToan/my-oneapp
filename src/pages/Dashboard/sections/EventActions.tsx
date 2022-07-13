@@ -13,6 +13,7 @@ import {
   useGetVoteStatsQuery,
 } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
+import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { FC, useEffect, useState } from "react";
@@ -24,6 +25,7 @@ interface EventActionsProps {
   event: ClubEvent;
   isFull: boolean;
   isClose?: boolean;
+  refetchVoted: any;
 }
 const CountdownStyle = styled("div")({
   display: "flex",
@@ -35,14 +37,19 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
     margin: theme.spacing(0, 0.5),
   },
 }));
-const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
+const EventActions: FC<EventActionsProps> = ({
+  event,
+  isFull,
+  isClose,
+  refetchVoted,
+}) => {
   const current = new Date();
   const { data: statsData, refetch } = useGetVoteStatsQuery({
     fetchPolicy: "no-cache",
     variables: { eventId: event.id },
     skip: !event,
   });
-
+  const { translate } = useLocales();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [isFormChangeOpen, setIsFormChangeOpen] = useState<boolean>(false);
   const [isVoteWaiting, setIsVoteWaiting] = useState<boolean>(false);
@@ -67,11 +74,20 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
 
       if (voteRes?.data?.voteEvent?.success) {
         refetch();
-        enqueueSnackbar(`Confirmed ${value} slot(s)`);
+        enqueueSnackbar(
+          translate("club.event.details.vote.confirmed_success", {
+            count: value,
+          })
+        );
+        refetchVoted();
       } else {
-        enqueueSnackbar(voteRes?.data?.voteEvent?.message || "Internal error", {
-          variant: "error",
-        });
+        enqueueSnackbar(
+          translate("club.event.details.vote.confirmed_full_message") ||
+            "Internal error",
+          {
+            variant: "error",
+          }
+        );
         throw voteRes?.data?.voteEvent?.message || "Internal error";
       }
     } catch (e) {
@@ -89,7 +105,9 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
 
       if (voteRes?.data?.voteEvent?.success) {
         refetch();
-        enqueueSnackbar(`Waiting ${value} slot(s)`);
+        enqueueSnackbar(
+          translate("club.event.details.vote.waiting_success", { count: value })
+        );
       } else {
         enqueueSnackbar(voteRes?.data?.voteEvent?.message || "Internal error", {
           variant: "error",
@@ -103,6 +121,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
     const countdown = useCountdown(
       event.start < current.toISOString() ? null : new Date(event.start)
     );
+
     useEffect(() => {
       const now = new Date();
       if (event.start < now.toISOString()) {
@@ -121,7 +140,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
       >
         <CountdownStyle>
           <Typography sx={{ marginRight: "6px" }}>
-            Registration will be open in
+            {translate("club.event.details.reg_will_open")}
           </Typography>
           <div>
             <Typography>{countdown.hours}</Typography>
@@ -159,7 +178,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
             >
               <Stack width={1} direction="row" justifyContent="center">
                 <Typography variant="body2" sx={{ color: "text.success" }}>
-                  Confirmed:{" "}
+                  {translate("club.event.details.confirmed")}:{" "}
                   <b>{fNumber(statsData?.getVoteStats?.confirmed || 0)}</b>
                 </Typography>
               </Stack>
@@ -171,7 +190,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
                 justifyContent="center"
               >
                 <Typography variant="body2" sx={{ color: "text.info" }}>
-                  Waiting:{" "}
+                  {translate("club.event.details.waiting")}:{" "}
                   <b>{fNumber(statsData?.getVoteStats?.waiting || 0)}</b>
                 </Typography>
               </Stack>
@@ -188,7 +207,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
             }}
             key="message"
           >
-            Voting is closed!
+            {translate("club.event.details.vote_close")}
           </Card>
         </Stack>
       </>
@@ -215,7 +234,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
           >
             <Stack width={1} direction="row" justifyContent="center">
               <Typography variant="body2" sx={{ color: "text.success" }}>
-                Confirmed:{" "}
+                {translate("club.event.details.confirmed")}:{" "}
                 <b>{fNumber(statsData?.getVoteStats?.confirmed || 0)}</b>
               </Typography>
             </Stack>
@@ -227,7 +246,8 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
               justifyContent="center"
             >
               <Typography variant="body2" sx={{ color: "text.info" }}>
-                Waiting: <b>{fNumber(statsData?.getVoteStats?.waiting || 0)}</b>
+                {translate("club.event.details.waiting")}:{" "}
+                <b>{fNumber(statsData?.getVoteStats?.waiting || 0)}</b>
               </Typography>
             </Stack>
           </Stack>
@@ -255,7 +275,9 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
             }}
             disabled={!isChangeVote && isFull}
           >
-            {isChangeVote ? `Change` : "Register"}
+            {isChangeVote
+              ? translate("common.btn.change")
+              : translate("common.btn.register")}
           </Button>
 
           <Button
@@ -277,7 +299,9 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
               statsData?.getVoteStats?.total >= event.maxVote
             }
           >
-            {isChangeWaitingVote ? `Change` : "Queue"}
+            {isChangeWaitingVote
+              ? translate("common.btn.change")
+              : translate("common.btn.queue")}
           </Button>
           <VotePopConfirm
             isOpen={isFormOpen}
@@ -303,6 +327,7 @@ const EventActions: FC<EventActionsProps> = ({ event, isFull, isClose }) => {
             }}
             postActions={() => {
               refetch();
+              refetchVoted();
             }}
             isWaiting={isVoteWaiting}
             currentVoteCount={

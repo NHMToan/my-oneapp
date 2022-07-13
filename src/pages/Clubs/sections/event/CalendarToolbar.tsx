@@ -8,16 +8,33 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Iconify from "components/Iconify";
+import useLocales from "hooks/useLocales";
 import useResponsive from "hooks/useResponsive";
 import { fDate } from "utils/formatTime";
 
 // ----------------------------------------------------------------------
 
 const VIEW_OPTIONS = [
-  { value: "dayGridMonth", label: "Month", icon: "ic:round-view-module" },
-  { value: "timeGridWeek", label: "Week", icon: "ic:round-view-week" },
-  { value: "timeGridDay", label: "Day", icon: "ic:round-view-day" },
-  { value: "listWeek", label: "Agenda", icon: "ic:round-view-agenda" },
+  {
+    value: "dayGridMonth",
+    label: "club.details.events.btn.month",
+    icon: "ic:round-view-module",
+  },
+  {
+    value: "timeGridWeek",
+    label: "club.details.events.btn.week",
+    icon: "ic:round-view-week",
+  },
+  {
+    value: "timeGridDay",
+    label: "club.details.events.btn.day",
+    icon: "ic:round-view-day",
+  },
+  {
+    value: "listWeek",
+    label: "club.details.events.btn.agenda",
+    icon: "ic:round-view-agenda",
+  },
 ];
 
 const RootStyle = styled("div")(({ theme }) => ({
@@ -50,13 +67,13 @@ export default function CalendarToolbar({
   onChangeView,
 }: CalendarToolbarProps) {
   const isDesktop = useResponsive("up", "sm");
-
+  const { translate } = useLocales();
   return (
     <RootStyle>
       {isDesktop && (
         <Stack direction="row" spacing={0.5}>
           {VIEW_OPTIONS.map((viewOption) => (
-            <Tooltip key={viewOption.value} title={viewOption.label}>
+            <Tooltip key={viewOption.value} title={translate(viewOption.label)}>
               <ToggleButton
                 value={view}
                 selected={viewOption.value === view}
@@ -89,7 +106,7 @@ export default function CalendarToolbar({
           variant="contained"
           onClick={onToday}
         >
-          Today
+          {translate("club.details.events.btn.today")}
         </Button>
       )}
     </RootStyle>

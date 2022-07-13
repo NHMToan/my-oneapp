@@ -1,7 +1,181 @@
 {
   "auth": {
     "login": {
-      "title": "Sign in to VSG"
+      "title": "Sign in to VSG",
+      "form": {
+        "email": "Email address",
+        "password": "Password",
+        "register_now": "Register now",
+        "forgot_password": "Forgot password?",
+        "login": "Login"
+      }
+    },
+    "register": {
+      "title": "Register to join with us.",
+      "form": {
+        "login": "Login",
+        "login_warning": "Already have account?",
+        "register": "Register",
+        "password": "Password",
+        "email": "Email address",
+        "fist_name": "First name",
+        "last_name": "Last name"
+      }
+    },
+    "forgot_password": {
+      "title": "Forgot your password?",
+      "sub_title": "Please enter the email address associated with your account and We will email you a link to reset your password.",
+      "btn_send": "Send Request",
+      "email": "Email address"
+    }
+  },
+  "common": {
+    "word": {
+      "prepositions": {
+        "on": "or"
+      }
+    },
+    "btn": {
+      "back": "Back",
+      "cancel": "Cancel",
+      "save_changes": "Save changes",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "change": "Change",
+      "queue": "Queue",
+      "vote": "Vote",
+      "register": "Register"
+    }
+  },
+  "account_menu": {
+    "settings": "Settings",
+    "profile": "Profile",
+    "home": "Home",
+    "logout": "Logout"
+  },
+  "menu": {
+    "events": "Events",
+    "clubs": "Clubs"
+  },
+  "club": {
+    "list": {
+      "title": "Clubs",
+      "btn_new_club": "New club"
+    },
+    "details": {
+      "general": {
+        "menu_label": "General",
+        "btn": {
+          "cancel_request": "Cancel request?",
+          "join": "Join club?"
+        },
+        "members": "Members",
+        "about": "About"
+      },
+      "events": {
+        "menu_label": "Events",
+        "title": "Events",
+        "btn": {
+          "new_event": "New event",
+          "agenda": "Agenda",
+          "day": "Day",
+          "week": "Week",
+          "month": "Month",
+          "today": "Today"
+        }
+      },
+      "settings": {
+        "menu_label": "Settings"
+      },
+      "requesting": {
+        "menu_label": "Requests"
+      },
+      "members": {
+        "menu_label": "Members"
+      }
+    },
+    "member": {
+      "status": {
+        "admin": "Admin",
+        "sub_admin": "Sub-admin",
+        "member": "Member"
+      }
+    },
+    "event": {
+      "form": {
+        "title": "Add event",
+        "info_section": "Event info",
+        "name": "Title",
+        "slot": "Slots",
+        "max_vote": "Max vote",
+        "start_date": "Start date",
+        "end_date": "End date",
+        "more_section": "More info",
+        "description": "Description",
+        "price": "Price",
+        "event_time": "Event time",
+        "address": "Address",
+        "edit_title": "Edit event",
+        "add_title": "Add event",
+        "update_success": "Event updated!",
+        "create_success": "Event created!"
+      },
+      "details": {
+        "tab_general": {
+          "title": "General"
+        },
+        "tab_vote_info": {
+          "title": "Votes info",
+          "confirm_list": {
+            "no_data": "No confirmed vote found",
+            "title": "Confirmed list",
+            "delete": {
+              "confirmation": "Are you sure you want to delete the vote?",
+              "sub_confirmation": "After deleting, the waiting votes will full-fill the slot!",
+              "success": "Vote deleted!"
+            }
+          },
+          "waiting_list": {
+            "delete": {
+              "confirmation": "Are you sure you want to delete the vote?\n",
+              "success": "Vote deleted!"
+            },
+            "title": "Waiting list",
+            "no_data": "No waiting list found"
+          }
+        },
+        "event_info": "Event info",
+        "vote_start_at": "Vote start at",
+        "vote_end_at": "Vote end at",
+        "max_vote": "Max vote",
+        "time": "Time",
+        "address": "Address",
+        "price": "Price",
+        "slot": "Slots",
+        "reg_will_open": "Registration will open in",
+        "confirmed": "Confirmed",
+        "waiting": "Waiting",
+        "vote_close": "Vote is closed!",
+        "vote": {
+          "confirmed_success": "Confirmed {{count}} slot(s)",
+          "waiting_success": "Waiting {{count}} slot(s)",
+          "waiting_change_success": "Waiting slot is changed to {{count}}",
+          "confirmed_change_success": "Confirmed slot is changed to {{count}}",
+          "change_waiting_title": "Change waiting slot",
+          "change_confirmed_title": "Change confirmed slot",
+          "vote_waiting_title": "Vote for waiting slot",
+          "vote_confirmed_title": "Vote for slot",
+          "confirmed_full_message": "Slot is full!"
+        }
+      },
+      "delete": {
+        "confirmation": "Are you sure you want to delete the event?",
+        "success": "Event deleted"
+      },
+      "status": {
+        "hidden": "Hidden"
+      }
     }
   }
 }
