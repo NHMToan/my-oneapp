@@ -7,7 +7,15 @@ fragment eventMutationResponse on EventMutationResponse {
     ...fieldError
   }
 }
-
+fragment eventVoteMutationResponse on EventVoteMutationResponse {
+  ...mutationStatuses
+  vote {
+    ...voteInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
 fragment eventInfo on ClubEvent {
   id
   title
@@ -42,4 +50,5 @@ fragment voteInfo on Vote {
   createdAt
   status
   updatedAt
+  paid
 }

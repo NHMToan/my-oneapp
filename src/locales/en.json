@@ -134,7 +134,11 @@
               "confirmation": "Are you sure you want to delete the vote?",
               "sub_confirmation": "After deleting, the waiting votes will full-fill the slot!",
               "success": "Vote deleted!"
-            }
+            },
+            "btn_unpaid": "Not paid",
+            "cash": "Cash",
+            "momo": "Momo",
+            "bank": "Bank"
           },
           "waiting_list": {
             "delete": {
@@ -167,6 +171,12 @@
           "vote_waiting_title": "Vote for waiting slot",
           "vote_confirmed_title": "Vote for slot",
           "confirmed_full_message": "Slot is full!"
+        },
+        "paid_status": {
+          "cash": "Cash",
+          "none": "Not paid",
+          "bank": "Bank",
+          "momo": "Momo"
         }
       },
       "delete": {

@@ -8,10 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Iconify from "components/Iconify";
-import {
-  useCreateVoteEventMutation,
-  useGetVoteStatsQuery,
-} from "generated/graphql";
+import { useCreateVoteEventMutation } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
@@ -25,7 +22,8 @@ interface EventActionsProps {
   event: ClubEvent;
   isFull: boolean;
   isClose?: boolean;
-  refetchVoted: any;
+  refetchStats: any;
+  statsData: any;
 }
 const CountdownStyle = styled("div")({
   display: "flex",
@@ -41,14 +39,11 @@ const EventActions: FC<EventActionsProps> = ({
   event,
   isFull,
   isClose,
-  refetchVoted,
+  refetchStats,
+  statsData,
 }) => {
   const current = new Date();
-  const { data: statsData, refetch } = useGetVoteStatsQuery({
-    fetchPolicy: "no-cache",
-    variables: { eventId: event.id },
-    skip: !event,
-  });
+
   const { translate } = useLocales();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [isFormChangeOpen, setIsFormChangeOpen] = useState<boolean>(false);
@@ -73,13 +68,12 @@ const EventActions: FC<EventActionsProps> = ({
       });
 
       if (voteRes?.data?.voteEvent?.success) {
-        refetch();
+        refetchStats();
         enqueueSnackbar(
           translate("club.event.details.vote.confirmed_success", {
             count: value,
           })
         );
-        refetchVoted();
       } else {
         enqueueSnackbar(
           translate("club.event.details.vote.confirmed_full_message") ||
@@ -104,7 +98,7 @@ const EventActions: FC<EventActionsProps> = ({
       });
 
       if (voteRes?.data?.voteEvent?.success) {
-        refetch();
+        refetchStats();
         enqueueSnackbar(
           translate("club.event.details.vote.waiting_success", { count: value })
         );
@@ -326,8 +320,7 @@ const EventActions: FC<EventActionsProps> = ({
               setIsVoteWaiting(false);
             }}
             postActions={() => {
-              refetch();
-              refetchVoted();
+              refetchStats();
             }}
             isWaiting={isVoteWaiting}
             currentVoteCount={

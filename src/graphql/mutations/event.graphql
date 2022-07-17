@@ -60,3 +60,8 @@ mutation DeleteEvent($id: ID!) {
     ...eventMutationResponse
   }
 }
+mutation VoteChangePaid($voteId: ID!, $payStatus: String!) {
+  voteChangePaid(voteId: $voteId, payStatus: $payStatus) {
+    ...eventVoteMutationResponse
+  }
+}

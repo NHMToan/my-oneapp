@@ -9,8 +9,8 @@ import { NavListRoot } from "./NavList";
 
 // ----------------------------------------------------------------------
 type ListSubheaderStyleProps = {
-children:ReactNode
-}
+  children: ReactNode;
+};
 export const ListSubheaderStyle = styled((props) => (
   <ListSubheader disableSticky disableGutters {...props} />
 ))<ListSubheaderStyleProps>(({ theme }) => ({
@@ -39,8 +39,8 @@ export default function NavSectionVertical({
 
   return (
     <Box {...other}>
-      {navConfig.map((group) => (
-        <List key={group.subheader} disablePadding sx={{ px: 2 }}>
+      {navConfig.map((group, key) => (
+        <List key={key} disablePadding sx={{ px: 2 }}>
           <ListSubheaderStyle
             sx={{
               ...(isCollapse && {

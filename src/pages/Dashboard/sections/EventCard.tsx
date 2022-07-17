@@ -17,7 +17,7 @@ import Iconify from "components/Iconify";
 import { differenceInHours } from "date-fns";
 import {
   useEventVoteChangedSubscriptionSubscription,
-  useGetEventIsVotedQuery,
+  useGetVoteStatsQuery,
 } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import useLocales from "hooks/useLocales";
@@ -87,10 +87,10 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
   const [isClose, setIsClose] = useState<boolean>(new Date() > new Date(end));
   const { translate } = useLocales();
-
-  const { data: isVotedData, refetch: refetchVoted } = useGetEventIsVotedQuery({
+  const { data: statsData, refetch: refetchStats } = useGetVoteStatsQuery({
     fetchPolicy: "no-cache",
-    variables: { eventId: id },
+    variables: { eventId: event.id },
+    skip: !event,
   });
 
   const { data: voteCountData } = useEventVoteChangedSubscriptionSubscription({
@@ -113,7 +113,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             <IconStyle icon={"ic:baseline-how-to-vote"} />
             <Typography variant="body2">
               {translate("club.event.details.max_vote")}: &nbsp;
-              <Link component="span" variant="subtitle2" color="text.primary">
+              <Link component="span" variant="subtitle2">
                 {maxVote}{" "}
               </Link>
             </Typography>
@@ -123,7 +123,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             <IconStyle icon={"clarity:alarm-clock-solid"} />
             <Typography variant="body2">
               {translate("club.event.details.time")}: &nbsp;
-              <Link component="span" variant="subtitle2" color="text.primary">
+              <Link component="span" variant="subtitle2">
                 {fDateTime(time)}
               </Link>
             </Typography>
@@ -132,7 +132,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             <IconStyle icon={"eva:pin-fill"} />
             <Typography variant="body2">
               {translate("club.event.details.address")}: &nbsp;
-              <Link component="span" variant="subtitle2" color="text.primary">
+              <Link component="span" variant="subtitle2">
                 {address}
               </Link>
             </Typography>
@@ -141,7 +141,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             <IconStyle icon={"bxs:dollar-circle"} />
             <Typography variant="body2">
               {translate("club.event.details.price")}: &nbsp;
-              <Link component="span" variant="subtitle2" color="text.primary">
+              <Link component="span" variant="subtitle2">
                 {fNumber(price || 0)} VND
               </Link>
             </Typography>
@@ -232,9 +232,9 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   return (
     <Card
       sx={
-        isVotedData?.getEventIsVoted && {
-          color: (theme: any) => theme.palette["success"].darker,
-          bgcolor: (theme: any) => theme.palette["success"].lighter,
+        statsData?.getVoteStats?.confirmed && {
+          color: (theme: any) => theme.palette["primary"].darker,
+          bgcolor: (theme: any) => theme.palette["primary"].lighter,
         }
       }
     >
@@ -284,7 +284,8 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           event={event}
           isFull={eventVoteCount >= event.slot}
           isClose={isClose}
-          refetchVoted={refetchVoted}
+          refetchStats={refetchStats}
+          statsData={statsData}
         />
       </Container>
 

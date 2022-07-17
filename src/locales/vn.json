@@ -92,7 +92,11 @@
               "success": "Vote đã được xóa"
             },
             "no_data": "Chưa có xác nhận slot nào",
-            "title": "Danh xách xác nhận"
+            "title": "Danh xách xác nhận",
+            "btn_unpaid": "Chưa đóng",
+            "cash": "Tiền mặt",
+            "momo": "Momo",
+            "bank": "Chuyển khoản"
           },
           "title": "Danh sách",
           "waiting_list": {
@@ -119,7 +123,13 @@
         "vote_close": "Đăng ký đã đóng!",
         "vote_end_at": "Kết thúc",
         "vote_start_at": "Bắt đầu",
-        "waiting": "Chờ"
+        "waiting": "Chờ",
+        "paid_status": {
+          "cash": "Tiền mặt",
+          "none": "Chưa đóng",
+          "bank": "Chuyển khoản",
+          "momo": "Momo"
+        }
       },
       "form": {
         "add_title": "Thêm sự kiện",

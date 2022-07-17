@@ -55,4 +55,5 @@ export interface VoteData {
   member: ClubMemberData;
   createdAt: string;
   status: number;
+  paid: string;
 }
