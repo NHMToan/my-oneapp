@@ -51,4 +51,5 @@ fragment voteInfo on Vote {
   status
   updatedAt
   paid
+  note
 }

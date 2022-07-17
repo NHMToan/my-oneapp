@@ -65,3 +65,8 @@ mutation VoteChangePaid($voteId: ID!, $payStatus: String!) {
     ...eventVoteMutationResponse
   }
 }
+mutation NoteVote($voteId: ID!, $note: String!) {
+  noteVote(voteId: $voteId, note: $note) {
+    ...eventVoteMutationResponse
+  }
+}

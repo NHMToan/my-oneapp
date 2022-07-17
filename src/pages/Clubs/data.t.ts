@@ -56,4 +56,5 @@ export interface VoteData {
   createdAt: string;
   status: number;
   paid: string;
+  note: string;
 }

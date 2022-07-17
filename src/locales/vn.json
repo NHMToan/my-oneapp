@@ -176,7 +176,9 @@
       "queue": "Chờ",
       "save_changes": "Lưu thay đổi",
       "vote": "Đăng ký",
-      "register": "Đăng ký"
+      "register": "Đăng ký",
+      "note": "Ghi chú",
+      "save": "Lưu"
     },
     "word": {
       "prepositions": {

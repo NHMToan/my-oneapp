@@ -344,6 +344,7 @@ export type Mutation = {
   like: MutationResponse;
   login: UserMutationResponse;
   logout: UserMutationResponse;
+  noteVote: EventVoteMutationResponse;
   register: UserMutationResponse;
   replyComment: CommentMutationResponse;
   requestJoinClub: ClubMutationResponse;
@@ -501,6 +502,12 @@ export type MutationLoginArgs = {
 
 export type MutationLogoutArgs = {
   userId: Scalars['ID'];
+};
+
+
+export type MutationNoteVoteArgs = {
+  note: Scalars['String'];
+  voteId: Scalars['ID'];
 };
 
 
@@ -987,6 +994,7 @@ export type Vote = {
   event: ClubEvent;
   id: Scalars['ID'];
   member: ClubMember;
+  note?: Maybe<Scalars['String']>;
   paid?: Maybe<Scalars['String']>;
   status: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
@@ -1020,11 +1028,11 @@ export type CommentWithUserInfoFragment = { __typename?: 'Comment', id: string, 
 
 export type EventMutationResponseFragment = { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
-export type EventVoteMutationResponseFragment = { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
+export type EventVoteMutationResponseFragment = { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
 export type EventInfoFragment = { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } };
 
-export type VoteInfoFragment = { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } };
+export type VoteInfoFragment = { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } };
 
 export type FieldErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -1233,7 +1241,15 @@ export type VoteChangePaidMutationVariables = Exact<{
 }>;
 
 
-export type VoteChangePaidMutation = { __typename?: 'Mutation', voteChangePaid: { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type VoteChangePaidMutation = { __typename?: 'Mutation', voteChangePaid: { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type NoteVoteMutationVariables = Exact<{
+  voteId: Scalars['ID'];
+  note: Scalars['String'];
+}>;
+
+
+export type NoteVoteMutation = { __typename?: 'Mutation', noteVote: { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type FollowUserMutationVariables = Exact<{
   profileId: Scalars['ID'];
@@ -1454,7 +1470,7 @@ export type GetVotesQueryVariables = Exact<{
 }>;
 
 
-export type GetVotesQuery = { __typename?: 'Query', getVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
+export type GetVotesQuery = { __typename?: 'Query', getVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
 
 export type GetVoteStatsQueryVariables = Exact<{
   eventId: Scalars['ID'];
@@ -1468,7 +1484,7 @@ export type GetMyVotesQueryVariables = Exact<{
 }>;
 
 
-export type GetMyVotesQuery = { __typename?: 'Query', getMyVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
+export type GetMyVotesQuery = { __typename?: 'Query', getMyVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
 
 export type GetVoteCountQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1817,6 +1833,7 @@ export const VoteInfoFragmentDoc = gql`
   status
   updatedAt
   paid
+  note
 }
     ${ClubMemberInfoFragmentDoc}`;
 export const EventVoteMutationResponseFragmentDoc = gql`
@@ -2649,6 +2666,40 @@ export function useVoteChangePaidMutation(baseOptions?: Apollo.MutationHookOptio
 export type VoteChangePaidMutationHookResult = ReturnType<typeof useVoteChangePaidMutation>;
 export type VoteChangePaidMutationResult = Apollo.MutationResult<VoteChangePaidMutation>;
 export type VoteChangePaidMutationOptions = Apollo.BaseMutationOptions<VoteChangePaidMutation, VoteChangePaidMutationVariables>;
+export const NoteVoteDocument = gql`
+    mutation NoteVote($voteId: ID!, $note: String!) {
+  noteVote(voteId: $voteId, note: $note) {
+    ...eventVoteMutationResponse
+  }
+}
+    ${EventVoteMutationResponseFragmentDoc}`;
+export type NoteVoteMutationFn = Apollo.MutationFunction<NoteVoteMutation, NoteVoteMutationVariables>;
+
+/**
+ * __useNoteVoteMutation__
+ *
+ * To run a mutation, you first call `useNoteVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNoteVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [noteVoteMutation, { data, loading, error }] = useNoteVoteMutation({
+ *   variables: {
+ *      voteId: // value for 'voteId'
+ *      note: // value for 'note'
+ *   },
+ * });
+ */
+export function useNoteVoteMutation(baseOptions?: Apollo.MutationHookOptions<NoteVoteMutation, NoteVoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NoteVoteMutation, NoteVoteMutationVariables>(NoteVoteDocument, options);
+      }
+export type NoteVoteMutationHookResult = ReturnType<typeof useNoteVoteMutation>;
+export type NoteVoteMutationResult = Apollo.MutationResult<NoteVoteMutation>;
+export type NoteVoteMutationOptions = Apollo.BaseMutationOptions<NoteVoteMutation, NoteVoteMutationVariables>;
 export const FollowUserDocument = gql`
     mutation FollowUser($profileId: ID!) {
   follow(followId: $profileId) {

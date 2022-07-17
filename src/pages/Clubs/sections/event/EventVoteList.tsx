@@ -7,7 +7,9 @@ import {
   Divider,
   IconButton,
   MenuItem,
+  Popover,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import DropdownMenu from "components/DropdownMenu";
@@ -16,6 +18,7 @@ import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
 import {
   useGetVotesQuery,
+  useNoteVoteMutation,
   useUnVoteEventMutation,
   useVoteChangePaidMutation,
 } from "generated/graphql";
@@ -96,10 +99,31 @@ interface VoterProps {
 function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   const [onDeleteVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openNote, setOpenNote] = useState<boolean>(false);
+
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
 
   const [onChangePaid] = useVoteChangePaidMutation({ fetchPolicy: "no-cache" });
+  const [onNoteVote] = useNoteVoteMutation({ fetchPolicy: "no-cache" });
+  const [message, setMessage] = useState<string>("");
+
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
+  const handleChangeMessage = (event) => {
+    setMessage(event.target.value);
+  };
 
   const onPaidChange = async (status) => {
     try {
@@ -114,7 +138,23 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       console.log(e);
     }
   };
+  const onNote = async () => {
+    try {
+      const res = await onNoteVote({
+        variables: { voteId: vote.id, note: message },
+      });
 
+      if (res?.data?.noteVote?.success) {
+        postActions();
+        setOpenNote(false);
+        setMessage("");
+      } else {
+        enqueueSnackbar("Error", { variant: "error" });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Avatar
@@ -126,6 +166,25 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
         <Typography variant="subtitle2">
           {vote.member.profile.displayName} ({vote.value}){" "}
           {vote.paid && PAID_STATUS[vote.paid]}
+          {vote.note && (
+            <>
+              <IconButton onClick={handleClick}>
+                <Iconify icon={"ic:baseline-sticky-note-2"} />
+              </IconButton>
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+              >
+                <Typography sx={{ p: 1 }}> {vote.note}</Typography>
+              </Popover>
+            </>
+          )}
         </Typography>
 
         <Typography
@@ -181,7 +240,6 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                 )}
               </MenuItem>
 
-              <Divider sx={{ borderStyle: "dashed" }} />
               <MenuItem
                 onClick={async () => {
                   onPaidChange("none");
@@ -193,6 +251,60 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                 )}
               </MenuItem>
               <Divider sx={{ borderStyle: "dashed" }} />
+              <PopConfirm
+                open={openNote}
+                onClose={() => {
+                  setMessage("");
+                  setOpenNote(false);
+                }}
+                title={
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={2}
+                    maxRows={8}
+                    value={message}
+                    placeholder="Type a note"
+                    onChange={handleChangeMessage}
+                  />
+                }
+                actions={
+                  <>
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      onClick={() => {
+                        setMessage("");
+                        setOpenNote(false);
+                      }}
+                    >
+                      {translate("common.btn.cancel")}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      disabled={!message}
+                      onClick={() => {
+                        try {
+                          onNote();
+                        } catch (e) {
+                          console.error(e);
+                        }
+                      }}
+                    >
+                      {translate("common.btn.save")}
+                    </Button>
+                  </>
+                }
+              >
+                <MenuItem
+                  onClick={() => {
+                    setOpenNote(true);
+                  }}
+                >
+                  {translate("common.btn.note")}
+                </MenuItem>
+              </PopConfirm>
               <PopConfirm
                 open={openDelete}
                 onClose={() => setOpenDelete(false)}
@@ -245,7 +357,12 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                   </>
                 }
               >
-                <MenuItem sx={{ color: "error.main" }}>
+                <MenuItem
+                  sx={{ color: "error.main" }}
+                  onClick={() => {
+                    setOpenDelete(true);
+                  }}
+                >
                   {translate("common.btn.delete")}
                 </MenuItem>
               </PopConfirm>

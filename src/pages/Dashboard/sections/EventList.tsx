@@ -16,7 +16,7 @@ const EventList: FC<EventListProps> = (props) => {
   if (!data || data?.myEvents?.totalCount === 0)
     return (
       <AppWelcome
-        title={`Welcome back! \n ${user?.displayName}`}
+        title={`Welcome! \n ${user?.displayName}`}
         description="There is no event for now!"
         img={
           <SeoIllustration
