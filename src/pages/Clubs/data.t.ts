@@ -8,6 +8,7 @@ export interface ClubMemberData {
   createdAt?: string;
   updatedAt?: string;
   id?: string;
+  isAdvanced?: boolean;
 }
 export interface ClubData {
   id: string;

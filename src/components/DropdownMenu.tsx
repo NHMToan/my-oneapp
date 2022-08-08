@@ -42,7 +42,7 @@ export default function DropdownMenu({
         arrow="right-top"
         sx={{
           mt: -1,
-          width: 160,
+          width: 180,
           "& .MuiMenuItem-root": {
             px: 1,
             typography: "body2",

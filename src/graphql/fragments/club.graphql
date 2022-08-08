@@ -7,6 +7,15 @@ fragment clubMutationResponse on ClubMutationResponse {
     ...fieldError
   }
 }
+fragment clubMemberMutationResponse on ClubMemberMutationResponse {
+  ...mutationStatuses
+  clubMember {
+    ...clubMemberInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
 fragment clubInfo on Club {
   id
   title
@@ -35,4 +44,5 @@ fragment clubMemberInfo on ClubMember {
   isAdmin
   createdAt
   updatedAt
+  isAdvanced
 }

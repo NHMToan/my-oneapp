@@ -38,6 +38,11 @@ mutation SetRole($clubMemId: ID!, $role: Int!) {
     ...clubMutationResponse
   }
 }
+mutation SetIsAdvanced($memberId: ID!, $isAdvanced: Boolean!) {
+  setIsAdvanced(memberId: $memberId, isAdvanced: $isAdvanced) {
+    ...clubMemberMutationResponse
+  }
+}
 
 mutation DeleteClubMember($clubMemId: ID!) {
   deleteClubMember(id: $clubMemId) {

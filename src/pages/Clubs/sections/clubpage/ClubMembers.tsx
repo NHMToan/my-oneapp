@@ -17,6 +17,7 @@ import { SimpleSkeleton } from "components/skeleton";
 import {
   useClubMembersQuery,
   useDeleteClubMemberMutation,
+  useSetIsAdvancedMutation,
   useSetRoleMutation,
 } from "generated/graphql";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
@@ -37,29 +38,58 @@ export default function ClubMembers({ club }: ClubMembersProps) {
   if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
-    <Box sx={{ mt: 5 }}>
-      <HeaderBreadcrumbs
-        heading="Members"
-        action={
-          <IconButton onClick={() => refetch()}>
-            <Iconify icon={"ci:refresh-02"} width={20} height={20} />
-          </IconButton>
-        }
-      />
+    <>
+      <Box sx={{ mt: 5 }}>
+        <HeaderBreadcrumbs
+          heading="Advanced members"
+          action={
+            <IconButton onClick={() => refetch()}>
+              <Iconify icon={"ci:refresh-02"} width={20} height={20} />
+            </IconButton>
+          }
+        />
 
-      <Grid container spacing={3}>
-        {data?.clubmembers?.results?.map((member) => (
-          <Grid key={member.id} item xs={12} md={4}>
-            <MemberCard
-              member={member as any}
-              refetch={refetch}
-              isAuth={club.isAdmin || club.isSubAdmin}
-              isAdmin={club.isAdmin}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+        <Grid container spacing={3}>
+          {data?.clubmembers?.results
+            ?.filter((item) => item.isAdvanced)
+            .map((member) => (
+              <Grid key={member.id} item xs={12} md={4}>
+                <MemberCard
+                  member={member as any}
+                  refetch={refetch}
+                  isAuth={club.isAdmin || club.isSubAdmin}
+                  isAdmin={club.isAdmin}
+                />
+              </Grid>
+            ))}
+        </Grid>
+      </Box>
+      <Box sx={{ mt: 5 }}>
+        <HeaderBreadcrumbs
+          heading="Members"
+          action={
+            <IconButton onClick={() => refetch()}>
+              <Iconify icon={"ci:refresh-02"} width={20} height={20} />
+            </IconButton>
+          }
+        />
+
+        <Grid container spacing={3}>
+          {data?.clubmembers?.results
+            ?.filter((item) => !item.isAdvanced)
+            .map((member) => (
+              <Grid key={member.id} item xs={12} md={4}>
+                <MemberCard
+                  member={member as any}
+                  refetch={refetch}
+                  isAuth={club.isAdmin || club.isSubAdmin}
+                  isAdmin={club.isAdmin}
+                />
+              </Grid>
+            ))}
+        </Grid>
+      </Box>
+    </>
   );
 }
 
@@ -73,18 +103,34 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
   const {
     profile: { displayName, avatar, id: userId, country },
     id,
+    isAdvanced,
   } = member;
   const [onSetRole] = useSetRoleMutation({ fetchPolicy: "no-cache" });
+  const [onSetIsAdvanced] = useSetIsAdvancedMutation({
+    fetchPolicy: "no-cache",
+  });
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   return (
     <Card sx={{ display: "flex", alignItems: "center", p: 3 }}>
       <Avatar alt={displayName} src={avatar} sx={{ width: 48, height: 48 }} />
       <Box sx={{ flexGrow: 1, minWidth: 0, pl: 2, pr: 1 }}>
-        <Typography variant="subtitle2" noWrap>
-          <Link to={PATH_DASHBOARD.user.profile(userId)} component={RouterLink}>
-            {displayName}
-          </Link>
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="subtitle2" noWrap>
+            <Link
+              to={PATH_DASHBOARD.user.profile(userId)}
+              component={RouterLink}
+            >
+              {displayName}
+            </Link>
+          </Typography>
+          {isAdvanced && (
+            <Iconify
+              icon={"emojione:star"}
+              sx={{ width: 16, height: 16, ml: 0.5, flexShrink: 0 }}
+            />
+          )}
+        </Box>
+
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Iconify
             icon={"eva:pin-fill"}
@@ -99,6 +145,35 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
         <DropdownMenu
           actions={
             <>
+              {isAdmin && (
+                <MenuItem
+                  onClick={async () => {
+                    try {
+                      if (isAdvanced) {
+                      }
+                      const res = await onSetIsAdvanced({
+                        variables: {
+                          memberId: id,
+                          isAdvanced: !isAdvanced,
+                        },
+                      });
+
+                      if (res.data.setIsAdvanced.success) {
+                        refetch();
+                      }
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  }}
+                >
+                  <Iconify
+                    icon={"emojione:star"}
+                    sx={{ width: 16, height: 16, mr: 0.5, flexShrink: 0 }}
+                  />
+                  {isAdvanced ? "Set not advanced" : "Set advanced"}
+                </MenuItem>
+              )}
+
               {isAdmin && (
                 <MenuItem
                   onClick={async () => {

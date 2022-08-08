@@ -155,6 +155,19 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       console.log(e);
     }
   };
+  const renderName = () => {
+    if (vote.member.isAdvanced)
+      return (
+        <span style={{ color: "rgb(255, 206, 49)" }}>
+          {vote.member.profile.displayName} ({vote.value})
+        </span>
+      );
+    return (
+      <span>
+        {vote.member.profile.displayName} ({vote.value})
+      </span>
+    );
+  };
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Avatar
@@ -164,8 +177,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
 
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2">
-          {vote.member.profile.displayName} ({vote.value}){" "}
-          {vote.paid && PAID_STATUS[vote.paid]}
+          {renderName()} {vote.paid && PAID_STATUS[vote.paid]}
           {vote.note && (
             <>
               <IconButton onClick={handleClick}>
@@ -300,6 +312,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                 <MenuItem
                   onClick={() => {
                     setOpenNote(true);
+                    setMessage(vote.note || "");
                   }}
                 >
                   {translate("common.btn.note")}
