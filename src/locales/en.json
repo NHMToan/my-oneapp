@@ -140,7 +140,8 @@
             "btn_unpaid": "Not paid",
             "cash": "Cash",
             "momo": "Momo",
-            "bank": "Bank"
+            "bank": "Bank",
+            "prepaid": "Prepaid"
           },
           "waiting_list": {
             "delete": {

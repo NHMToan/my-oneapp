@@ -17,6 +17,7 @@ export default function UserAvatar({ profile, ...other }: UserAvatarProps) {
       src={profile?.avatar}
       alt={profile?.displayName || "userAvatar"}
       color={profile?.avatar ? "default" : createAvatar(userName).color}
+      clickable
       {...other}
     >
       {createAvatar(userName).name}

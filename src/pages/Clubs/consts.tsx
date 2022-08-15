@@ -21,4 +21,9 @@ export const PAID_STATUS = {
       Unpaid
     </Label>
   ),
+  prepaid: (
+    <Label variant="filled" color="info">
+      Prepaid
+    </Label>
+  ),
 };

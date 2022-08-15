@@ -96,7 +96,8 @@
             "btn_unpaid": "Chưa đóng",
             "cash": "Tiền mặt",
             "momo": "Momo",
-            "bank": "Chuyển khoản"
+            "bank": "Chuyển khoản",
+            "prepaid": "Đóng tháng"
           },
           "title": "Danh sách",
           "waiting_list": {

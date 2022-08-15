@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -12,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Avatar from "components/Avatar";
 import DropdownMenu from "components/DropdownMenu";
 import Iconify from "components/Iconify";
 import PopConfirm from "components/PopConfirm";
@@ -173,6 +173,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       <Avatar
         alt={vote.member.profile.displayName}
         src={vote.member.profile.avatar}
+        clickable
       />
 
       <Box sx={{ flexGrow: 1 }}>
@@ -254,12 +255,12 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
 
               <MenuItem
                 onClick={async () => {
-                  onPaidChange("none");
+                  onPaidChange("prepaid");
                 }}
               >
-                <Iconify icon={"fluent:money-off-20-filled"} />
+                <Iconify icon={"bxs:dollar-circle"} />
                 {translate(
-                  "club.event.details.tab_vote_info.confirm_list.btn_unpaid"
+                  "club.event.details.tab_vote_info.confirm_list.prepaid"
                 )}
               </MenuItem>
               <Divider sx={{ borderStyle: "dashed" }} />

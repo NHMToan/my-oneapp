@@ -122,7 +122,7 @@ export default function LightboxModal({
     }
   }, [isOpen]);
 
-  const showIndex = (
+  const showIndex = images?.length > 1 && (
     <Typography variant="subtitle2">{`${photoIndex + 1} / ${
       images.length
     }`}</Typography>

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -8,6 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import Avatar from "components/Avatar";
 import Iconify from "components/Iconify";
 import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
@@ -94,6 +94,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       <Avatar
         alt={vote.member.profile.displayName}
         src={vote.member.profile.avatar}
+        clickable
       />
 
       <Box sx={{ flexGrow: 1 }}>

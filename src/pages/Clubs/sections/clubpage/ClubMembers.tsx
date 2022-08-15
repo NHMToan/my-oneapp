@@ -1,6 +1,5 @@
 // @mui
 import {
-  Avatar,
   Box,
   Card,
   Divider,
@@ -10,6 +9,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
+import Avatar from "components/Avatar";
 import DropdownMenu from "components/DropdownMenu";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
@@ -41,7 +41,7 @@ export default function ClubMembers({ club }: ClubMembersProps) {
     <>
       <Box sx={{ mt: 5 }}>
         <HeaderBreadcrumbs
-          heading="Advanced members"
+          heading="Prepaid members"
           action={
             <IconButton onClick={() => refetch()}>
               <Iconify icon={"ci:refresh-02"} width={20} height={20} />
@@ -112,7 +112,12 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   return (
     <Card sx={{ display: "flex", alignItems: "center", p: 3 }}>
-      <Avatar alt={displayName} src={avatar} sx={{ width: 48, height: 48 }} />
+      <Avatar
+        alt={displayName}
+        src={avatar}
+        sx={{ width: 48, height: 48 }}
+        clickable
+      />
       <Box sx={{ flexGrow: 1, minWidth: 0, pl: 2, pr: 1 }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="subtitle2" noWrap>
@@ -170,7 +175,7 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
                     icon={"emojione:star"}
                     sx={{ width: 16, height: 16, mr: 0.5, flexShrink: 0 }}
                   />
-                  {isAdvanced ? "Set not advanced" : "Set advanced"}
+                  {isAdvanced ? "Set not prepaid" : "Set prepaid"}
                 </MenuItem>
               )}
 

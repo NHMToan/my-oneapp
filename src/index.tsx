@@ -32,14 +32,15 @@ import { CollapseDrawerProvider } from "./contexts/CollapseDrawerContext";
 import { AuthProvider } from "./contexts/JWTContext";
 // contexts
 import { SettingsProvider } from "./contexts/SettingsContext";
-import apolloClient from "./lib/apolloClient";
 import "./i18n";
+import apolloClient from "./lib/apolloClient";
 // redux
 import { persistor, store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 // highlight
-import "./utils/highlight";
 
+import enLocale from "date-fns/locale/en-GB";
+import "./utils/highlight";
 //
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -50,7 +51,10 @@ root.render(
       <HelmetProvider>
         <ReduxProvider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider
+              locale={enLocale}
+              dateAdapter={AdapterDateFns}
+            >
               <SettingsProvider>
                 <CollapseDrawerProvider>
                   <BrowserRouter>

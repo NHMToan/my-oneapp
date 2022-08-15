@@ -1,6 +1,5 @@
 // @mui
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -11,6 +10,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
+import Avatar from "components/Avatar";
 import DropdownMenu from "components/DropdownMenu";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
@@ -168,6 +168,7 @@ function AdminCard({
         alt={displayName}
         src={avatar}
         sx={{ width: 64, height: 64, mb: 3 }}
+        clickable
       />
       <Typography variant="subtitle2" noWrap>
         <Link to={PATH_DASHBOARD.user.profile(userId)} component={RouterLink}>
