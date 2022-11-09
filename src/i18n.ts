@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 // config
 import { defaultLang } from "./config";
 //
+import transCN from "./locales/cn.json";
 import transEN from "./locales/en.json";
 import transVN from "./locales/vn.json";
 
@@ -14,6 +15,9 @@ const resources = {
   },
   vn: {
     translation: transVN,
+  },
+  cn: {
+    translation: transCN,
   },
 };
 

@@ -85,6 +85,9 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
 
         refreshUser();
       } else {
+        enqueueSnackbar(res.data.updateProfile.message || "Internal error", {
+          variant: "error",
+        });
         throw res.data.updateProfile.message;
       }
     } catch (error) {

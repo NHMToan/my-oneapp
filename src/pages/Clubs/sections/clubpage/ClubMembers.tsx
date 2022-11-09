@@ -20,9 +20,11 @@ import {
   useSetIsAdvancedMutation,
   useSetRoleMutation,
 } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
+
 // ----------------------------------------------------------------------
 
 interface ClubMembersProps {
@@ -30,18 +32,31 @@ interface ClubMembersProps {
 }
 export default function ClubMembers({ club }: ClubMembersProps) {
   const { data, loading, error, refetch } = useClubMembersQuery({
-    variables: { clubId: club?.id, status: 2, role: 1, limit: 200, offset: 0 },
+    variables: { clubId: club?.id, status: 2, role: 1, limit: 300, offset: 0 },
     fetchPolicy: "no-cache",
     skip: !club,
   });
-
+  const { translate } = useLocales();
+  // const updateQuery = (previousResult, { fetchMoreResult }) => {
+  //   if (!fetchMoreResult) {
+  //     return previousResult;
+  //   }
+  //   console.log(previousResult);
+  //   const previousEdges = previousResult.clubmembers.results;
+  //   const fetchMoreEdges = fetchMoreResult.clubmembers.results;
+  //   console.log(previousEdges, fetchMoreEdges);
+  //   fetchMoreResult.clubmembers.results = [...previousEdges, ...fetchMoreEdges];
+  //   console.log(fetchMoreResult);
+  //   return { ...fetchMoreResult };
+  // };
+  // console.log(data);
   if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
     <>
       <Box sx={{ mt: 5 }}>
         <HeaderBreadcrumbs
-          heading="Prepaid members"
+          heading={translate("club.details.members.list_member_title")}
           action={
             <IconButton onClick={() => refetch()}>
               <Iconify icon={"ci:refresh-02"} width={20} height={20} />
@@ -50,43 +65,37 @@ export default function ClubMembers({ club }: ClubMembersProps) {
         />
 
         <Grid container spacing={3}>
-          {data?.clubmembers?.results
-            ?.filter((item) => item.isAdvanced)
-            .map((member) => (
-              <Grid key={member.id} item xs={12} md={4}>
-                <MemberCard
-                  member={member as any}
-                  refetch={refetch}
-                  isAuth={club.isAdmin || club.isSubAdmin}
-                  isAdmin={club.isAdmin}
-                />
-              </Grid>
-            ))}
-        </Grid>
-      </Box>
-      <Box sx={{ mt: 5 }}>
-        <HeaderBreadcrumbs
-          heading="Members"
-          action={
-            <IconButton onClick={() => refetch()}>
-              <Iconify icon={"ci:refresh-02"} width={20} height={20} />
-            </IconButton>
-          }
-        />
-
-        <Grid container spacing={3}>
-          {data?.clubmembers?.results
-            ?.filter((item) => !item.isAdvanced)
-            .map((member) => (
-              <Grid key={member.id} item xs={12} md={4}>
-                <MemberCard
-                  member={member as any}
-                  refetch={refetch}
-                  isAuth={club.isAdmin || club.isSubAdmin}
-                  isAdmin={club.isAdmin}
-                />
-              </Grid>
-            ))}
+          {data?.clubmembers?.results.map((member) => (
+            <Grid key={member.id} item xs={12} md={4}>
+              <MemberCard
+                member={member as any}
+                refetch={refetch}
+                isAuth={club.isAdmin || club.isSubAdmin}
+                isAdmin={club.isAdmin}
+              />
+            </Grid>
+          ))}
+          {/* {data.clubmembers.totalCount > data.clubmembers.results.length && (
+            <Grid key="loadmore" item xs={12} md={4}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  fetchMore({
+                    updateQuery,
+                    variables: {
+                      clubId: club?.id,
+                      status: 2,
+                      role: 1,
+                      limit: 2,
+                      offset: 2,
+                    },
+                  });
+                }}
+              >
+                Load more
+              </Button>
+            </Grid>
+          )} */}
         </Grid>
       </Box>
     </>
@@ -101,7 +110,7 @@ interface MemberCardProps {
 }
 function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
   const {
-    profile: { displayName, avatar, id: userId, country },
+    profile: { displayName, avatar, id: userId },
     id,
     isAdvanced,
   } = member;
@@ -111,11 +120,11 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
   });
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   return (
-    <Card sx={{ display: "flex", alignItems: "center", p: 3 }}>
+    <Card sx={{ display: "flex", alignItems: "center", p: 1.5 }}>
       <Avatar
         alt={displayName}
         src={avatar}
-        sx={{ width: 48, height: 48 }}
+        sx={{ width: 40, height: 40 }}
         clickable
       />
       <Box sx={{ flexGrow: 1, minWidth: 0, pl: 2, pr: 1 }}>
@@ -127,22 +136,6 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
             >
               {displayName}
             </Link>
-          </Typography>
-          {isAdvanced && (
-            <Iconify
-              icon={"emojione:star"}
-              sx={{ width: 16, height: 16, ml: 0.5, flexShrink: 0 }}
-            />
-          )}
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Iconify
-            icon={"eva:pin-fill"}
-            sx={{ width: 16, height: 16, mr: 0.5, flexShrink: 0 }}
-          />
-          <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {country}
           </Typography>
         </Box>
       </Box>

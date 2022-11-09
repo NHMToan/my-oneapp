@@ -7,14 +7,14 @@
         "password": "Password",
         "register_now": "Register now",
         "forgot_password": "Forgot password?",
-        "login": "Login"
+        "login": "Log in"
       }
     },
     "register": {
       "title": "Register to join with us.",
       "form": {
         "login": "Login",
-        "login_warning": "Already have account?",
+        "login_warning": "Already have an account?",
         "register": "Register",
         "password": "Password",
         "email": "Email address",
@@ -24,8 +24,8 @@
     },
     "forgot_password": {
       "title": "Forgot your password?",
-      "sub_title": "Please enter the email address associated with your account and We will email you a link to reset your password.",
-      "btn_send": "Send Request",
+      "sub_title": "Please enter the email address associated with your account to get an email with a link to reset your password.",
+      "btn_send": "Send request",
       "email": "Email address"
     }
   },
@@ -44,7 +44,7 @@
       "delete": "Delete",
       "change": "Change",
       "queue": "Queue",
-      "vote": "Vote",
+      "vote": "Confirm",
       "register": "Register",
       "note": "Note",
       "save": "Save"
@@ -54,10 +54,10 @@
     "settings": "Settings",
     "profile": "Profile",
     "home": "Home",
-    "logout": "Logout"
+    "logout": "Log out"
   },
   "menu": {
-    "events": "Events",
+    "events": "Activities",
     "clubs": "Clubs"
   },
   "club": {
@@ -76,10 +76,10 @@
         "about": "About"
       },
       "events": {
-        "menu_label": "Events",
-        "title": "Events",
+        "menu_label": "Activities",
+        "title": "Activities",
         "btn": {
-          "new_event": "New event",
+          "new_event": "New activity",
           "agenda": "Agenda",
           "day": "Day",
           "week": "Week",
@@ -94,7 +94,9 @@
         "menu_label": "Requests"
       },
       "members": {
-        "menu_label": "Members"
+        "menu_label": "Members",
+        "list_admin_title": "Admins",
+        "list_member_title": "Members"
       }
     },
     "member": {
@@ -106,38 +108,37 @@
     },
     "event": {
       "form": {
-        "title": "Add event",
-        "info_section": "Event info",
+        "title": "Add an activity",
+        "info_section": "Activity info",
         "name": "Title",
-        "slot": "Slots",
-        "max_vote": "Max vote",
+        "slot": "Total slots",
+        "max_vote": "Max slots",
         "start_date": "Start date",
         "end_date": "End date",
         "more_section": "More info",
         "description": "Description",
-        "price": "Price",
-        "event_time": "Event time",
+        "price": "Fee",
+        "event_time": "Activity time",
         "address": "Address",
-        "edit_title": "Edit event",
-        "add_title": "Add event",
-        "update_success": "Event updated!",
-        "create_success": "Event created!"
+        "edit_title": "Edit activity",
+        "add_title": "Add an activity",
+        "update_success": "Activity is updated!",
+        "create_success": "Activity is created!"
       },
       "details": {
         "tab_general": {
           "title": "General"
         },
         "tab_vote_info": {
-          "title": "Votes info",
+          "title": "Slots info",
           "confirm_list": {
-            "no_data": "No confirmed vote found",
+            "no_data": "No confirmed slot found",
             "title": "Confirmed list",
             "delete": {
-              "confirmation": "Are you sure you want to delete the vote?",
-              "sub_confirmation": "After deleting, the waiting votes will full-fill the slot!",
-              "success": "Vote deleted!"
+              "confirmation": "Are you sure you want to remove the slot?",
+              "sub_confirmation": "After this slot is removed, the waiting slots will be filled up automatically!",
+              "success": "Slot is removed!"
             },
-            "btn_unpaid": "Not paid",
             "cash": "Cash",
             "momo": "Momo",
             "bank": "Bank",
@@ -145,25 +146,25 @@
           },
           "waiting_list": {
             "delete": {
-              "confirmation": "Are you sure you want to delete the vote?\n",
-              "success": "Vote deleted!"
+              "confirmation": "Are you sure you want to remove the slot?",
+              "success": "Slot is removed!"
             },
             "title": "Waiting list",
             "no_data": "No waiting list found"
           }
         },
-        "event_info": "Event info",
-        "vote_start_at": "Vote start at",
-        "vote_end_at": "Vote end at",
-        "max_vote": "Max vote",
+        "event_info": "Activity info",
+        "vote_start_at": "Slots are opened at",
+        "vote_end_at": "Slots are closed at",
+        "max_vote": "Max slot per member",
         "time": "Time",
         "address": "Address",
-        "price": "Price",
+        "price": "Fee",
         "slot": "Slots",
         "reg_will_open": "Registration will open in",
         "confirmed": "Confirmed",
         "waiting": "Waiting",
-        "vote_close": "Vote is closed!",
+        "vote_close": "Registration is closed!",
         "vote": {
           "confirmed_success": "Confirmed {{count}} slot(s)",
           "waiting_success": "Waiting {{count}} slot(s)",
@@ -171,24 +172,22 @@
           "confirmed_change_success": "Confirmed slot is changed to {{count}}",
           "change_waiting_title": "Change waiting slot",
           "change_confirmed_title": "Change confirmed slot",
-          "vote_waiting_title": "Vote for waiting slot",
-          "vote_confirmed_title": "Vote for slot",
-          "confirmed_full_message": "Slot is full!"
-        },
-        "paid_status": {
-          "cash": "Cash",
-          "none": "Not paid",
-          "bank": "Bank",
-          "momo": "Momo"
+          "vote_waiting_title": "Get a waiting slot",
+          "vote_confirmed_title": "Get a slot",
+          "confirmed_full_message": "Slots are full!"
         }
       },
       "delete": {
-        "confirmation": "Are you sure you want to delete the event?",
-        "success": "Event deleted"
+        "confirmation": "Are you sure you want to delete the activity?",
+        "success": "Activity is deleted"
       },
       "status": {
         "hidden": "Hidden"
       }
     }
+  },
+  "activity": {
+    "no_event_label": "Welcome!",
+    "no_event_message": "There is no events for now! Please come back later!"
   }
 }

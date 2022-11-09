@@ -23,6 +23,7 @@ import {
   useDeleteClubMemberMutation,
   useSetRoleMutation,
 } from "generated/graphql";
+import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
 import SocialsButton from "pages/People/sections/SocialsButton";
@@ -40,13 +41,14 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
     fetchPolicy: "no-cache",
     skip: !club,
   });
+  const { translate } = useLocales();
 
   if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
     <Box sx={{ mt: 5 }}>
       <HeaderBreadcrumbs
-        heading="Admins"
+        heading={translate("club.details.members.list_admin_title")}
         action={
           <IconButton onClick={() => refetch()}>
             <Iconify icon={"ci:refresh-02"} width={20} height={20} />
@@ -111,6 +113,7 @@ function AdminCard({
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   const [onSetAdmin] = useChangeAdminMutation({ fetchPolicy: "no-cache" });
   const { enqueueSnackbar } = useSnackbar();
+  const { translate } = useLocales();
 
   const SOCIALS = [
     {
@@ -187,7 +190,9 @@ function AdminCard({
         }}
       >
         <Label variant="filled" color={isAdmin ? "error" : "success"}>
-          {isAdmin ? "Admin" : "Sub-admin"}
+          {isAdmin
+            ? translate("club.member.status.admin")
+            : translate("club.member.status.sub_admin")}
         </Label>
       </Typography>
 

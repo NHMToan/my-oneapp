@@ -1,0 +1,193 @@
+{
+  "auth": {
+    "login": {
+      "title": "登录到VSG",
+      "form": {
+        "email": "电子邮件",
+        "forgot_password": "忘了密码？",
+        "login": "登录",
+        "password": "密码",
+        "register_now": "请立即注册！"
+      }
+    },
+    "forgot_password": {
+      "btn_send": "发送请求",
+      "email": "电子邮件",
+      "sub_title": "请输入与您的帐户关联的电子邮件地址，以获取包含重置密码链接的电子邮件",
+      "title": "忘记密码"
+    },
+    "register": {
+      "form": {
+        "email": "电子邮件",
+        "fist_name": "姓",
+        "last_name": "名字",
+        "login": "登录",
+        "login_warning": "已经有账号",
+        "password": "密码",
+        "register": "注册"
+      },
+      "title": "注册一个帐户"
+    }
+  },
+  "account_menu": {
+    "profile": "个人信息",
+    "settings": "设置",
+    "home": "主页",
+    "logout": "登出"
+  },
+  "club": {
+    "details": {
+      "events": {
+        "btn": {
+          "agenda": "一天",
+          "day": "日",
+          "month": "月",
+          "new_event": "添加新活动",
+          "today": "今天",
+          "week": "星期"
+        },
+        "menu_label": "活动",
+        "title": "活动"
+      },
+      "general": {
+        "about": "信息",
+        "btn": {
+          "cancel_request": "取消请求",
+          "join": "加入俱乐部"
+        },
+        "members": "成员",
+        "menu_label": "一般信息"
+      },
+      "members": {
+        "menu_label": "成员",
+        "list_admin_title": "管理员",
+        "list_member_title": "成员"
+      },
+      "requesting": {
+        "menu_label": "要求"
+      },
+      "settings": {
+        "menu_label": "设置"
+      }
+    },
+    "event": {
+      "delete": {
+        "confirmation": "您是否同意删除该活动",
+        "success": "该活动已被删除"
+      },
+      "details": {
+        "address": "地址",
+        "confirmed": "确认",
+        "event_info": "活动信息",
+        "max_vote": "活动的最大人数",
+        "price": "参加费",
+        "reg_will_open": "开放报名",
+        "slot": "人数",
+        "tab_general": {
+          "title": "信息"
+        },
+        "tab_vote_info": {
+          "confirm_list": {
+            "delete": {
+              "confirmation": "您是否同意删除此注册",
+              "sub_confirmation": "删除此注册后，等待的注册将自动填满",
+              "success": "注册被删除"
+            },
+            "no_data": "未确认注册",
+            "title": "确认清单",
+            "bank": "银行",
+            "cash": "现金",
+            "momo": "Momo",
+            "prepaid": "预付"
+          },
+          "title": "清单",
+          "waiting_list": {
+            "delete": {
+              "confirmation": "您是否同意删除此等待注册",
+              "success": "注册被删除"
+            },
+            "no_data": "未找到等待注册",
+            "title": "等候名单"
+          }
+        },
+        "time": "时间",
+        "vote": {
+          "change_confirmed_title": "更改确认注册",
+          "change_waiting_title": "更改等待注册",
+          "confirmed_change_success": "确认注册更改为 {{count}}",
+          "confirmed_success": "已确认 {{count}} 个注册",
+          "vote_confirmed_title": "登记",
+          "vote_waiting_title": "排队",
+          "waiting_change_success": "等待注册改为 {{count}}",
+          "waiting_success": "等待 {{count}} 注册",
+          "confirmed_full_message": "报名已满，请排队"
+        },
+        "vote_close": "注册已关闭",
+        "vote_end_at": "注册截止",
+        "vote_start_at": "注册开始",
+        "waiting": "等待"
+      },
+      "form": {
+        "add_title": "添加新活动",
+        "address": "地址",
+        "create_success": "活动已成功添加",
+        "description": "描述",
+        "edit_title": "更改活动信息",
+        "end_date": "注册截止",
+        "event_time": "时间",
+        "info_section": "活动信息",
+        "max_vote": "活动的最大人数",
+        "more_section": "更多信息",
+        "name": "活动的标题",
+        "price": "参加费",
+        "slot": "人数",
+        "start_date": "开始",
+        "title": "添加新活动",
+        "update_success": "活动已成功更改"
+      },
+      "status": {
+        "hidden": "隐"
+      }
+    },
+    "list": {
+      "btn_new_club": "创建一个新俱乐部",
+      "title": "俱乐部"
+    },
+    "member": {
+      "status": {
+        "admin": "管理员",
+        "member": "成员",
+        "sub_admin": "助理"
+      }
+    }
+  },
+  "common": {
+    "btn": {
+      "add": "添加",
+      "back": "后退",
+      "cancel": "取消",
+      "change": "改变",
+      "delete": "消除",
+      "edit": "编辑",
+      "queue": "排队",
+      "save_changes": "保存更改",
+      "vote": "登记",
+      "register": "登记",
+      "note": "笔记",
+      "save": "Save"
+    },
+    "word": {
+      "prepositions": {
+        "on": "或者"
+      }
+    }
+  },
+  "menu": {
+    "clubs": "俱乐部",
+    "events": "活动"
+  },
+  "activity": {
+    "no_event_label": "欢迎光临",
+    "no_event_message": "目前没有可注册的活动。请待会再过来！"
+  }
+}

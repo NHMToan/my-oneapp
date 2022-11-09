@@ -13,7 +13,7 @@
     "forgot_password": {
       "btn_send": "Gửi yêu cầu",
       "email": "Email",
-      "sub_title": "Vui lòng nhập địa chỉ email của tài khoản, VSG sẽ gửi cho bạn mã số thay đổi mật khẩu về email. Trong trường hợp không nhận được mail, vui lòng kiểm tra thông tin spam mail.",
+      "sub_title": "Vui lòng nhập địa chỉ email của tài khoản, VSG sẽ gửi cho bạn mã số thay đổi mật khẩu về email. Trong trường hợp không nhận được, vui lòng kiểm tra thông tin spam mail.",
       "title": "Quên mật khẩu"
     },
     "register": {
@@ -33,7 +33,7 @@
     "profile": "Thông tin cá nhân",
     "settings": "Cài đặt",
     "home": "Trang chủ",
-    "logout": "Đăng suất"
+    "logout": "Đăng xuất"
   },
   "club": {
     "details": {
@@ -42,12 +42,12 @@
           "agenda": "Trong ngày",
           "day": "Ngày",
           "month": "Tháng",
-          "new_event": "Thêm sự kiện",
+          "new_event": "Thêm hoạt động",
           "today": "Hôm nay",
           "week": "Tuần"
         },
-        "menu_label": "Sự kiện",
-        "title": "Sự kiện"
+        "menu_label": "Hoạt động",
+        "title": "Hoạt động"
       },
       "general": {
         "about": "Thông tin",
@@ -59,7 +59,9 @@
         "menu_label": "Thông tin chung"
       },
       "members": {
-        "menu_label": "Thành viên"
+        "menu_label": "Thành viên",
+        "list_admin_title": " Quản trị viên",
+        "list_member_title": "Thành viên"
       },
       "requesting": {
         "menu_label": "Yêu cầu"
@@ -70,85 +72,78 @@
     },
     "event": {
       "delete": {
-        "confirmation": "Đồng ý xóa sự kiện?",
-        "success": "Sự kiện đã được xóa"
+        "confirmation": "Đồng ý xóa hoạt động?",
+        "success": "Hoạt động đã được xóa!"
       },
       "details": {
         "address": "Địa chỉ",
         "confirmed": "Xác nhận",
-        "event_info": "Thông tin sự kiện",
-        "max_vote": "Vote tối đa",
-        "price": "Giá",
+        "event_info": "Thông tin hoạt động",
+        "max_vote": "Số suất tối đa",
+        "price": "Phí tham gia",
         "reg_will_open": "Đăng ký sẽ mở sau",
-        "slot": "Slots",
+        "slot": "Suất",
         "tab_general": {
           "title": "Thông tin"
         },
         "tab_vote_info": {
           "confirm_list": {
             "delete": {
-              "confirmation": "Dồng ý xóa vote này?",
-              "sub_confirmation": "Sau khi xóa vote, các vote chờ sẽ được đẩy lên.",
-              "success": "Vote đã được xóa"
+              "confirmation": "Đồng ý xóa suất này?",
+              "sub_confirmation": "Sau khi xóa suất, các suất chờ sẽ được đẩy lên.",
+              "success": "Suất đã được xóa!"
             },
-            "no_data": "Chưa có xác nhận slot nào",
+            "no_data": "Chưa có xác nhận suất nào",
             "title": "Danh xách xác nhận",
-            "btn_unpaid": "Chưa đóng",
+            "bank": "Ngân hàng",
             "cash": "Tiền mặt",
             "momo": "Momo",
-            "bank": "Chuyển khoản",
             "prepaid": "Đóng tháng"
           },
           "title": "Danh sách",
           "waiting_list": {
             "delete": {
-              "confirmation": "Đồng ý xóa slot chờ này không?",
-              "success": "Vote đã được xóa!"
+              "confirmation": "Đồng ý xóa suất chờ này không?",
+              "success": "Suất đã được xóa!"
             },
-            "no_data": "Chưa có slot chờ nào",
+            "no_data": "Chưa có suất chờ nào",
             "title": "Danh sách chờ"
           }
         },
         "time": "Thời gian",
         "vote": {
-          "change_confirmed_title": "Thay đổi slot đăng ký",
-          "change_waiting_title": "Thay đổi slot chờ",
-          "confirmed_change_success": "Xác nhận slot đã được thay đổi thành {{count}}",
-          "confirmed_success": "Xác nhận {{count}} slot(s)",
+          "change_confirmed_title": "Thay đổi suất đăng ký",
+          "change_waiting_title": "Thay đổi suất chờ",
+          "confirmed_change_success": "Xác nhận suất đã được thay đổi thành {{count}}",
+          "confirmed_success": "Xác nhận {{count}} suất",
           "vote_confirmed_title": "Đăng ký",
           "vote_waiting_title": "Đăng ký chờ",
-          "waiting_change_success": "Slot chờ đã thay đổi thành {{count}}",
-          "waiting_success": "Đăng ký chờ {{count}} slot(s)",
-          "confirmed_full_message": "Hết slot rồi, đăng ký chờ đi!"
+          "waiting_change_success": "Suất chờ đã thay đổi thành {{count}}",
+          "waiting_success": "Đăng ký chờ {{count}} suất",
+          "confirmed_full_message": "Hết suất rồi, đăng ký chờ nghen!"
         },
         "vote_close": "Đăng ký đã đóng!",
         "vote_end_at": "Kết thúc",
         "vote_start_at": "Bắt đầu",
-        "waiting": "Chờ",
-        "paid_status": {
-          "cash": "Tiền mặt",
-          "none": "Chưa đóng",
-          "bank": "Chuyển khoản",
-          "momo": "Momo"
-        }
+        "waiting": "Chờ"
       },
       "form": {
-        "add_title": "Thêm sự kiện",
+        "add_title": "Thêm hoạt động",
         "address": "Địa chỉ",
-        "create_success": "Sự kiện đã thêm thành công",
+        "create_success": "Hoạt động đã thêm thành công",
         "description": "Mô tả",
-        "edit_title": "Thay đổi thông tin sự kiện",
+        "edit_title": "Thay đổi thông tin hoạt động",
         "end_date": "Kết thúc",
         "event_time": "Thời gian",
-        "info_section": "Thông tin sự kiện",
-        "max_vote": "Vote tối đa",
+        "info_section": "Thông tin hoạt động",
+        "max_vote": "Số suất tối đa",
         "more_section": "Thông tin thêm",
-        "name": "Tên sự kiện",
-        "price": "Giá",
-        "slot": "Slots",
+        "name": "Tên hoạt động",
+        "price": "Phí tham gia",
+        "slot": "Số suất",
         "start_date": "Bắt đầu",
-        "title": "Thêm sự kiện",
-        "update_success": "Sự kiện đã được thay đổi!"
+        "title": "Thêm hoạt động",
+        "update_success": "Hoạt động đã được thay đổi!"
       },
       "status": {
         "hidden": "Che lại"
@@ -160,7 +155,7 @@
     },
     "member": {
       "status": {
-        "admin": "Admin",
+        "admin": "Quản trị viên",
         "member": "Thành viên",
         "sub_admin": "Trợ lý"
       }
@@ -189,6 +184,10 @@
   },
   "menu": {
     "clubs": "Câu lạc bộ",
-    "events": "Sự kiện"
+    "events": "Hoạt động"
+  },
+  "activity": {
+    "no_event_label": "Xin chào!",
+    "no_event_message": "Hiện chưa có hoạt động nào mở đăng kí tham gia, bạn quay lại sau nghen!"
   }
 }

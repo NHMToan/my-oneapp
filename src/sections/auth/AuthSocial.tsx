@@ -1,11 +1,11 @@
 // material
 import { Button, Divider, Stack, Typography } from "@mui/material";
 // component
-import IconBox from "../../components/IconBox";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { useFbLoginMutation } from "generated/graphql";
 import useAuth from "hooks/useAuth";
 import useLocales from "hooks/useLocales";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import IconBox from "../../components/IconBox";
 
 // ----------------------------------------------------------------------
 

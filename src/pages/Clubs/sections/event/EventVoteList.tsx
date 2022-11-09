@@ -295,7 +295,6 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                     </Button>
                     <Button
                       variant="contained"
-                      color="error"
                       disabled={!message}
                       onClick={() => {
                         try {
@@ -325,10 +324,10 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                 title={
                   <CardHeader
                     title={translate(
-                      "club.event.details.tab_vote_info.confirm_list.delete.confirmation"
+                      /*i18n*/ "club.event.details.tab_vote_info.confirm_list.delete.confirmation"
                     )}
                     subheader={translate(
-                      "club.event.details.tab_vote_info.confirm_list.delete.sub_confirmation"
+                      /*i18n*/ "club.event.details.tab_vote_info.confirm_list.delete.sub_confirmation"
                     )}
                   />
                 }

@@ -3,6 +3,7 @@ import { SeoIllustration } from "assets";
 import { SimpleSkeleton } from "components/skeleton";
 import { useMyEventsQuery } from "generated/graphql";
 import useAuth from "hooks/useAuth";
+import useLocales from "hooks/useLocales";
 import { FC } from "react";
 import AppWelcome from "./AppWelcome";
 import EventCard from "./EventCard";
@@ -11,13 +12,16 @@ interface EventListProps {}
 const EventList: FC<EventListProps> = (props) => {
   const { data, loading } = useMyEventsQuery({ fetchPolicy: "no-cache" });
   const { user } = useAuth();
+  const { translate } = useLocales();
 
   if (loading) return <SimpleSkeleton />;
   if (!data || data?.myEvents?.totalCount === 0)
     return (
       <AppWelcome
-        title={`Welcome! \n ${user?.displayName}`}
-        description="There is no event for now!"
+        title={`${translate("activity.no_event_label")} \n ${
+          user?.displayName
+        }!`}
+        description={translate("activity.no_event_message")}
         img={
           <SeoIllustration
             sx={{
