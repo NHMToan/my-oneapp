@@ -37,7 +37,6 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   }
 
   if (requestedLocation && pathname !== requestedLocation) {
-    console.log(requestedLocation);
     setRequestedLocation(null);
     return <Navigate to={requestedLocation} />;
   }

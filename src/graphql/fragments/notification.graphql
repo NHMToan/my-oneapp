@@ -1,0 +1,21 @@
+fragment notificationInfo on Notification {
+  id
+  createdAt
+  messageKey
+  amount
+  action_object
+  actor_name
+  actor_avatar
+}
+fragment userNotificationInfo on UserNotification {
+  id
+  createdAt
+  is_read
+  is_seen
+  notification {
+    ...notificationInfo
+  }
+  profile {
+    id
+  }
+}

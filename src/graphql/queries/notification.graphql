@@ -1,0 +1,11 @@
+query GetNotifications($limit: Int!, $offset: Int!) {
+  getNotifications(limit: $limit, offset: $offset) {
+    totalCount
+    results {
+      ...userNotificationInfo
+    }
+  }
+}
+query GetNotiUnreadCount {
+  getUnreadCount
+}

@@ -93,6 +93,15 @@ export default function Router() {
             { path: ":id/edit", element: <ClubForm /> },
           ],
         },
+        {
+          path: "notification",
+          children: [
+            {
+              element: <Notification />,
+              index: true,
+            },
+          ],
+        },
         // {
         //   path: "chat",
         //   children: [
@@ -143,3 +152,4 @@ const ClubForm = Loadable(lazy(() => import("../pages/Clubs/ClubFrom")));
 const ClubPage = Loadable(lazy(() => import("../pages/Clubs/ClubPage")));
 
 // const Chat = Loadable(lazy(() => import("../pages/Chat")));
+const Notification = Loadable(lazy(() => import("../pages/Notification")));

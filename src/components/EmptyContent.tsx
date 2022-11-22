@@ -19,7 +19,7 @@ const RootStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 interface EmptyContentProps {
-  title: string;
+  title?: string;
   img?: string;
   description?: string;
 }
@@ -35,7 +35,7 @@ export default function EmptyContent({
         disabledEffect
         visibleByDefault
         alt="empty content"
-        src={img || "/assets/illustrations/illustration_empty_content.svg"}
+        src={img || "/assets/illustrations/illustration_empty_mail.svg"}
         sx={{ height: 240, mb: 3 }}
       />
 

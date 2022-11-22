@@ -7,7 +7,6 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import Iconify from "components/Iconify";
 import { useCreateVoteEventMutation } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import useLocales from "hooks/useLocales";
@@ -257,7 +256,6 @@ const EventActions: FC<EventActionsProps> = ({
           <Button
             fullWidth
             variant="contained"
-            endIcon={<Iconify icon={"eva:checkmark-circle-2-fill"} />}
             onClick={() => {
               if (statsData?.getVoteStats?.confirmed) {
                 setIsFormChangeOpen(true);
@@ -278,7 +276,6 @@ const EventActions: FC<EventActionsProps> = ({
             fullWidth
             variant="contained"
             color="info"
-            endIcon={<Iconify icon={"fluent:people-queue-20-filled"} />}
             onClick={() => {
               if (statsData?.getVoteStats?.waiting) {
                 setIsFormChangeOpen(true);

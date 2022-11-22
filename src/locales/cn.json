@@ -189,5 +189,32 @@
   "activity": {
     "no_event_label": "欢迎光临",
     "no_event_message": "目前没有可注册的活动。请待会再过来！"
+  },
+  "notification": {
+    "key": {
+      "accept_join_club": "您已获准加入俱乐部 <1>{{action_object}}</1>",
+      "apply_club": "<0>{{actor_name}}</0> 要求加入俱乐部 <2>{{action_object}}</2>",
+      "confirm_waiting_slot_one": "您已从 <3>{{action_object}}</3> 活动中确认 <1>{{count}} 个注册</1>",
+      "confirm_waiting_slot_other": "您已从 <3>{{action_object}}</3> 活动中确认 <1>{{count}} 个注册</1>",
+      "remove_confirm_vote_one": "<0>{{actor_name}}</0> 从 <4>{{action_object}}</4> 活动中删除了 <2>{{count}} 个注册</2>",
+      "remove_confirm_vote_other": "<0>{{actor_name}}</0> 从 <4>{{action_object}}</4> 活动中删除了 <2>{{count}} 个注册</2>"
+    },
+    "btn": {
+      "mark_all_read": "将所有消息标记为已读",
+      "view_all": "查看所有消息"
+    },
+    "title": "",
+    "unread_subtitle_one": "您有{{count}}条未读消息",
+    "unread_subtitle_other": "您有{{count}}条未读消息"
+  },
+  "form": {
+    "validation": {
+      "max_file_size": "允许 *.jpeg、*.jpg、*.png、*.gif <br/> 最大尺寸 {{size}}"
+    }
+  },
+  "user": {
+    "setting_form_modal": {
+      "title": "请提供以下信息以继续"
+    }
   }
 }

@@ -63,12 +63,14 @@ export default function NavbarAccount({ isCollapse }: INavbarAccount) {
           <Typography variant="subtitle2" noWrap>
             {user?.displayName}
           </Typography>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <BadgeStatus size="large" status="online" />
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              Online
-            </Typography>
-          </Stack>
+          {!isCollapse && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <BadgeStatus size="large" status="online" />
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Online
+              </Typography>
+            </Stack>
+          )}
         </Box>
       </RootStyle>
     </Link>

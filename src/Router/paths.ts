@@ -52,4 +52,5 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, "/chat/new"),
     view: (uuid) => path(ROOTS_DASHBOARD, `/chat/${uuid}`),
   },
+  notification: "/notification",
 };

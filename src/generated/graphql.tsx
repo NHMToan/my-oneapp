@@ -19,6 +19,32 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Admin = {
+  __typename?: 'Admin';
+  account: Scalars['String'];
+  id: Scalars['ID'];
+};
+
+export type AdminLoginInput = {
+  account: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type AdminMutationResponse = IMutationResponse & {
+  __typename?: 'AdminMutationResponse';
+  accessToken?: Maybe<Scalars['String']>;
+  code: Scalars['Float'];
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+  user?: Maybe<Admin>;
+};
+
+export type AdminRegisterInput = {
+  account: Scalars['String'];
+  key: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Club = {
   __typename?: 'Club';
   admin: Profile;
@@ -331,6 +357,10 @@ export type Mutation = {
   addFriend: FriendMutaionResponse;
   addNewConversation: ConversationMutationResponse;
   addNewMessage: Scalars['Boolean'];
+  adminChangePassUser: UserMutationResponse;
+  adminLogin: AdminMutationResponse;
+  adminLogout: AdminMutationResponse;
+  adminRegister: AdminMutationResponse;
   cancelRequest: ClubMutationResponse;
   cancelRequestClub: ClubMutationResponse;
   changeAdmin: ClubMutationResponse;
@@ -355,6 +385,7 @@ export type Mutation = {
   login: UserMutationResponse;
   logout: UserMutationResponse;
   noteVote: EventVoteMutationResponse;
+  readAllNotis: Scalars['Boolean'];
   register: UserMutationResponse;
   replyComment: CommentMutationResponse;
   requestJoinClub: ClubMutationResponse;
@@ -389,6 +420,27 @@ export type MutationAddNewConversationArgs = {
 
 export type MutationAddNewMessageArgs = {
   messageInput: MessageInput;
+};
+
+
+export type MutationAdminChangePassUserArgs = {
+  newPassword: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+
+export type MutationAdminLoginArgs = {
+  adminLoginInput: AdminLoginInput;
+};
+
+
+export type MutationAdminLogoutArgs = {
+  userId: Scalars['ID'];
+};
+
+
+export type MutationAdminRegisterArgs = {
+  adminRegisterInput: AdminRegisterInput;
 };
 
 
@@ -607,12 +659,35 @@ export type MutationResponse = IMutationResponse & {
   success: Scalars['Boolean'];
 };
 
+export type NewNotiSubscriptionData = {
+  __typename?: 'NewNotiSubscriptionData';
+  notification: UserNotification;
+  profileId: Scalars['String'];
+};
+
 export type NewVoteSubscriptionData = {
   __typename?: 'NewVoteSubscriptionData';
   eventId: Scalars['String'];
   status: Scalars['Float'];
   voteCount?: Maybe<Scalars['Float']>;
   waitingCount?: Maybe<Scalars['Float']>;
+};
+
+export type Notification = {
+  __typename?: 'Notification';
+  action_object?: Maybe<Scalars['String']>;
+  actor_avatar?: Maybe<Scalars['String']>;
+  actor_name?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['Float']>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  messageKey: Scalars['String'];
+};
+
+export type Notifications = {
+  __typename?: 'Notifications';
+  results: Array<UserNotification>;
+  totalCount: Scalars['Float'];
 };
 
 export type Post = {
@@ -721,8 +796,11 @@ export type Query = {
   getFriends?: Maybe<Profiles>;
   getMessages?: Maybe<Messages>;
   getMyVotes?: Maybe<Votes>;
+  getNotifications?: Maybe<Notifications>;
   getProfile?: Maybe<Profile>;
   getProfiles?: Maybe<Profiles>;
+  getUnreadCount?: Maybe<Scalars['Float']>;
+  getUsers?: Maybe<Users>;
   getVoteCount: Scalars['Float'];
   getVoteStats?: Maybe<VotCount>;
   getVotes?: Maybe<Votes>;
@@ -828,6 +906,12 @@ export type QueryGetMyVotesArgs = {
 };
 
 
+export type QueryGetNotificationsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryGetProfileArgs = {
   id: Scalars['ID'];
 };
@@ -838,6 +922,13 @@ export type QueryGetProfilesArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   ordering?: InputMaybe<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetUsersArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  ordering?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -892,6 +983,7 @@ export type Subscription = {
   conversationChanged: Conversation;
   newConversation: Conversation;
   newMessageSent: Message;
+  newNotification: NewNotiSubscriptionData;
   voteChanged: NewVoteSubscriptionData;
 };
 
@@ -903,6 +995,11 @@ export type SubscriptionConversationChangedArgs = {
 
 export type SubscriptionNewMessageSentArgs = {
   conversationId: Scalars['ID'];
+};
+
+
+export type SubscriptionNewNotificationArgs = {
+  profileId: Scalars['ID'];
 };
 
 
@@ -998,6 +1095,24 @@ export type UserMutationResponse = IMutationResponse & {
   user?: Maybe<User>;
 };
 
+export type UserNotification = {
+  __typename?: 'UserNotification';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  is_read: Scalars['Boolean'];
+  is_seen: Scalars['Boolean'];
+  notification: Notification;
+  profile: Profile;
+  read_at: Scalars['DateTime'];
+};
+
+export type Users = {
+  __typename?: 'Users';
+  hasMore: Scalars['Boolean'];
+  results: Array<User>;
+  totalCount: Scalars['Float'];
+};
+
 export type VotCount = {
   __typename?: 'VotCount';
   confirmed: Scalars['Float'];
@@ -1055,6 +1170,8 @@ export type VoteInfoFragment = { __typename?: 'Vote', id: string, value: number,
 
 export type FieldErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
+type MutationStatuses_AdminMutationResponse_Fragment = { __typename?: 'AdminMutationResponse', code: number, success: boolean, message?: string | null };
+
 type MutationStatuses_ClubMemberMutationResponse_Fragment = { __typename?: 'ClubMemberMutationResponse', code: number, success: boolean, message?: string | null };
 
 type MutationStatuses_ClubMutationResponse_Fragment = { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null };
@@ -1079,13 +1196,17 @@ type MutationStatuses_ProfileMutationResponse_Fragment = { __typename?: 'Profile
 
 type MutationStatuses_UserMutationResponse_Fragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
-export type MutationStatusesFragment = MutationStatuses_ClubMemberMutationResponse_Fragment | MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_EventVoteMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
+export type MutationStatusesFragment = MutationStatuses_AdminMutationResponse_Fragment | MutationStatuses_ClubMemberMutationResponse_Fragment | MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_EventVoteMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
 
 export type UserMutationStatusesFragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
 export type PostMutationStatusesFragment = { __typename?: 'PostMutationResponse', code: number, success: boolean, message?: string | null };
 
 export type CommentMutationStatusesFragment = { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null };
+
+export type NotificationInfoFragment = { __typename?: 'Notification', id: string, createdAt: any, messageKey: string, amount?: number | null, action_object?: string | null, actor_name?: string | null, actor_avatar?: string | null };
+
+export type UserNotificationInfoFragment = { __typename?: 'UserNotification', id: string, createdAt: any, is_read: boolean, is_seen: boolean, notification: { __typename?: 'Notification', id: string, createdAt: any, messageKey: string, amount?: number | null, action_object?: string | null, actor_name?: string | null, actor_avatar?: string | null }, profile: { __typename?: 'Profile', id: string } };
 
 export type PostMutationResponseFragment = { __typename?: 'PostMutationResponse', code: number, success: boolean, message?: string | null, post?: { __typename?: 'Post', id: string, title: string, content: string, cover: string, description?: string | null, tags?: Array<string> | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, metaTitle?: string | null, publish: boolean, allowComments: boolean, createdAt: any, updatedAt: any, favorite: number, comment: number, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
@@ -1336,6 +1457,11 @@ export type LogoutMutationVariables = Exact<{
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'UserMutationResponse', code: number, success: boolean } };
 
+export type ReadAllNotificationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReadAllNotificationMutation = { __typename?: 'Mutation', readAllNotis: boolean };
+
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1577,6 +1703,19 @@ export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyProfileQuery = { __typename?: 'Query', myProfile?: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } | null };
 
+export type GetNotificationsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+}>;
+
+
+export type GetNotificationsQuery = { __typename?: 'Query', getNotifications?: { __typename?: 'Notifications', totalCount: number, results: Array<{ __typename?: 'UserNotification', id: string, createdAt: any, is_read: boolean, is_seen: boolean, notification: { __typename?: 'Notification', id: string, createdAt: any, messageKey: string, amount?: number | null, action_object?: string | null, actor_name?: string | null, actor_avatar?: string | null }, profile: { __typename?: 'Profile', id: string } }> } | null };
+
+export type GetNotiUnreadCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNotiUnreadCountQuery = { __typename?: 'Query', getUnreadCount?: number | null };
+
 export type PostQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1624,6 +1763,13 @@ export type EventVoteChangedSubscriptionSubscriptionVariables = Exact<{
 
 
 export type EventVoteChangedSubscriptionSubscription = { __typename?: 'Subscription', voteChanged: { __typename?: 'NewVoteSubscriptionData', voteCount?: number | null, waitingCount?: number | null, eventId: string } };
+
+export type NewNotificationSubscriptionVariables = Exact<{
+  profileId: Scalars['ID'];
+}>;
+
+
+export type NewNotificationSubscription = { __typename?: 'Subscription', newNotification: { __typename?: 'NewNotiSubscriptionData', notification: { __typename?: 'UserNotification', id: string, createdAt: any, is_read: boolean, is_seen: boolean, notification: { __typename?: 'Notification', id: string, createdAt: any, messageKey: string, amount?: number | null, action_object?: string | null, actor_name?: string | null, actor_avatar?: string | null }, profile: { __typename?: 'Profile', id: string } } } };
 
 export const MessageInfoFragmentDoc = gql`
     fragment messageInfo on Message {
@@ -1899,6 +2045,31 @@ export const UserMutationStatusesFragmentDoc = gql`
   message
 }
     `;
+export const NotificationInfoFragmentDoc = gql`
+    fragment notificationInfo on Notification {
+  id
+  createdAt
+  messageKey
+  amount
+  action_object
+  actor_name
+  actor_avatar
+}
+    `;
+export const UserNotificationInfoFragmentDoc = gql`
+    fragment userNotificationInfo on UserNotification {
+  id
+  createdAt
+  is_read
+  is_seen
+  notification {
+    ...notificationInfo
+  }
+  profile {
+    id
+  }
+}
+    ${NotificationInfoFragmentDoc}`;
 export const PostMutationStatusesFragmentDoc = gql`
     fragment postMutationStatuses on PostMutationResponse {
   code
@@ -3056,6 +3227,36 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const ReadAllNotificationDocument = gql`
+    mutation ReadAllNotification {
+  readAllNotis
+}
+    `;
+export type ReadAllNotificationMutationFn = Apollo.MutationFunction<ReadAllNotificationMutation, ReadAllNotificationMutationVariables>;
+
+/**
+ * __useReadAllNotificationMutation__
+ *
+ * To run a mutation, you first call `useReadAllNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReadAllNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [readAllNotificationMutation, { data, loading, error }] = useReadAllNotificationMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useReadAllNotificationMutation(baseOptions?: Apollo.MutationHookOptions<ReadAllNotificationMutation, ReadAllNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReadAllNotificationMutation, ReadAllNotificationMutationVariables>(ReadAllNotificationDocument, options);
+      }
+export type ReadAllNotificationMutationHookResult = ReturnType<typeof useReadAllNotificationMutation>;
+export type ReadAllNotificationMutationResult = Apollo.MutationResult<ReadAllNotificationMutation>;
+export type ReadAllNotificationMutationOptions = Apollo.BaseMutationOptions<ReadAllNotificationMutation, ReadAllNotificationMutationVariables>;
 export const DeletePostDocument = gql`
     mutation DeletePost($id: ID!) {
   deletePost(id: $id) {
@@ -4247,6 +4448,77 @@ export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
 export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
+export const GetNotificationsDocument = gql`
+    query GetNotifications($limit: Int!, $offset: Int!) {
+  getNotifications(limit: $limit, offset: $offset) {
+    totalCount
+    results {
+      ...userNotificationInfo
+    }
+  }
+}
+    ${UserNotificationInfoFragmentDoc}`;
+
+/**
+ * __useGetNotificationsQuery__
+ *
+ * To run a query within a React component, call `useGetNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetNotificationsQuery(baseOptions: Apollo.QueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+      }
+export function useGetNotificationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+        }
+export type GetNotificationsQueryHookResult = ReturnType<typeof useGetNotificationsQuery>;
+export type GetNotificationsLazyQueryHookResult = ReturnType<typeof useGetNotificationsLazyQuery>;
+export type GetNotificationsQueryResult = Apollo.QueryResult<GetNotificationsQuery, GetNotificationsQueryVariables>;
+export const GetNotiUnreadCountDocument = gql`
+    query GetNotiUnreadCount {
+  getUnreadCount
+}
+    `;
+
+/**
+ * __useGetNotiUnreadCountQuery__
+ *
+ * To run a query within a React component, call `useGetNotiUnreadCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotiUnreadCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotiUnreadCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetNotiUnreadCountQuery(baseOptions?: Apollo.QueryHookOptions<GetNotiUnreadCountQuery, GetNotiUnreadCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotiUnreadCountQuery, GetNotiUnreadCountQueryVariables>(GetNotiUnreadCountDocument, options);
+      }
+export function useGetNotiUnreadCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotiUnreadCountQuery, GetNotiUnreadCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotiUnreadCountQuery, GetNotiUnreadCountQueryVariables>(GetNotiUnreadCountDocument, options);
+        }
+export type GetNotiUnreadCountQueryHookResult = ReturnType<typeof useGetNotiUnreadCountQuery>;
+export type GetNotiUnreadCountLazyQueryHookResult = ReturnType<typeof useGetNotiUnreadCountLazyQuery>;
+export type GetNotiUnreadCountQueryResult = Apollo.QueryResult<GetNotiUnreadCountQuery, GetNotiUnreadCountQueryVariables>;
 export const PostDocument = gql`
     query Post($id: ID!) {
   post(id: $id) {
@@ -4468,3 +4740,35 @@ export function useEventVoteChangedSubscriptionSubscription(baseOptions: Apollo.
       }
 export type EventVoteChangedSubscriptionSubscriptionHookResult = ReturnType<typeof useEventVoteChangedSubscriptionSubscription>;
 export type EventVoteChangedSubscriptionSubscriptionResult = Apollo.SubscriptionResult<EventVoteChangedSubscriptionSubscription>;
+export const NewNotificationDocument = gql`
+    subscription NewNotification($profileId: ID!) {
+  newNotification(profileId: $profileId) {
+    notification {
+      ...userNotificationInfo
+    }
+  }
+}
+    ${UserNotificationInfoFragmentDoc}`;
+
+/**
+ * __useNewNotificationSubscription__
+ *
+ * To run a query within a React component, call `useNewNotificationSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewNotificationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewNotificationSubscription({
+ *   variables: {
+ *      profileId: // value for 'profileId'
+ *   },
+ * });
+ */
+export function useNewNotificationSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewNotificationSubscription, NewNotificationSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewNotificationSubscription, NewNotificationSubscriptionVariables>(NewNotificationDocument, options);
+      }
+export type NewNotificationSubscriptionHookResult = ReturnType<typeof useNewNotificationSubscription>;
+export type NewNotificationSubscriptionResult = Apollo.SubscriptionResult<NewNotificationSubscription>;

@@ -1,35 +1,65 @@
 import {
-  Avatar,
   Badge,
   Box,
   Button,
   Divider,
   IconButton,
   List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
+  Skeleton,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { noCase } from "change-case";
-import { useState } from "react";
-import { _notifications } from "_mock";
+import EmptyContent from "components/EmptyContent";
+import {
+  useGetNotificationsQuery,
+  useGetNotiUnreadCountQuery,
+  useNewNotificationSubscription,
+  useReadAllNotificationMutation,
+} from "generated/graphql";
+import useAuth from "hooks/useAuth";
+import { NotificationItem } from "pages/Notification";
+import { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
+import { Link as RouterLink } from "react-router-dom";
+import { PATH_DASHBOARD } from "Router/paths";
 import { IconButtonAnimate } from "../../../components/animate";
 import Iconify from "../../../components/Iconify";
 import MenuPopover from "../../../components/MenuPopover";
 import Scrollbar from "../../../components/Scrollbar";
-import { fToNow } from "../../../utils/formatTime";
-
 // ----------------------------------------------------------------------
 
 export default function NotificationsPopover() {
-  const [notifications, setNotifications] = useState(_notifications);
+  const { user } = useAuth();
 
-  const totalUnRead = notifications.filter(
-    (item) => item.isUnRead === true
-  ).length;
+  const [readALl] = useReadAllNotificationMutation({ fetchPolicy: "no-cache" });
+
+  const {
+    data: notifications,
+    loading,
+    refetch: refetchNoti,
+  } = useGetNotificationsQuery({
+    variables: { limit: 5, offset: 0 },
+    fetchPolicy: "no-cache",
+  });
+  const { data: unreadCount, refetch: refetchCount } =
+    useGetNotiUnreadCountQuery({
+      fetchPolicy: "no-cache",
+    });
+  const { data: newNoti } = useNewNotificationSubscription({
+    variables: {
+      profileId: user.profile.id,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  useEffect(() => {
+    if (newNoti?.newNotification) {
+      refetchNoti();
+      refetchCount();
+    }
+  }, [newNoti]);
+
+  const totalUnRead = unreadCount?.getUnreadCount || 0;
 
   const [open, setOpen] = useState(null);
 
@@ -42,14 +72,93 @@ export default function NotificationsPopover() {
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
+    readALl().then(() => {
+      refetchNoti();
+      refetchCount();
+    });
   };
 
+  const renderList = () => {
+    if (loading)
+      return (
+        <>
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
+        </>
+      );
+    if (notifications?.getNotifications?.results.length > 0)
+      return (
+        <>
+          <Box sx={{ display: "flex", alignItems: "center", py: 2, px: 2.5 }}>
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="subtitle1">
+                <Trans i18nKey="notification.title" />
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                <Trans
+                  i18nKey="notification.unread_subtitle"
+                  count={totalUnRead}
+                  values={{ count: totalUnRead }}
+                />
+              </Typography>
+            </Box>
+
+            {totalUnRead > 0 && (
+              <Tooltip
+                title={<Trans i18nKey="notification.btn.mark_all_read" />}
+              >
+                <IconButton color="primary" onClick={handleMarkAllAsRead}>
+                  <Iconify icon="eva:done-all-fill" width={20} height={20} />
+                </IconButton>
+              </Tooltip>
+            )}
+          </Box>
+
+          <Divider sx={{ borderStyle: "dashed" }} />
+
+          <Scrollbar sx={{ height: { xs: 340, sm: "auto" } }}>
+            <List disablePadding>
+              {notifications?.getNotifications?.results?.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  notification={notification}
+                />
+              ))}
+            </List>
+          </Scrollbar>
+
+          <Divider sx={{ borderStyle: "dashed" }} />
+
+          <Box sx={{ p: 1 }}>
+            <Button
+              fullWidth
+              disableRipple
+              component={RouterLink}
+              to={PATH_DASHBOARD.notification}
+            >
+              <Trans i18nKey="notification.btn.view_all" />
+            </Button>
+          </Box>
+        </>
+      );
+
+    return (
+      <>
+        <Box sx={{ display: "flex", alignItems: "center", py: 2, px: 2.5 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle1">
+              <Trans i18nKey="notification.title" />
+            </Typography>
+          </Box>
+        </Box>
+
+        <Divider sx={{ borderStyle: "dashed" }} />
+
+        <EmptyContent />
+      </>
+    );
+  };
   return (
     <>
       <IconButtonAnimate
@@ -68,187 +177,8 @@ export default function NotificationsPopover() {
         onClose={handleClose}
         sx={{ width: 360, p: 0, mt: 1.5, ml: 0.75 }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", py: 2, px: 2.5 }}>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1">Notifications</Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              You have {totalUnRead} unread messages
-            </Typography>
-          </Box>
-
-          {totalUnRead > 0 && (
-            <Tooltip title=" Mark all as read">
-              <IconButton color="primary" onClick={handleMarkAllAsRead}>
-                <Iconify icon="eva:done-all-fill" width={20} height={20} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
-
-        <Divider sx={{ borderStyle: "dashed" }} />
-
-        <Scrollbar sx={{ height: { xs: 340, sm: "auto" } }}>
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader
-                disableSticky
-                sx={{ py: 1, px: 2.5, typography: "overline" }}
-              >
-                New
-              </ListSubheader>
-            }
-          >
-            {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-              />
-            ))}
-          </List>
-
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader
-                disableSticky
-                sx={{ py: 1, px: 2.5, typography: "overline" }}
-              >
-                Before that
-              </ListSubheader>
-            }
-          >
-            {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-              />
-            ))}
-          </List>
-        </Scrollbar>
-
-        <Divider sx={{ borderStyle: "dashed" }} />
-
-        <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
-            View All
-          </Button>
-        </Box>
+        {renderList()}
       </MenuPopover>
     </>
   );
-}
-
-// ----------------------------------------------------------------------
-
-interface INotificationItem {
-  notification?: any;
-}
-function NotificationItem({ notification }: INotificationItem) {
-  const { avatar, title } = renderContent(notification);
-
-  return (
-    <ListItemButton
-      sx={{
-        py: 1.5,
-        px: 2.5,
-        mt: "1px",
-        ...(notification.isUnRead && {
-          bgcolor: "action.selected",
-        }),
-      }}
-    >
-      <ListItemAvatar>
-        <Avatar sx={{ bgcolor: "background.neutral" }}>{avatar}</Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={title}
-        secondary={
-          <Typography
-            variant="caption"
-            sx={{
-              mt: 0.5,
-              display: "flex",
-              alignItems: "center",
-              color: "text.disabled",
-            }}
-          >
-            <Iconify
-              icon="eva:clock-outline"
-              sx={{ mr: 0.5, width: 16, height: 16 }}
-            />
-            {fToNow(notification.createdAt)}
-          </Typography>
-        }
-      />
-    </ListItemButton>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-function renderContent(notification) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification.title}
-      <Typography
-        component="span"
-        variant="body2"
-        sx={{ color: "text.secondary" }}
-      >
-        &nbsp; {noCase(notification.description)}
-      </Typography>
-    </Typography>
-  );
-
-  if (notification.type === "order_placed") {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api-dev.vercel.app/assets/icons/ic_notification_package.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === "order_shipped") {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api-dev.vercel.app/assets/icons/ic_notification_shipping.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === "mail") {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api-dev.vercel.app/assets/icons/ic_notification_mail.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === "chat_message") {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api-dev.vercel.app/assets/icons/ic_notification_chat.svg"
-        />
-      ),
-      title,
-    };
-  }
-  return {
-    avatar: notification.avatar ? (
-      <img alt={notification.title} src={notification.avatar} />
-    ) : null,
-    title,
-  };
 }

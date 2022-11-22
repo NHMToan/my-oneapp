@@ -14,6 +14,7 @@ import MobileBottomNavigation from "./bottom-navigation/BottomNavigation";
 import DashboardHeader from "./header";
 import NavbarHorizontal from "./navbar/NavbarHorizontal";
 import NavbarVertical from "./navbar/NavbarVertical";
+import SettingsForm from "./SettingsForm";
 
 // ----------------------------------------------------------------------
 type MainStyleProps = {
@@ -110,6 +111,7 @@ export default function DashboardLayout() {
       <MainStyle collapseClick={collapseClick}>
         <Outlet />
         {!isDesktop && <MobileBottomNavigation />}
+        <SettingsForm />
       </MainStyle>
     </Box>
   );

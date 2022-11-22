@@ -146,7 +146,7 @@
         "update_success": "Hoạt động đã được thay đổi!"
       },
       "status": {
-        "hidden": "Che lại"
+        "hidden": "Ẩn"
       }
     },
     "list": {
@@ -189,5 +189,32 @@
   "activity": {
     "no_event_label": "Xin chào!",
     "no_event_message": "Hiện chưa có hoạt động nào mở đăng kí tham gia, bạn quay lại sau nghen!"
+  },
+  "notification": {
+    "key": {
+      "accept_join_club": "Bạn đã được xác nhận tham gia Câu lạc bộ <1>{{action_object}}</1>",
+      "apply_club": "<0>{{actor_name}}</0> đã yêu cầu tham gia Câu lạc bộ <2>{{action_object}}</2>",
+      "confirm_waiting_slot_one": "Bạn đã được xác nhận <1>{{count}} suất</1> cho hoạt động <3>{{action_object}}</3>",
+      "confirm_waiting_slot_other": "Bạn đã được xác nhận <1>{{count}} suất</1> cho hoạt động <3>{{action_object}}</3>",
+      "remove_confirm_vote_one": "<0>{{actor_name}}</0> đã hủy <2>{{count}} suất</2>  khỏi hoạt động <4>{{action_object}}</4>",
+      "remove_confirm_vote_other": "<0>{{actor_name}}</0> đã hủy <2>{{count}} suất</2>  khỏi hoạt động <4>{{action_object}}</4>"
+    },
+    "btn": {
+      "mark_all_read": "Đánh dấu đã đọc hết rồi nè",
+      "view_all": "Xem tất cả"
+    },
+    "title": "",
+    "unread_subtitle_one": "Bạn có {{count}} tin chưa đọc đó nhe!",
+    "unread_subtitle_other": "Bạn có {{count}} tin chưa đọc đó nhe!"
+  },
+  "form": {
+    "validation": {
+      "max_file_size": "Chấp nhận hình *.jpeg, *.jpg, *.png, *.gif <br/> kích thước tối đa {{size}}"
+    }
+  },
+  "user": {
+    "setting_form_modal": {
+      "title": "Xin hãy bổ sung thông tin bên dưới để tiếp tục"
+    }
   }
 }

@@ -37,19 +37,7 @@ export default function ClubMembers({ club }: ClubMembersProps) {
     skip: !club,
   });
   const { translate } = useLocales();
-  // const updateQuery = (previousResult, { fetchMoreResult }) => {
-  //   if (!fetchMoreResult) {
-  //     return previousResult;
-  //   }
-  //   console.log(previousResult);
-  //   const previousEdges = previousResult.clubmembers.results;
-  //   const fetchMoreEdges = fetchMoreResult.clubmembers.results;
-  //   console.log(previousEdges, fetchMoreEdges);
-  //   fetchMoreResult.clubmembers.results = [...previousEdges, ...fetchMoreEdges];
-  //   console.log(fetchMoreResult);
-  //   return { ...fetchMoreResult };
-  // };
-  // console.log(data);
+
   if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
   return (
@@ -75,27 +63,6 @@ export default function ClubMembers({ club }: ClubMembersProps) {
               />
             </Grid>
           ))}
-          {/* {data.clubmembers.totalCount > data.clubmembers.results.length && (
-            <Grid key="loadmore" item xs={12} md={4}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  fetchMore({
-                    updateQuery,
-                    variables: {
-                      clubId: club?.id,
-                      status: 2,
-                      role: 1,
-                      limit: 2,
-                      offset: 2,
-                    },
-                  });
-                }}
-              >
-                Load more
-              </Button>
-            </Grid>
-          )} */}
         </Grid>
       </Box>
     </>

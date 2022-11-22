@@ -189,5 +189,32 @@
   "activity": {
     "no_event_label": "Welcome!",
     "no_event_message": "There is no events for now! Please come back later!"
+  },
+  "notification": {
+    "key": {
+      "apply_club": "<0>{{actor_name}}</0> requested to join club <2>{{action_object}}</2>",
+      "accept_join_club": "You have been accepted to join club <1>{{action_object}}</1>",
+      "remove_confirm_vote_one": "<0>{{actor_name}}</0> has removed <2>{{count}} slot</2>  from activity <4>{{action_object}}</4>",
+      "remove_confirm_vote_other": "<0>{{actor_name}}</0> has removed <2>{{count}} slots</2>  from activity <4>{{action_object}}</4>",
+      "confirm_waiting_slot_one": "You has been confirmed <1>{{count}} slot</1> from activity <3>{{action_object}}</3>",
+      "confirm_waiting_slot_other": "You has been confirmed <1>{{count}} slots</1> from activity <3>{{action_object}}</3>"
+    },
+    "unread_subtitle_one": "You have {{count}} unread message",
+    "unread_subtitle_other": "You have {{count}} unread messages",
+    "title": "Notification",
+    "btn": {
+      "mark_all_read": "Mark all as read",
+      "view_all": "View all"
+    }
+  },
+  "user": {
+    "setting_form_modal": {
+      "title": "Please give the information below to continue"
+    }
+  },
+  "form": {
+    "validation": {
+      "max_file_size": "Allowed *.jpeg, *.jpg, *.png, *.gif <br/> max size of {{size}}"
+    }
   }
 }
