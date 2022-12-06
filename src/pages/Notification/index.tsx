@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Card,
+  CircularProgress,
   Container,
   Divider,
   IconButton,
@@ -20,6 +21,7 @@ import {
   useGetNotiUnreadCountQuery,
   useReadAllNotificationMutation,
 } from "generated/graphql";
+import { useState } from "react";
 import { Trans } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroller";
 import { fToNow } from "utils/formatTime";
@@ -33,6 +35,7 @@ const NotificationList = (props) => {
     variables: { limit: 30, offset: 0 },
   });
   const [readALl] = useReadAllNotificationMutation({ fetchPolicy: "no-cache" });
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
 
   const { data: unreadCount, refetch: refetchCount } =
     useGetNotiUnreadCountQuery({
@@ -49,6 +52,7 @@ const NotificationList = (props) => {
   const totalUnRead = unreadCount?.getUnreadCount || 0;
 
   const handleInfiniteOnLoad = (page) => {
+    setLoadingMore(true);
     fetchMore({
       updateQuery: (pv, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
@@ -69,7 +73,13 @@ const NotificationList = (props) => {
         limit: 30,
         offset: page * 30,
       },
-    });
+    })
+      .then(() => {
+        setLoadingMore(false);
+      })
+      .catch(() => {
+        setLoadingMore(false);
+      });
   };
   const hasMore =
     notifications?.getNotifications?.results?.length <
@@ -131,6 +141,18 @@ const NotificationList = (props) => {
                 />
               ))}
             </List>
+            {loadingMore && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  bottom: 40,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            )}
           </InfiniteScroll>
         </div>
       </>

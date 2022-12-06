@@ -203,7 +203,7 @@
       "mark_all_read": "Đánh dấu đã đọc hết rồi nè",
       "view_all": "Xem tất cả"
     },
-    "title": "",
+    "title": "Thông báo",
     "unread_subtitle_one": "Bạn có {{count}} tin chưa đọc đó nhe!",
     "unread_subtitle_other": "Bạn có {{count}} tin chưa đọc đó nhe!"
   },
@@ -214,7 +214,7 @@
   },
   "user": {
     "setting_form_modal": {
-      "title": "Xin hãy bổ sung thông tin bên dưới để tiếp tục"
+      "title": "Thêm ảnh đại diện"
     }
   }
 }

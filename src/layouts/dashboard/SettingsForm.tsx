@@ -1,6 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
-import { Dialog, DialogActions, DialogTitle, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Divider,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { FormProvider, RHFUploadAvatar } from "components/hook-form";
 import { AuthContext } from "contexts/JWTContext";
@@ -90,9 +97,25 @@ const SettingsForm = (props) => {
   );
   return (
     <Dialog open={isOpen} maxWidth="xs">
-      <DialogTitle>{translate("user.setting_form_modal.title")}</DialogTitle>
+      <DialogTitle sx={{ m: 0, p: 2, minWidth: "350px" }}>
+        {translate("user.setting_form_modal.title")}{" "}
+        <Button
+          aria-label="close"
+          onClick={() => {
+            setIsOpen(false);
+          }}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 13,
+          }}
+        >
+          Skip
+        </Button>
+      </DialogTitle>
+      <Divider />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ mt: 2 }}>
           <RHFUploadAvatar
             name="avatarFile"
             accept={"image/*" as any}

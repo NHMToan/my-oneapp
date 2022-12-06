@@ -296,6 +296,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           onClose={() => {
             setIsDetailsOpen(false);
           }}
+          refetchStats={refetchStats}
         />
       )}
     </Card>

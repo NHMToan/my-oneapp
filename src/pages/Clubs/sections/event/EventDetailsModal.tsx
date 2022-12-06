@@ -48,11 +48,13 @@ interface EventDetailsContentProps {
   eventId: string;
   onClose: () => void;
   onRefreshList?: () => void;
+  refetchStats?: () => void;
 }
 const Content: FC<EventDetailsContentProps> = ({
   eventId,
   onRefreshList,
   onClose,
+  refetchStats,
 }) => {
   const { data, loading, refetch } = useEventQuery({
     variables: { id: eventId },
@@ -167,7 +169,9 @@ const Content: FC<EventDetailsContentProps> = ({
           height={20}
         />
       ),
-      component: <EventDetailsVotesTab event={eventData} />,
+      component: (
+        <EventDetailsVotesTab event={eventData} refetchStats={refetchStats} />
+      ),
     },
   ];
 
@@ -369,6 +373,7 @@ interface EventDetailsModalProps {
   open: boolean;
   onClose: () => void;
   onRefreshList?: () => void;
+  refetchStats?: any;
 }
 
 const EventDetailsModal: FC<EventDetailsModalProps> = ({
@@ -376,6 +381,7 @@ const EventDetailsModal: FC<EventDetailsModalProps> = ({
   open,
   onClose,
   onRefreshList,
+  refetchStats,
 }) => {
   return (
     <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
@@ -384,6 +390,7 @@ const EventDetailsModal: FC<EventDetailsModalProps> = ({
           eventId={eventId}
           onRefreshList={onRefreshList}
           onClose={onClose}
+          refetchStats={refetchStats}
         />
       </Stack>
     </Dialog>

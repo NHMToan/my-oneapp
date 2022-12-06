@@ -2,6 +2,7 @@
 import {
   Box,
   Card,
+  CircularProgress,
   Divider,
   Grid,
   IconButton,
@@ -22,6 +23,8 @@ import {
 } from "generated/graphql";
 import useLocales from "hooks/useLocales";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
+import { useState } from "react";
+import InfiniteScroll from "react-infinite-scroller";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
 
@@ -31,15 +34,49 @@ interface ClubMembersProps {
   club: ClubData;
 }
 export default function ClubMembers({ club }: ClubMembersProps) {
-  const { data, loading, error, refetch } = useClubMembersQuery({
-    variables: { clubId: club?.id, status: 2, role: 1, limit: 300, offset: 0 },
-    fetchPolicy: "no-cache",
+  const { data, loading, error, refetch, fetchMore } = useClubMembersQuery({
+    variables: { clubId: club?.id, status: 2, role: 1, limit: 30, offset: 0 },
     skip: !club,
   });
   const { translate } = useLocales();
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
 
+  const handleInfiniteOnLoad = (page) => {
+    setLoadingMore(true);
+    fetchMore({
+      updateQuery: (pv, { fetchMoreResult }) => {
+        if (!fetchMoreResult) {
+          return pv;
+        }
+        return {
+          clubmembers: {
+            __typename: "Clubmembers",
+            results: [
+              ...pv?.clubmembers?.results,
+              ...fetchMoreResult?.clubmembers?.results,
+            ],
+            totalCount: pv.clubmembers.totalCount,
+            hasMore: pv.clubmembers.hasMore,
+          },
+        };
+      },
+      variables: {
+        limit: 30,
+        offset: page * 30,
+      },
+    })
+      .then(() => {
+        setLoadingMore(false);
+      })
+      .catch(() => {
+        setLoadingMore(false);
+      });
+  };
   if (loading) return <SimpleSkeleton />;
   if (!data) return <p>{error.message}</p>;
+
+  const hasMore =
+    data?.clubmembers?.results?.length < data?.clubmembers?.totalCount;
   return (
     <>
       <Box sx={{ mt: 5 }}>
@@ -51,19 +88,45 @@ export default function ClubMembers({ club }: ClubMembersProps) {
             </IconButton>
           }
         />
-
-        <Grid container spacing={3}>
-          {data?.clubmembers?.results.map((member) => (
-            <Grid key={member.id} item xs={12} md={4}>
-              <MemberCard
-                member={member as any}
-                refetch={refetch}
-                isAuth={club.isAdmin || club.isSubAdmin}
-                isAdmin={club.isAdmin}
-              />
+        <div
+          style={{
+            height: "calc(100vh - 240px)",
+            overflow: "auto",
+          }}
+        >
+          <InfiniteScroll
+            initialLoad={false}
+            pageStart={0}
+            loadMore={handleInfiniteOnLoad}
+            hasMore={!loadingMore && hasMore}
+            useWindow={false}
+          >
+            <Grid container spacing={3}>
+              {data?.clubmembers?.results.map((member) => (
+                <Grid key={member.id} item xs={12} md={4}>
+                  <MemberCard
+                    member={member as any}
+                    refetch={refetch}
+                    isAuth={club.isAdmin || club.isSubAdmin}
+                    isAdmin={club.isAdmin}
+                  />
+                </Grid>
+              ))}
+              <Grid key="loadingMore" item xs={12} md={12}>
+                {!loadingMore && (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      textAlign: "center",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                )}
+              </Grid>
             </Grid>
-          ))}
-        </Grid>
+          </InfiniteScroll>
+        </div>
       </Box>
     </>
   );

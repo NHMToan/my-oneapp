@@ -31,9 +31,10 @@ import { fSDateTime } from "utils/formatTime";
 
 interface EventVoteListProps {
   event: ClubEvent;
+  refetchStats?: () => void;
 }
 
-const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
+const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
   const { data, loading, refetch } = useGetVotesQuery({
     fetchPolicy: "no-cache",
     skip: !event,
@@ -65,6 +66,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event }) => {
             isAdmin={event.isAdmin}
             postActions={() => {
               refetch();
+              if (refetchStats) refetchStats();
             }}
             event={event}
           />

@@ -16,7 +16,6 @@ export default function CLubsList() {
   const { themeStretch } = useSettings();
   const { data: dataclubs, loading } = useClubsQuery({
     variables: { limit: 50, offset: 0 },
-    fetchPolicy: "no-cache",
   });
 
   const clubs = dataclubs?.clubs?.results || [];

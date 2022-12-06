@@ -203,7 +203,7 @@
       "mark_all_read": "将所有消息标记为已读",
       "view_all": "查看所有消息"
     },
-    "title": "",
+    "title": "Notification",
     "unread_subtitle_one": "您有{{count}}条未读消息",
     "unread_subtitle_other": "您有{{count}}条未读消息"
   },
