@@ -112,13 +112,15 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
   };
 
   const handleSelectRange = (arg) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.unselect();
+    if (isAdmin || isSubAdmin) {
+      const calendarEl = calendarRef.current;
+      if (calendarEl) {
+        const calendarApi = calendarEl.getApi();
+        calendarApi.unselect();
+      }
+      setSelectedRange({ start: arg.start.getTime(), end: arg.end.getTime() });
+      setIsFormOpen(true);
     }
-    setSelectedRange({ start: arg.start.getTime(), end: arg.end.getTime() });
-    setIsFormOpen(true);
   };
 
   const handleSelectEvent = (arg) => {

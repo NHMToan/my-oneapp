@@ -22,6 +22,7 @@ interface VotePopConfirmProps {
   onPostSave: (count: number) => void;
   isWaiting?: boolean;
   currentVoteCount?: number;
+  isSubmitting: boolean;
 }
 const VotePopConfirm: FC<VotePopConfirmProps> = ({
   event,
@@ -30,6 +31,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
   onPostSave,
   isWaiting,
   currentVoteCount,
+  isSubmitting,
 }) => {
   const defaultValues: any = {
     value: 1,
@@ -43,11 +45,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
     defaultValues,
   });
 
-  const {
-    reset,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, handleSubmit } = methods;
   const onCancel = () => {
     onClose();
     reset();

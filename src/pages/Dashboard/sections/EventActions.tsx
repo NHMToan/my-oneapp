@@ -48,6 +48,7 @@ const EventActions: FC<EventActionsProps> = ({
   const [isFormChangeOpen, setIsFormChangeOpen] = useState<boolean>(false);
   const [isVoteWaiting, setIsVoteWaiting] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const [renderCountDown, setRenderCountDown] = useState<boolean>(
     event.start > current.toISOString()
@@ -59,6 +60,7 @@ const EventActions: FC<EventActionsProps> = ({
   const isChangeWaitingVote = statsData?.getVoteStats?.waiting > 0;
 
   const handleVote = async (value) => {
+    setSubmitting(true);
     try {
       const voteRes = await onVote({
         variables: {
@@ -83,12 +85,15 @@ const EventActions: FC<EventActionsProps> = ({
         );
         throw voteRes?.data?.voteEvent?.message || "Internal error";
       }
+      setSubmitting(false);
     } catch (e) {
       console.error(e);
+      setSubmitting(false);
     }
   };
 
   const handleWaitingVote = async (value) => {
+    setSubmitting(true);
     try {
       const voteRes = await onVote({
         variables: {
@@ -106,8 +111,10 @@ const EventActions: FC<EventActionsProps> = ({
           variant: "error",
         });
       }
+      setSubmitting(true);
     } catch (e) {
       console.error(e);
+      setSubmitting(false);
     }
   };
   const RenderCountdown = () => {
@@ -308,6 +315,7 @@ const EventActions: FC<EventActionsProps> = ({
               }
             }}
             isWaiting={isVoteWaiting}
+            isSubmitting={submitting}
           />
           <ChangeVoteModal
             isOpen={isFormChangeOpen}

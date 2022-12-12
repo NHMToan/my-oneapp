@@ -13,7 +13,7 @@ import { useChangeSlotsMutation } from "generated/graphql";
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { ClubEvent } from "pages/Clubs/data.t";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 interface ChangeVoteModalProps {
@@ -34,6 +34,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
 }) => {
   const [onChangeSlot] = useChangeSlotsMutation({ fetchPolicy: "no-cache" });
   const { enqueueSnackbar } = useSnackbar();
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const defaultValues: any = {
     value: currentVoteCount,
   };
@@ -47,12 +48,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
     defaultValues,
   });
 
-  const {
-    reset,
-    handleSubmit,
-    formState: { isSubmitting },
-    setValue,
-  } = methods;
+  const { reset, handleSubmit, setValue } = methods;
   const onCancel = () => {
     onClose();
     reset();
@@ -63,6 +59,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
   }, [currentVoteCount]);
 
   const onSubmit = async (data) => {
+    setSubmitting(true);
     try {
       const params: any = {
         value: ~~data.value,
@@ -98,11 +95,12 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
           }
         );
       }
-
+      setSubmitting(false);
       onClose();
       reset();
     } catch (error) {
       console.error(error);
+      setSubmitting(false);
     }
   };
   const maxVote = event.maxVote || 3;
@@ -142,7 +140,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
           <LoadingButton
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={submitting}
             disabled={!maxVote}
           >
             {translate("common.btn.change")}
