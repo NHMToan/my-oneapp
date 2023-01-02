@@ -53,4 +53,9 @@ export const PATH_DASHBOARD = {
     view: (uuid) => path(ROOTS_DASHBOARD, `/chat/${uuid}`),
   },
   notification: "/notification",
+  rating: {
+    root: path(ROOTS_DASHBOARD, "/rating"),
+    new: path(ROOTS_DASHBOARD, "/rating/new"),
+    edit: (id) => path(ROOTS_DASHBOARD, `/rating/${id}/edit`),
+  },
 };

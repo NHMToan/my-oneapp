@@ -111,7 +111,7 @@ const EventActions: FC<EventActionsProps> = ({
           variant: "error",
         });
       }
-      setSubmitting(true);
+      setSubmitting(false);
     } catch (e) {
       console.error(e);
       setSubmitting(false);

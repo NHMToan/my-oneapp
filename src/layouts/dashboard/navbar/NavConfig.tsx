@@ -18,6 +18,7 @@ const ICONS = {
   people: getIcon("ic_user"),
   chat: getIcon("ic_chat"),
   club: getIcon("ic_menu_item"),
+  rating: getIcon("ic_label"),
 };
 
 const navConfig = [
@@ -29,6 +30,11 @@ const navConfig = [
         title: "menu.events",
         path: PATH_DASHBOARD.general.app,
         icon: ICONS.dashboard,
+      },
+      {
+        title: "menu.ratings",
+        path: PATH_DASHBOARD.rating.root,
+        icon: ICONS.rating,
       },
       // {
       //   title: "people",

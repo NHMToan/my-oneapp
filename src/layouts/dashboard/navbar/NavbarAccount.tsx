@@ -1,7 +1,8 @@
 import { Box, Link, Stack, Typography } from "@mui/material";
 // @mui
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import BadgeStatus from "components/BadgeStatus";
+import Label from "components/Label";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
 // components
@@ -30,7 +31,29 @@ interface INavbarAccount {
 }
 export default function NavbarAccount({ isCollapse }: INavbarAccount) {
   const { user } = useAuth();
+  const theme = useTheme();
 
+  const renderTag = () => {
+    if (user.role === "admin")
+      return (
+        <Label
+          variant={theme.palette.mode === "light" ? "ghost" : "filled"}
+          color={"error"}
+          sx={{ textTransform: "capitalize" }}
+        >
+          {user?.role}
+        </Label>
+      );
+
+    return (
+      <Stack direction="row" spacing={1} alignItems="center">
+        <BadgeStatus size="large" status="online" />
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          Online
+        </Typography>
+      </Stack>
+    );
+  };
   return (
     <Link
       underline="none"
@@ -63,14 +86,7 @@ export default function NavbarAccount({ isCollapse }: INavbarAccount) {
           <Typography variant="subtitle2" noWrap>
             {user?.displayName}
           </Typography>
-          {!isCollapse && (
-            <Stack direction="row" spacing={1} alignItems="center">
-              <BadgeStatus size="large" status="online" />
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Online
-              </Typography>
-            </Stack>
-          )}
+          {!isCollapse && renderTag()}
         </Box>
       </RootStyle>
     </Link>

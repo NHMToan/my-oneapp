@@ -4,7 +4,6 @@ import {
   Container,
   Divider,
   IconButton,
-  Link,
   Stack,
   styled,
   Typography,
@@ -113,9 +112,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             <IconStyle icon={"ic:baseline-how-to-vote"} />
             <Typography variant="body2">
               {translate("club.event.details.max_vote")}: &nbsp;
-              <Link component="span" variant="subtitle2">
-                {maxVote}{" "}
-              </Link>
+              <b>{maxVote}</b>
             </Typography>
           </Stack>
 
@@ -123,27 +120,21 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
             <IconStyle icon={"clarity:alarm-clock-solid"} />
             <Typography variant="body2">
               {translate("club.event.details.time")}: &nbsp;
-              <Link component="span" variant="subtitle2">
-                {fDateTime(time)}
-              </Link>
+              <b> {fDateTime(time)}</b>
             </Typography>
           </Stack>
           <Stack direction="row">
             <IconStyle icon={"eva:pin-fill"} />
             <Typography variant="body2">
               {translate("club.event.details.address")}: &nbsp;
-              <Link component="span" variant="subtitle2">
-                {address}
-              </Link>
+              <b> {address}</b>
             </Typography>
           </Stack>
           <Stack direction="row">
             <IconStyle icon={"bxs:dollar-circle"} />
             <Typography variant="body2">
               {translate("club.event.details.price")}: &nbsp;
-              <Link component="span" variant="subtitle2">
-                {fNumber(price || 0)} VND
-              </Link>
+              <b> {fNumber(price || 0)} VND</b>
             </Typography>
           </Stack>
           <Divider />
@@ -159,7 +150,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
   }, [voteCountData]);
 
   const currentDate = new Date();
-  const colors = [[theme.palette.primary.light, theme.palette.primary.main]];
+
   const baseOptions: any = BaseOptionChart();
 
   const chartSeries = (eventVoteCount / slot) * 100;
@@ -168,21 +159,13 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
     grid: {
       padding: { top: -32, bottom: -32 },
     },
-    fill: {
-      type: "gradient",
-      gradient: {
-        colorStops: colors.map((colors) => [
-          { offset: 0, color: colors[0] },
-          { offset: 100, color: colors[1] },
-        ]),
-      },
-    },
+    colors: [theme.palette.primary.main],
     plotOptions: {
       radialBar: {
-        hollow: { size: "64%" },
+        hollow: { size: "54%" },
         dataLabels: {
           showOn: "always",
-          name: { offsetY: -16 },
+          name: { show: false },
           value: {
             offsetY: 8,
             show: false,
@@ -213,7 +196,7 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
           sx={{
             flexGrow: 1,
             position: "absolute",
-            top: "calc(50% + 48px)",
+            top: "calc(50% - 20px)",
             left: "50%",
             transform: "translate(-50%, -50%)",
           }}

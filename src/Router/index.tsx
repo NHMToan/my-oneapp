@@ -94,6 +94,18 @@ export default function Router() {
           ],
         },
         {
+          path: "rating",
+          children: [
+            {
+              element: <Rating />,
+              index: true,
+            },
+            { path: ":id", element: <Rating /> },
+            { path: "new", element: <RatingForm /> },
+            { path: ":id/edit", element: <RatingForm /> },
+          ],
+        },
+        {
           path: "notification",
           children: [
             {
@@ -153,3 +165,7 @@ const ClubPage = Loadable(lazy(() => import("../pages/Clubs/ClubPage")));
 
 // const Chat = Loadable(lazy(() => import("../pages/Chat")));
 const Notification = Loadable(lazy(() => import("../pages/Notification")));
+
+//Rating
+const Rating = Loadable(lazy(() => import("../pages/Rating")));
+const RatingForm = Loadable(lazy(() => import("../pages/Rating/RatingForm")));

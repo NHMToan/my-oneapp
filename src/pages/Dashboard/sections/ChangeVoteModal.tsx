@@ -65,6 +65,7 @@ const ChangeVoteModal: FC<ChangeVoteModalProps> = ({
         value: ~~data.value,
       };
       if (params.value === currentVoteCount) {
+        setSubmitting(false);
         onClose();
         return;
       }

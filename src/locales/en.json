@@ -58,12 +58,14 @@
   },
   "menu": {
     "events": "Activities",
-    "clubs": "Clubs"
+    "clubs": "Clubs",
+    "ratings": "Rating"
   },
   "club": {
     "list": {
       "title": "Clubs",
-      "btn_new_club": "New club"
+      "btn_new_club": "New club",
+      "btn_new": "Add new"
     },
     "details": {
       "general": {
@@ -215,6 +217,15 @@
   "form": {
     "validation": {
       "max_file_size": "Allowed *.jpeg, *.jpg, *.png, *.gif <br/> max size of {{size}}"
+    }
+  },
+  "rating": {
+    "list": {
+      "title": "Rating"
+    },
+    "form": {
+      "start_date": "Start date",
+      "end_date": "End date"
     }
   }
 }
