@@ -59,7 +59,8 @@
   "menu": {
     "events": "Activities",
     "clubs": "Clubs",
-    "ratings": "Rating"
+    "ratings": "Rating",
+    "admin": "Admin"
   },
   "club": {
     "list": {
@@ -226,6 +227,9 @@
     "form": {
       "start_date": "Start date",
       "end_date": "End date"
+    },
+    "details": {
+      "title": "Rating details"
     }
   }
 }

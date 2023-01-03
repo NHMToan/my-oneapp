@@ -19,6 +19,7 @@ const ICONS = {
   chat: getIcon("ic_chat"),
   club: getIcon("ic_menu_item"),
   rating: getIcon("ic_label"),
+  lock: getIcon("ic_lock"),
 };
 
 const navConfig = [
@@ -47,7 +48,17 @@ const navConfig = [
       //   icon: ICONS.blog,
       // },
       // { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+
       { title: "menu.clubs", path: PATH_DASHBOARD.club.root, icon: ICONS.club },
+      {
+        title: "menu.admin",
+        isAdmin: true,
+        path: PATH_DASHBOARD.adminRating.root,
+        icon: ICONS.lock,
+        children: [
+          { title: "menu.ratings", path: PATH_DASHBOARD.adminRating.root },
+        ],
+      },
     ],
   },
 ];

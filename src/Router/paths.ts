@@ -55,7 +55,11 @@ export const PATH_DASHBOARD = {
   notification: "/notification",
   rating: {
     root: path(ROOTS_DASHBOARD, "/rating"),
-    new: path(ROOTS_DASHBOARD, "/rating/new"),
-    edit: (id) => path(ROOTS_DASHBOARD, `/rating/${id}/edit`),
+  },
+  adminRating: {
+    root: path(ROOTS_DASHBOARD, "/admin-rating"),
+    new: path(ROOTS_DASHBOARD, "/admin-rating/new"),
+    view: (uuid) => path(ROOTS_DASHBOARD, `/admin-rating/${uuid}`),
+    edit: (id) => path(ROOTS_DASHBOARD, `/admin-rating/${id}/edit`),
   },
 };

@@ -1,0 +1,34 @@
+fragment ratingMutationResponse on RatingMutationResponse {
+  ...mutationStatuses
+  errors {
+    ...fieldError
+  }
+}
+
+fragment ratingInfo on Rating {
+  id
+  name
+  description
+  start
+  end
+  createdAt
+  updatedAt
+  status
+}
+fragment ratingCandidateInfo on RatingCandidate {
+  id
+  name
+  bio
+  createdAt
+  order
+  photo1
+  photo2
+  photo2
+}
+fragment ratingVoteInfo on RatingVote {
+  id
+  voter {
+    ...userInfo
+  }
+  createdAt
+}

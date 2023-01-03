@@ -1,6 +1,7 @@
 import { Box, BoxProps, List, ListSubheader } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
+import useAuth from "hooks/useAuth";
 import { ReactNode } from "react";
 // hooks
 import useLocales from "../../../hooks/useLocales";
@@ -36,7 +37,7 @@ export default function NavSectionVertical({
   ...other
 }: NavSectionVerticalProps) {
   const { translate } = useLocales();
-
+  const { user } = useAuth();
   return (
     <Box {...other}>
       {navConfig.map((group, key) => (
@@ -51,13 +52,19 @@ export default function NavSectionVertical({
             {translate(group.subheader)}
           </ListSubheaderStyle>
 
-          {group.items.map((list) => (
-            <NavListRoot
-              key={list.title + list.path}
-              list={list}
-              isCollapse={isCollapse}
-            />
-          ))}
+          {group.items
+            .filter(
+              (item) =>
+                (user.role !== "admin" && !item.isAdmin) ||
+                user.role === "admin"
+            )
+            .map((list) => (
+              <NavListRoot
+                key={list.title + list.path}
+                list={list}
+                isCollapse={isCollapse}
+              />
+            ))}
         </List>
       ))}
     </Box>

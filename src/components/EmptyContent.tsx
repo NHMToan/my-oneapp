@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 // @mui
-import { styled } from "@mui/material/styles";
+import { styled, SxProps } from "@mui/material/styles";
 //
 import Image from "./Image";
 
@@ -22,6 +22,7 @@ interface EmptyContentProps {
   title?: string;
   img?: string;
   description?: string;
+  sx?: SxProps;
 }
 export default function EmptyContent({
   title,

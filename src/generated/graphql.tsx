@@ -45,6 +45,13 @@ export type AdminRegisterInput = {
   password: Scalars['String'];
 };
 
+export type Candidates = {
+  __typename?: 'Candidates';
+  hasMore: Scalars['Boolean'];
+  results: Array<RatingCandidate>;
+  totalCount: Scalars['Float'];
+};
+
 export type Club = {
   __typename?: 'Club';
   admin: Profile;
@@ -238,6 +245,22 @@ export type CreatePostInput = {
   title: Scalars['String'];
 };
 
+export type CreateRatingCandidateInput = {
+  bio: Scalars['String'];
+  name: Scalars['String'];
+  photo1?: InputMaybe<Scalars['Upload']>;
+  photo2?: InputMaybe<Scalars['Upload']>;
+  photo3?: InputMaybe<Scalars['Upload']>;
+};
+
+export type CreateRatingInput = {
+  description: Scalars['String'];
+  end: Scalars['String'];
+  name: Scalars['String'];
+  start: Scalars['String'];
+  status?: InputMaybe<Scalars['Float']>;
+};
+
 export type CreateVoteInput = {
   eventId: Scalars['String'];
   status: Scalars['Float'];
@@ -361,6 +384,7 @@ export type Mutation = {
   adminLogin: AdminMutationResponse;
   adminLogout: AdminMutationResponse;
   adminRegister: AdminMutationResponse;
+  adminSetRole: UserMutationResponse;
   cancelRequest: ClubMutationResponse;
   cancelRequestClub: ClubMutationResponse;
   changeAdmin: ClubMutationResponse;
@@ -369,15 +393,19 @@ export type Mutation = {
   changePassword: UserMutationResponse;
   changeSlots: EventMutationResponse;
   commentPost: CommentMutationResponse;
+  createCandidate: RatingMutationResponse;
   createClub: ClubMutationResponse;
   createEvent: EventMutationResponse;
   createPost: PostMutationResponse;
+  createRating: RatingMutationResponse;
+  deleteCandidate: RatingMutationResponse;
   deleteClub: ClubMutationResponse;
   deleteClubMember: ClubMutationResponse;
   deleteComment: CommentMutationResponse;
   deleteEvent: EventMutationResponse;
   deleteFriendShip: FriendMutaionResponse;
   deletePost: PostMutationResponse;
+  deleteRating: RatingMutationResponse;
   fbLogin: UserMutationResponse;
   follow: FollowingMutaionResponse;
   forgotPassword: UserMutationResponse;
@@ -393,11 +421,14 @@ export type Mutation = {
   setRole: ClubMutationResponse;
   unFollow: FollowingMutaionResponse;
   unVoteEvent: EventMutationResponse;
+  updateCandidate: RatingMutationResponse;
   updateClub: ClubMutationResponse;
   updateEvent: EventMutationResponse;
   updatePost: PostMutationResponse;
   updateProfile: ProfileMutationResponse;
+  updateRating: RatingMutationResponse;
   updateUser: UserMutationResponse;
+  voteCandidate: RatingMutationResponse;
   voteChangePaid: EventVoteMutationResponse;
   voteEvent: EventMutationResponse;
 };
@@ -441,6 +472,12 @@ export type MutationAdminLogoutArgs = {
 
 export type MutationAdminRegisterArgs = {
   adminRegisterInput: AdminRegisterInput;
+};
+
+
+export type MutationAdminSetRoleArgs = {
+  newRole: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 
@@ -493,6 +530,12 @@ export type MutationCommentPostArgs = {
 };
 
 
+export type MutationCreateCandidateArgs = {
+  createCandidateInput: CreateRatingCandidateInput;
+  ratingId: Scalars['ID'];
+};
+
+
 export type MutationCreateClubArgs = {
   createClubInput: CreateClubInput;
 };
@@ -505,6 +548,16 @@ export type MutationCreateEventArgs = {
 
 export type MutationCreatePostArgs = {
   createPostInput: CreatePostInput;
+};
+
+
+export type MutationCreateRatingArgs = {
+  createRatingInput: CreateRatingInput;
+};
+
+
+export type MutationDeleteCandidateArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -534,6 +587,11 @@ export type MutationDeleteFriendShipArgs = {
 
 
 export type MutationDeletePostArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteRatingArgs = {
   id: Scalars['ID'];
 };
 
@@ -613,6 +671,12 @@ export type MutationUnVoteEventArgs = {
 };
 
 
+export type MutationUpdateCandidateArgs = {
+  id: Scalars['String'];
+  updateCandidateInput: CreateRatingCandidateInput;
+};
+
+
 export type MutationUpdateClubArgs = {
   id: Scalars['String'];
   updateClubInput: UpdateClubInput;
@@ -636,8 +700,20 @@ export type MutationUpdateProfileArgs = {
 };
 
 
+export type MutationUpdateRatingArgs = {
+  id: Scalars['ID'];
+  updateRatingInput: CreateRatingInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
+};
+
+
+export type MutationVoteCandidateArgs = {
+  candidateId: Scalars['ID'];
+  ratingId: Scalars['ID'];
 };
 
 
@@ -786,6 +862,7 @@ export type Query = {
   clubmembers?: Maybe<Clubmembers>;
   clubs?: Maybe<Clubs>;
   comments?: Maybe<Comments>;
+  getCandidates?: Maybe<Candidates>;
   getClubRequestingNumber?: Maybe<Scalars['Float']>;
   getConversation?: Maybe<Conversation>;
   getConversations?: Maybe<Conversations>;
@@ -799,6 +876,7 @@ export type Query = {
   getNotifications?: Maybe<Notifications>;
   getProfile?: Maybe<Profile>;
   getProfiles?: Maybe<Profiles>;
+  getRatingVotes?: Maybe<RatingVotes>;
   getUnreadCount?: Maybe<Scalars['Float']>;
   getUsers?: Maybe<Users>;
   getVoteCount: Scalars['Float'];
@@ -809,8 +887,11 @@ export type Query = {
   me?: Maybe<User>;
   myEvents?: Maybe<Events>;
   myProfile?: Maybe<Profile>;
+  myRatings?: Maybe<Ratings>;
   post?: Maybe<Post>;
   posts?: Maybe<Posts>;
+  rating?: Maybe<Rating>;
+  ratings?: Maybe<Ratings>;
   users: Array<User>;
 };
 
@@ -841,6 +922,11 @@ export type QueryCommentsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   ordering?: InputMaybe<Scalars['String']>;
   postId: Scalars['ID'];
+};
+
+
+export type QueryGetCandidatesArgs = {
+  ratingId: Scalars['ID'];
 };
 
 
@@ -925,6 +1011,11 @@ export type QueryGetProfilesArgs = {
 };
 
 
+export type QueryGetRatingVotesArgs = {
+  candidateId?: InputMaybe<Scalars['ID']>;
+};
+
+
 export type QueryGetUsersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -964,6 +1055,76 @@ export type QueryPostsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   ordering?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryRatingArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryRatingsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  ordering?: InputMaybe<Scalars['String']>;
+};
+
+export type Rating = {
+  __typename?: 'Rating';
+  candidates: Array<RatingCandidate>;
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  end: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  start: Scalars['String'];
+  status: Scalars['Float'];
+  updatedAt: Scalars['DateTime'];
+  votedFor?: Maybe<RatingCandidate>;
+};
+
+export type RatingCandidate = {
+  __typename?: 'RatingCandidate';
+  bio?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  order?: Maybe<Scalars['Float']>;
+  photo1: Scalars['String'];
+  photo2?: Maybe<Scalars['String']>;
+  photo3?: Maybe<Scalars['String']>;
+  votes: Array<RatingVote>;
+};
+
+export type RatingMutationResponse = IMutationResponse & {
+  __typename?: 'RatingMutationResponse';
+  code: Scalars['Float'];
+  errors?: Maybe<Array<FieldError>>;
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
+export type RatingVote = {
+  __typename?: 'RatingVote';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  rating: Rating;
+  votedFor: RatingCandidate;
+  voter: User;
+};
+
+export type RatingVotes = {
+  __typename?: 'RatingVotes';
+  hasMore: Scalars['Boolean'];
+  results: Array<RatingVote>;
+  totalCount: Scalars['Float'];
+};
+
+export type Ratings = {
+  __typename?: 'Ratings';
+  hasMore: Scalars['Boolean'];
+  results: Array<Rating>;
+  totalCount: Scalars['Float'];
 };
 
 export type RegisterInput = {
@@ -1194,9 +1355,11 @@ type MutationStatuses_PostMutationResponse_Fragment = { __typename?: 'PostMutati
 
 type MutationStatuses_ProfileMutationResponse_Fragment = { __typename?: 'ProfileMutationResponse', code: number, success: boolean, message?: string | null };
 
+type MutationStatuses_RatingMutationResponse_Fragment = { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null };
+
 type MutationStatuses_UserMutationResponse_Fragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
-export type MutationStatusesFragment = MutationStatuses_AdminMutationResponse_Fragment | MutationStatuses_ClubMemberMutationResponse_Fragment | MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_EventVoteMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
+export type MutationStatusesFragment = MutationStatuses_AdminMutationResponse_Fragment | MutationStatuses_ClubMemberMutationResponse_Fragment | MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_EventVoteMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_RatingMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
 
 export type UserMutationStatusesFragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
@@ -1213,6 +1376,14 @@ export type PostMutationResponseFragment = { __typename?: 'PostMutationResponse'
 export type PostWithUserInfoFragment = { __typename?: 'Post', id: string, title: string, content: string, cover: string, description?: string | null, tags?: Array<string> | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, metaTitle?: string | null, publish: boolean, allowComments: boolean, createdAt: any, updatedAt: any, favorite: number, comment: number, author: { __typename?: 'User', id: string, displayName: string, avatar: string } };
 
 export type ProfileInfoFragment = { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null };
+
+export type RatingMutationResponseFragment = { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
+
+export type RatingInfoFragment = { __typename?: 'Rating', id: string, name: string, description?: string | null, start: string, end: string, createdAt: any, updatedAt: any, status: number };
+
+export type RatingCandidateInfoFragment = { __typename?: 'RatingCandidate', id: string, name: string, bio?: string | null, createdAt: any, order?: number | null, photo1: string, photo2?: string | null };
+
+export type RatingVoteInfoFragment = { __typename?: 'RatingVote', id: string, createdAt: any, voter: { __typename?: 'User', id: string, email: string, lastName: string, firstName?: string | null, isPublic: boolean, role: string, avatar: string, displayName: string, profile: { __typename?: 'Profile', id: string } } };
 
 export type UserInfoFragment = { __typename?: 'User', id: string, email: string, lastName: string, firstName?: string | null, isPublic: boolean, role: string, avatar: string, displayName: string, profile: { __typename?: 'Profile', id: string } };
 
@@ -1512,6 +1683,59 @@ export type ReplyCommentMutationVariables = Exact<{
 
 export type ReplyCommentMutation = { __typename?: 'Mutation', replyComment: { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null, comment?: { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
+export type DeleteRatingMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteRatingMutation = { __typename?: 'Mutation', deleteRating: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null } };
+
+export type CreateRatingMutationVariables = Exact<{
+  createRatingInput: CreateRatingInput;
+}>;
+
+
+export type CreateRatingMutation = { __typename?: 'Mutation', createRating: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type UpdateRatingMutationVariables = Exact<{
+  id: Scalars['ID'];
+  updateRatingInput: CreateRatingInput;
+}>;
+
+
+export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type DeleteCandidateMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteCandidateMutation = { __typename?: 'Mutation', deleteCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null } };
+
+export type CreateCandidateMutationVariables = Exact<{
+  ratingId: Scalars['ID'];
+  createCandidateInput: CreateRatingCandidateInput;
+}>;
+
+
+export type CreateCandidateMutation = { __typename?: 'Mutation', createCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type UpdateCandidateMutationVariables = Exact<{
+  id: Scalars['String'];
+  updateCandidateInput: CreateRatingCandidateInput;
+}>;
+
+
+export type UpdateCandidateMutation = { __typename?: 'Mutation', updateCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type VoteCandidateMutationVariables = Exact<{
+  ratingId: Scalars['ID'];
+  candidateId: Scalars['ID'];
+}>;
+
+
+export type VoteCandidateMutation = { __typename?: 'Mutation', voteCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type RegisterMutationVariables = Exact<{
   registerInput: RegisterInput;
 }>;
@@ -1741,6 +1965,41 @@ export type ProfilesQueryVariables = Exact<{
 
 
 export type ProfilesQuery = { __typename?: 'Query', getProfiles?: { __typename?: 'Profiles', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }> } | null };
+
+export type RatingsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  ordering?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'Ratings', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Rating', id: string, name: string, description?: string | null, start: string, end: string, createdAt: any, updatedAt: any, status: number }> } | null };
+
+export type MyRatingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyRatingsQuery = { __typename?: 'Query', myRatings?: { __typename?: 'Ratings', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Rating', id: string, name: string, description?: string | null, start: string, end: string, createdAt: any, updatedAt: any, status: number, votedFor?: { __typename?: 'RatingCandidate', id: string, name: string, bio?: string | null, createdAt: any, order?: number | null, photo1: string, photo2?: string | null } | null }> } | null };
+
+export type RatingQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type RatingQuery = { __typename?: 'Query', rating?: { __typename?: 'Rating', id: string, name: string, description?: string | null, start: string, end: string, createdAt: any, updatedAt: any, status: number } | null };
+
+export type GetCandidatesQueryVariables = Exact<{
+  ratingId: Scalars['ID'];
+}>;
+
+
+export type GetCandidatesQuery = { __typename?: 'Query', getCandidates?: { __typename?: 'Candidates', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'RatingCandidate', id: string, name: string, bio?: string | null, createdAt: any, order?: number | null, photo1: string, photo2?: string | null }> } | null };
+
+export type GetRatingVoteQueryVariables = Exact<{
+  candidateId: Scalars['ID'];
+}>;
+
+
+export type GetRatingVoteQuery = { __typename?: 'Query', getRatingVotes?: { __typename?: 'RatingVotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'RatingVote', id: string, createdAt: any, voter: { __typename?: 'User', id: string, email: string, lastName: string, firstName?: string | null, isPublic: boolean, role: string, avatar: string, displayName: string, profile: { __typename?: 'Profile', id: string } } }> } | null };
 
 export type MessageSendSubscriptionSubscriptionVariables = Exact<{
   conversationId: Scalars['ID'];
@@ -2114,6 +2373,39 @@ export const PostMutationResponseFragmentDoc = gql`
     ${PostMutationStatusesFragmentDoc}
 ${PostWithUserInfoFragmentDoc}
 ${FieldErrorFragmentDoc}`;
+export const RatingMutationResponseFragmentDoc = gql`
+    fragment ratingMutationResponse on RatingMutationResponse {
+  ...mutationStatuses
+  errors {
+    ...fieldError
+  }
+}
+    ${MutationStatusesFragmentDoc}
+${FieldErrorFragmentDoc}`;
+export const RatingInfoFragmentDoc = gql`
+    fragment ratingInfo on Rating {
+  id
+  name
+  description
+  start
+  end
+  createdAt
+  updatedAt
+  status
+}
+    `;
+export const RatingCandidateInfoFragmentDoc = gql`
+    fragment ratingCandidateInfo on RatingCandidate {
+  id
+  name
+  bio
+  createdAt
+  order
+  photo1
+  photo2
+  photo2
+}
+    `;
 export const UserInfoFragmentDoc = gql`
     fragment userInfo on User {
   id
@@ -2129,6 +2421,15 @@ export const UserInfoFragmentDoc = gql`
   }
 }
     `;
+export const RatingVoteInfoFragmentDoc = gql`
+    fragment ratingVoteInfo on RatingVote {
+  id
+  voter {
+    ...userInfo
+  }
+  createdAt
+}
+    ${UserInfoFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($code: String!, $newPassword: String!) {
   changePassword(code: $code, newPassword: $newPassword) {
@@ -3489,6 +3790,244 @@ export function useReplyCommentMutation(baseOptions?: Apollo.MutationHookOptions
 export type ReplyCommentMutationHookResult = ReturnType<typeof useReplyCommentMutation>;
 export type ReplyCommentMutationResult = Apollo.MutationResult<ReplyCommentMutation>;
 export type ReplyCommentMutationOptions = Apollo.BaseMutationOptions<ReplyCommentMutation, ReplyCommentMutationVariables>;
+export const DeleteRatingDocument = gql`
+    mutation DeleteRating($id: ID!) {
+  deleteRating(id: $id) {
+    ...mutationStatuses
+  }
+}
+    ${MutationStatusesFragmentDoc}`;
+export type DeleteRatingMutationFn = Apollo.MutationFunction<DeleteRatingMutation, DeleteRatingMutationVariables>;
+
+/**
+ * __useDeleteRatingMutation__
+ *
+ * To run a mutation, you first call `useDeleteRatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteRatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteRatingMutation, { data, loading, error }] = useDeleteRatingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteRatingMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRatingMutation, DeleteRatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRatingMutation, DeleteRatingMutationVariables>(DeleteRatingDocument, options);
+      }
+export type DeleteRatingMutationHookResult = ReturnType<typeof useDeleteRatingMutation>;
+export type DeleteRatingMutationResult = Apollo.MutationResult<DeleteRatingMutation>;
+export type DeleteRatingMutationOptions = Apollo.BaseMutationOptions<DeleteRatingMutation, DeleteRatingMutationVariables>;
+export const CreateRatingDocument = gql`
+    mutation CreateRating($createRatingInput: CreateRatingInput!) {
+  createRating(createRatingInput: $createRatingInput) {
+    ...ratingMutationResponse
+  }
+}
+    ${RatingMutationResponseFragmentDoc}`;
+export type CreateRatingMutationFn = Apollo.MutationFunction<CreateRatingMutation, CreateRatingMutationVariables>;
+
+/**
+ * __useCreateRatingMutation__
+ *
+ * To run a mutation, you first call `useCreateRatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRatingMutation, { data, loading, error }] = useCreateRatingMutation({
+ *   variables: {
+ *      createRatingInput: // value for 'createRatingInput'
+ *   },
+ * });
+ */
+export function useCreateRatingMutation(baseOptions?: Apollo.MutationHookOptions<CreateRatingMutation, CreateRatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRatingMutation, CreateRatingMutationVariables>(CreateRatingDocument, options);
+      }
+export type CreateRatingMutationHookResult = ReturnType<typeof useCreateRatingMutation>;
+export type CreateRatingMutationResult = Apollo.MutationResult<CreateRatingMutation>;
+export type CreateRatingMutationOptions = Apollo.BaseMutationOptions<CreateRatingMutation, CreateRatingMutationVariables>;
+export const UpdateRatingDocument = gql`
+    mutation UpdateRating($id: ID!, $updateRatingInput: CreateRatingInput!) {
+  updateRating(id: $id, updateRatingInput: $updateRatingInput) {
+    ...ratingMutationResponse
+  }
+}
+    ${RatingMutationResponseFragmentDoc}`;
+export type UpdateRatingMutationFn = Apollo.MutationFunction<UpdateRatingMutation, UpdateRatingMutationVariables>;
+
+/**
+ * __useUpdateRatingMutation__
+ *
+ * To run a mutation, you first call `useUpdateRatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRatingMutation, { data, loading, error }] = useUpdateRatingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      updateRatingInput: // value for 'updateRatingInput'
+ *   },
+ * });
+ */
+export function useUpdateRatingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRatingMutation, UpdateRatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRatingMutation, UpdateRatingMutationVariables>(UpdateRatingDocument, options);
+      }
+export type UpdateRatingMutationHookResult = ReturnType<typeof useUpdateRatingMutation>;
+export type UpdateRatingMutationResult = Apollo.MutationResult<UpdateRatingMutation>;
+export type UpdateRatingMutationOptions = Apollo.BaseMutationOptions<UpdateRatingMutation, UpdateRatingMutationVariables>;
+export const DeleteCandidateDocument = gql`
+    mutation DeleteCandidate($id: ID!) {
+  deleteCandidate(id: $id) {
+    ...mutationStatuses
+  }
+}
+    ${MutationStatusesFragmentDoc}`;
+export type DeleteCandidateMutationFn = Apollo.MutationFunction<DeleteCandidateMutation, DeleteCandidateMutationVariables>;
+
+/**
+ * __useDeleteCandidateMutation__
+ *
+ * To run a mutation, you first call `useDeleteCandidateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCandidateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCandidateMutation, { data, loading, error }] = useDeleteCandidateMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCandidateMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCandidateMutation, DeleteCandidateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCandidateMutation, DeleteCandidateMutationVariables>(DeleteCandidateDocument, options);
+      }
+export type DeleteCandidateMutationHookResult = ReturnType<typeof useDeleteCandidateMutation>;
+export type DeleteCandidateMutationResult = Apollo.MutationResult<DeleteCandidateMutation>;
+export type DeleteCandidateMutationOptions = Apollo.BaseMutationOptions<DeleteCandidateMutation, DeleteCandidateMutationVariables>;
+export const CreateCandidateDocument = gql`
+    mutation CreateCandidate($ratingId: ID!, $createCandidateInput: CreateRatingCandidateInput!) {
+  createCandidate(
+    ratingId: $ratingId
+    createCandidateInput: $createCandidateInput
+  ) {
+    ...ratingMutationResponse
+  }
+}
+    ${RatingMutationResponseFragmentDoc}`;
+export type CreateCandidateMutationFn = Apollo.MutationFunction<CreateCandidateMutation, CreateCandidateMutationVariables>;
+
+/**
+ * __useCreateCandidateMutation__
+ *
+ * To run a mutation, you first call `useCreateCandidateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCandidateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCandidateMutation, { data, loading, error }] = useCreateCandidateMutation({
+ *   variables: {
+ *      ratingId: // value for 'ratingId'
+ *      createCandidateInput: // value for 'createCandidateInput'
+ *   },
+ * });
+ */
+export function useCreateCandidateMutation(baseOptions?: Apollo.MutationHookOptions<CreateCandidateMutation, CreateCandidateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCandidateMutation, CreateCandidateMutationVariables>(CreateCandidateDocument, options);
+      }
+export type CreateCandidateMutationHookResult = ReturnType<typeof useCreateCandidateMutation>;
+export type CreateCandidateMutationResult = Apollo.MutationResult<CreateCandidateMutation>;
+export type CreateCandidateMutationOptions = Apollo.BaseMutationOptions<CreateCandidateMutation, CreateCandidateMutationVariables>;
+export const UpdateCandidateDocument = gql`
+    mutation UpdateCandidate($id: String!, $updateCandidateInput: CreateRatingCandidateInput!) {
+  updateCandidate(id: $id, updateCandidateInput: $updateCandidateInput) {
+    ...ratingMutationResponse
+  }
+}
+    ${RatingMutationResponseFragmentDoc}`;
+export type UpdateCandidateMutationFn = Apollo.MutationFunction<UpdateCandidateMutation, UpdateCandidateMutationVariables>;
+
+/**
+ * __useUpdateCandidateMutation__
+ *
+ * To run a mutation, you first call `useUpdateCandidateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCandidateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCandidateMutation, { data, loading, error }] = useUpdateCandidateMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      updateCandidateInput: // value for 'updateCandidateInput'
+ *   },
+ * });
+ */
+export function useUpdateCandidateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCandidateMutation, UpdateCandidateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCandidateMutation, UpdateCandidateMutationVariables>(UpdateCandidateDocument, options);
+      }
+export type UpdateCandidateMutationHookResult = ReturnType<typeof useUpdateCandidateMutation>;
+export type UpdateCandidateMutationResult = Apollo.MutationResult<UpdateCandidateMutation>;
+export type UpdateCandidateMutationOptions = Apollo.BaseMutationOptions<UpdateCandidateMutation, UpdateCandidateMutationVariables>;
+export const VoteCandidateDocument = gql`
+    mutation VoteCandidate($ratingId: ID!, $candidateId: ID!) {
+  voteCandidate(ratingId: $ratingId, candidateId: $candidateId) {
+    ...ratingMutationResponse
+  }
+}
+    ${RatingMutationResponseFragmentDoc}`;
+export type VoteCandidateMutationFn = Apollo.MutationFunction<VoteCandidateMutation, VoteCandidateMutationVariables>;
+
+/**
+ * __useVoteCandidateMutation__
+ *
+ * To run a mutation, you first call `useVoteCandidateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteCandidateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voteCandidateMutation, { data, loading, error }] = useVoteCandidateMutation({
+ *   variables: {
+ *      ratingId: // value for 'ratingId'
+ *      candidateId: // value for 'candidateId'
+ *   },
+ * });
+ */
+export function useVoteCandidateMutation(baseOptions?: Apollo.MutationHookOptions<VoteCandidateMutation, VoteCandidateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VoteCandidateMutation, VoteCandidateMutationVariables>(VoteCandidateDocument, options);
+      }
+export type VoteCandidateMutationHookResult = ReturnType<typeof useVoteCandidateMutation>;
+export type VoteCandidateMutationResult = Apollo.MutationResult<VoteCandidateMutation>;
+export type VoteCandidateMutationOptions = Apollo.BaseMutationOptions<VoteCandidateMutation, VoteCandidateMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($registerInput: RegisterInput!) {
   register(registerInput: $registerInput) {
@@ -4647,6 +5186,206 @@ export function useProfilesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
 export type ProfilesQueryHookResult = ReturnType<typeof useProfilesQuery>;
 export type ProfilesLazyQueryHookResult = ReturnType<typeof useProfilesLazyQuery>;
 export type ProfilesQueryResult = Apollo.QueryResult<ProfilesQuery, ProfilesQueryVariables>;
+export const RatingsDocument = gql`
+    query Ratings($limit: Int!, $offset: Int!, $ordering: String) {
+  ratings(limit: $limit, offset: $offset, ordering: $ordering) {
+    totalCount
+    hasMore
+    results {
+      ...ratingInfo
+    }
+  }
+}
+    ${RatingInfoFragmentDoc}`;
+
+/**
+ * __useRatingsQuery__
+ *
+ * To run a query within a React component, call `useRatingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRatingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRatingsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      ordering: // value for 'ordering'
+ *   },
+ * });
+ */
+export function useRatingsQuery(baseOptions: Apollo.QueryHookOptions<RatingsQuery, RatingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RatingsQuery, RatingsQueryVariables>(RatingsDocument, options);
+      }
+export function useRatingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RatingsQuery, RatingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RatingsQuery, RatingsQueryVariables>(RatingsDocument, options);
+        }
+export type RatingsQueryHookResult = ReturnType<typeof useRatingsQuery>;
+export type RatingsLazyQueryHookResult = ReturnType<typeof useRatingsLazyQuery>;
+export type RatingsQueryResult = Apollo.QueryResult<RatingsQuery, RatingsQueryVariables>;
+export const MyRatingsDocument = gql`
+    query MyRatings {
+  myRatings {
+    totalCount
+    hasMore
+    results {
+      ...ratingInfo
+      votedFor {
+        ...ratingCandidateInfo
+      }
+    }
+  }
+}
+    ${RatingInfoFragmentDoc}
+${RatingCandidateInfoFragmentDoc}`;
+
+/**
+ * __useMyRatingsQuery__
+ *
+ * To run a query within a React component, call `useMyRatingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyRatingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyRatingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyRatingsQuery(baseOptions?: Apollo.QueryHookOptions<MyRatingsQuery, MyRatingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyRatingsQuery, MyRatingsQueryVariables>(MyRatingsDocument, options);
+      }
+export function useMyRatingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyRatingsQuery, MyRatingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyRatingsQuery, MyRatingsQueryVariables>(MyRatingsDocument, options);
+        }
+export type MyRatingsQueryHookResult = ReturnType<typeof useMyRatingsQuery>;
+export type MyRatingsLazyQueryHookResult = ReturnType<typeof useMyRatingsLazyQuery>;
+export type MyRatingsQueryResult = Apollo.QueryResult<MyRatingsQuery, MyRatingsQueryVariables>;
+export const RatingDocument = gql`
+    query Rating($id: ID!) {
+  rating(id: $id) {
+    ...ratingInfo
+  }
+}
+    ${RatingInfoFragmentDoc}`;
+
+/**
+ * __useRatingQuery__
+ *
+ * To run a query within a React component, call `useRatingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRatingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRatingQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRatingQuery(baseOptions: Apollo.QueryHookOptions<RatingQuery, RatingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RatingQuery, RatingQueryVariables>(RatingDocument, options);
+      }
+export function useRatingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RatingQuery, RatingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RatingQuery, RatingQueryVariables>(RatingDocument, options);
+        }
+export type RatingQueryHookResult = ReturnType<typeof useRatingQuery>;
+export type RatingLazyQueryHookResult = ReturnType<typeof useRatingLazyQuery>;
+export type RatingQueryResult = Apollo.QueryResult<RatingQuery, RatingQueryVariables>;
+export const GetCandidatesDocument = gql`
+    query GetCandidates($ratingId: ID!) {
+  getCandidates(ratingId: $ratingId) {
+    totalCount
+    hasMore
+    results {
+      ...ratingCandidateInfo
+    }
+  }
+}
+    ${RatingCandidateInfoFragmentDoc}`;
+
+/**
+ * __useGetCandidatesQuery__
+ *
+ * To run a query within a React component, call `useGetCandidatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCandidatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCandidatesQuery({
+ *   variables: {
+ *      ratingId: // value for 'ratingId'
+ *   },
+ * });
+ */
+export function useGetCandidatesQuery(baseOptions: Apollo.QueryHookOptions<GetCandidatesQuery, GetCandidatesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCandidatesQuery, GetCandidatesQueryVariables>(GetCandidatesDocument, options);
+      }
+export function useGetCandidatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCandidatesQuery, GetCandidatesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCandidatesQuery, GetCandidatesQueryVariables>(GetCandidatesDocument, options);
+        }
+export type GetCandidatesQueryHookResult = ReturnType<typeof useGetCandidatesQuery>;
+export type GetCandidatesLazyQueryHookResult = ReturnType<typeof useGetCandidatesLazyQuery>;
+export type GetCandidatesQueryResult = Apollo.QueryResult<GetCandidatesQuery, GetCandidatesQueryVariables>;
+export const GetRatingVoteDocument = gql`
+    query GetRatingVote($candidateId: ID!) {
+  getRatingVotes(candidateId: $candidateId) {
+    totalCount
+    hasMore
+    results {
+      id
+      createdAt
+      voter {
+        ...userInfo
+      }
+    }
+  }
+}
+    ${UserInfoFragmentDoc}`;
+
+/**
+ * __useGetRatingVoteQuery__
+ *
+ * To run a query within a React component, call `useGetRatingVoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRatingVoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRatingVoteQuery({
+ *   variables: {
+ *      candidateId: // value for 'candidateId'
+ *   },
+ * });
+ */
+export function useGetRatingVoteQuery(baseOptions: Apollo.QueryHookOptions<GetRatingVoteQuery, GetRatingVoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRatingVoteQuery, GetRatingVoteQueryVariables>(GetRatingVoteDocument, options);
+      }
+export function useGetRatingVoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRatingVoteQuery, GetRatingVoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRatingVoteQuery, GetRatingVoteQueryVariables>(GetRatingVoteDocument, options);
+        }
+export type GetRatingVoteQueryHookResult = ReturnType<typeof useGetRatingVoteQuery>;
+export type GetRatingVoteLazyQueryHookResult = ReturnType<typeof useGetRatingVoteLazyQuery>;
+export type GetRatingVoteQueryResult = Apollo.QueryResult<GetRatingVoteQuery, GetRatingVoteQueryVariables>;
 export const MessageSendSubscriptionDocument = gql`
     subscription MessageSendSubscription($conversationId: ID!) {
   newMessageSent(conversationId: $conversationId) {

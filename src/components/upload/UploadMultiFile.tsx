@@ -29,6 +29,7 @@ export interface UploadMultiFileProps extends DropzoneOptions {
   onRemoveAll?: any;
   helperText?: ReactNode;
   sx?: SxProps;
+  thumbnail?: boolean;
 }
 export default function UploadMultiFile({
   error,
@@ -39,6 +40,7 @@ export default function UploadMultiFile({
   onRemoveAll,
   helperText,
   sx,
+  thumbnail,
   ...other
 }: UploadMultiFileProps) {
   const {
@@ -77,6 +79,7 @@ export default function UploadMultiFile({
         files={files}
         showPreview={showPreview}
         onRemove={onRemove}
+        thumbnail={thumbnail}
       />
 
       {files?.length > 0 && (
@@ -84,9 +87,11 @@ export default function UploadMultiFile({
           <Button color="inherit" size="small" onClick={onRemoveAll}>
             Remove all
           </Button>
-          <Button size="small" variant="contained" onClick={onUpload}>
-            Upload files
-          </Button>
+          {onUpload && (
+            <Button size="small" variant="contained" onClick={onUpload}>
+              Upload files
+            </Button>
+          )}
         </Stack>
       )}
 

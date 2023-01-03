@@ -1,12 +1,11 @@
-import { IconButton, List, ListItem, ListItemText } from "@mui/material";
+import { IconButton, List, Stack, Typography } from "@mui/material";
 // @mui
-import { alpha } from "@mui/material/styles";
+import { alpha, SxProps } from "@mui/material/styles";
 import { AnimatePresence, m } from "framer-motion";
 import { fData } from "../../utils/formatNumber";
-import getFileData from "../../utils/getFileData";
 import { varFade } from "../animate";
+import FileThumbnail, { fileData } from "../file-thumbnail";
 import Iconify from "../Iconify";
-import Image from "../Image";
 
 // ----------------------------------------------------------------------
 
@@ -14,88 +13,106 @@ interface MultiFilePreviewProps {
   files: any[];
   onRemove?: (file: any) => void;
   showPreview?: boolean;
+  thumbnail?: boolean;
+  sx?: SxProps;
 }
 export default function MultiFilePreview({
   showPreview = false,
   files,
   onRemove,
+  sx,
+  thumbnail,
 }: MultiFilePreviewProps) {
   const hasFile = files?.length > 0;
 
   return (
     <List disablePadding sx={{ ...(hasFile && { my: 3 }) }}>
       <AnimatePresence>
-        {files?.map((file, index) => {
-          const { key, name, size, preview } = getFileData(file, index);
+        {files?.map((file) => {
+          const { key, name = "", size = 0 } = fileData(file);
 
-          if (showPreview) {
+          const isNotFormatFile = typeof file === "string";
+
+          if (thumbnail) {
             return (
-              <ListItem
+              <Stack
                 key={key}
                 component={m.div}
-                {...varFade().inRight}
+                {...varFade().inUp}
+                alignItems="center"
+                display="inline-flex"
+                justifyContent="center"
                 sx={{
-                  p: 0,
                   m: 0.5,
                   width: 80,
                   height: 80,
                   borderRadius: 1.25,
                   overflow: "hidden",
                   position: "relative",
-                  display: "inline-flex",
                   border: (theme) => `solid 1px ${theme.palette.divider}`,
+                  ...sx,
                 }}
               >
-                <Image alt="preview" src={preview} ratio="1/1" />
+                <FileThumbnail
+                  tooltip
+                  imageView
+                  file={file}
+                  sx={{ position: "absolute" }}
+                  imgSx={{ position: "absolute" }}
+                />
 
                 {onRemove && (
                   <IconButton
                     size="small"
                     onClick={() => onRemove(file)}
                     sx={{
-                      top: 6,
-                      p: "2px",
-                      right: 6,
+                      top: 4,
+                      right: 4,
+                      p: "1px",
                       position: "absolute",
-                      color: "common.white",
-                      bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                      color: (theme) => alpha(theme.palette.common.white, 0.72),
+                      bgcolor: (theme) => alpha(theme.palette.grey[900], 0.48),
                       "&:hover": {
                         bgcolor: (theme) =>
-                          alpha(theme.palette.grey[900], 0.48),
+                          alpha(theme.palette.grey[900], 0.72),
                       },
                     }}
                   >
-                    <Iconify icon={"eva:close-fill"} />
+                    <Iconify icon="eva:close-fill" width={16} />
                   </IconButton>
                 )}
-              </ListItem>
+              </Stack>
             );
           }
 
           return (
-            <ListItem
+            <Stack
               key={key}
               component={m.div}
-              {...varFade().inRight}
+              {...varFade().inUp}
+              spacing={2}
+              direction="row"
+              alignItems="center"
               sx={{
                 my: 1,
-                px: 2,
+                px: 1,
                 py: 0.75,
                 borderRadius: 0.75,
                 border: (theme) => `solid 1px ${theme.palette.divider}`,
+                ...sx,
               }}
             >
-              <Iconify
-                icon={"eva:file-fill"}
-                sx={{ width: 28, height: 28, color: "text.secondary", mr: 2 }}
-              />
+              <FileThumbnail file={file} />
 
-              <ListItemText
-                primary={typeof file === "string" ? file : name}
-                secondary={typeof file === "string" ? "" : fData(size || 0)}
-                primaryTypographyProps={{ variant: "subtitle2" }}
-                secondaryTypographyProps={{ variant: "caption" }}
-              />
+              <Stack flexGrow={1} sx={{ minWidth: 0 }}>
+                <Typography variant="subtitle2" noWrap>
+                  {isNotFormatFile ? file : name}
+                </Typography>
+
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  {isNotFormatFile ? "" : fData(size)}
+                </Typography>
+              </Stack>
 
               {onRemove && (
                 <IconButton
@@ -103,10 +120,10 @@ export default function MultiFilePreview({
                   size="small"
                   onClick={() => onRemove(file)}
                 >
-                  <Iconify icon={"eva:close-fill"} />
+                  <Iconify icon="eva:close-fill" />
                 </IconButton>
               )}
-            </ListItem>
+            </Stack>
           );
         })}
       </AnimatePresence>

@@ -1,12 +1,26 @@
-import { Container, Stack } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
+import { SkeletionComment } from "components/skeleton";
+import { useMyRatingsQuery } from "generated/graphql";
 import { FC } from "react";
+import RatingCard from "./RatingCard";
 
 interface RatingListProps {}
 const RatingList: FC<RatingListProps> = (props) => {
+  const { data, loading, refetch } = useMyRatingsQuery();
+
+  if (loading) return <SkeletionComment />;
+  if (!data || data.myRatings.totalCount === 0) return <div>Empty</div>;
+
   return (
-    <Container maxWidth="xs" sx={{ pt: 3 }}>
-      <Stack direction="column" justifyContent="center" spacing={4}></Stack>
-    </Container>
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Stack direction="column" justifyContent="center" spacing={4}>
+          {data.myRatings.results.map((item) => (
+            <RatingCard data={item as any} postVoted={refetch} />
+          ))}
+        </Stack>
+      </Grid>
+    </Grid>
   );
 };
 

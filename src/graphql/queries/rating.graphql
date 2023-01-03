@@ -1,0 +1,49 @@
+query Ratings($limit: Int!, $offset: Int!, $ordering: String) {
+  ratings(limit: $limit, offset: $offset, ordering: $ordering) {
+    totalCount
+    hasMore
+    results {
+      ...ratingInfo
+    }
+  }
+}
+
+query MyRatings {
+  myRatings {
+    totalCount
+    hasMore
+    results {
+      ...ratingInfo
+      votedFor {
+        ...ratingCandidateInfo
+      }
+    }
+  }
+}
+query Rating($id: ID!) {
+  rating(id: $id) {
+    ...ratingInfo
+  }
+}
+query GetCandidates($ratingId: ID!) {
+  getCandidates(ratingId: $ratingId) {
+    totalCount
+    hasMore
+    results {
+      ...ratingCandidateInfo
+    }
+  }
+}
+query GetRatingVote($candidateId: ID!) {
+  getRatingVotes(candidateId: $candidateId) {
+    totalCount
+    hasMore
+    results {
+      id
+      createdAt
+      voter {
+        ...userInfo
+      }
+    }
+  }
+}

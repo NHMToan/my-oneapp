@@ -1,0 +1,46 @@
+mutation DeleteRating($id: ID!) {
+  deleteRating(id: $id) {
+    ...mutationStatuses
+  }
+}
+
+mutation CreateRating($createRatingInput: CreateRatingInput!) {
+  createRating(createRatingInput: $createRatingInput) {
+    ...ratingMutationResponse
+  }
+}
+mutation UpdateRating($id: ID!, $updateRatingInput: CreateRatingInput!) {
+  updateRating(id: $id, updateRatingInput: $updateRatingInput) {
+    ...ratingMutationResponse
+  }
+}
+mutation DeleteCandidate($id: ID!) {
+  deleteCandidate(id: $id) {
+    ...mutationStatuses
+  }
+}
+
+mutation CreateCandidate(
+  $ratingId: ID!
+  $createCandidateInput: CreateRatingCandidateInput!
+) {
+  createCandidate(
+    ratingId: $ratingId
+    createCandidateInput: $createCandidateInput
+  ) {
+    ...ratingMutationResponse
+  }
+}
+mutation UpdateCandidate(
+  $id: String!
+  $updateCandidateInput: CreateRatingCandidateInput!
+) {
+  updateCandidate(id: $id, updateCandidateInput: $updateCandidateInput) {
+    ...ratingMutationResponse
+  }
+}
+mutation VoteCandidate($ratingId: ID!, $candidateId: ID!) {
+  voteCandidate(ratingId: $ratingId, candidateId: $candidateId) {
+    ...ratingMutationResponse
+  }
+}

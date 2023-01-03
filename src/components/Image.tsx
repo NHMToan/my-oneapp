@@ -1,9 +1,11 @@
 // @mui
 import { Box, SxProps } from "@mui/material";
+import { useState } from "react";
 import {
   LazyLoadImage,
-  LazyLoadImageProps
+  LazyLoadImageProps,
 } from "react-lazy-load-image-component";
+import LightboxModal from "./LightboxModal";
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +23,7 @@ interface ImageProps extends LazyLoadImageProps {
     | "1/1";
   sx?: SxProps;
   visibleByDefault?: boolean;
+  clickable?: boolean;
 }
 
 export default function Image({
@@ -28,8 +31,21 @@ export default function Image({
   disabledEffect = false,
   effect = "blur",
   sx,
+  clickable,
   ...other
 }: ImageProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const lightBox = () => {
+    return (
+      <LightboxModal
+        images={[other.src]}
+        mainSrc={other.src}
+        isOpen={isOpen}
+        onCloseRequest={() => setIsOpen(false)}
+      />
+    );
+  };
+
   if (ratio) {
     return (
       <Box
@@ -50,6 +66,7 @@ export default function Image({
             position: "absolute",
             backgroundSize: "cover !important",
           },
+          cursor: "pointer",
           ...sx,
         }}
       >
@@ -59,8 +76,12 @@ export default function Image({
           effect={disabledEffect ? undefined : effect}
           placeholderSrc="/assets/placeholder.svg"
           sx={{ width: 1, height: 1, objectFit: "cover" }}
+          onClick={() => {
+            if (other.src && clickable) setIsOpen(true);
+          }}
           {...other}
         />
+        {lightBox()}
       </Box>
     );
   }
@@ -77,6 +98,7 @@ export default function Image({
           height: 1,
           backgroundSize: "cover !important",
         },
+        cursor: "pointer",
         ...sx,
       }}
     >
@@ -86,8 +108,12 @@ export default function Image({
         effect={disabledEffect ? undefined : effect}
         placeholderSrc="/assets/placeholder.svg"
         sx={{ width: 1, height: 1, objectFit: "cover" }}
+        onClick={() => {
+          if (other.src && clickable) setIsOpen(true);
+        }}
         {...other}
       />
+      {lightBox()}
     </Box>
   );
 }

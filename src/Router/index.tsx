@@ -1,6 +1,7 @@
 import { PATH_AFTER_LOGIN } from "config";
 import AuthGuard from "guards/AuthGuard";
 import GuestGuard from "guards/GuestGuard";
+import AdminLayout from "layouts/admin";
 import DashboardLayout from "layouts/dashboard";
 import LogoOnlyLayout from "layouts/LogoOnlyLayout";
 import { lazy, Suspense } from "react";
@@ -100,9 +101,19 @@ export default function Router() {
               element: <Rating />,
               index: true,
             },
-            { path: ":id", element: <Rating /> },
-            { path: "new", element: <RatingForm /> },
-            { path: ":id/edit", element: <RatingForm /> },
+          ],
+        },
+        {
+          path: "admin-rating",
+          element: <AdminLayout />,
+          children: [
+            {
+              element: <AdminRatingList />,
+              index: true,
+            },
+            { path: ":id", element: <AdminRatingDetails /> },
+            { path: "new", element: <AdminRatingForm /> },
+            { path: ":id/edit", element: <AdminRatingForm /> },
           ],
         },
         {
@@ -168,4 +179,14 @@ const Notification = Loadable(lazy(() => import("../pages/Notification")));
 
 //Rating
 const Rating = Loadable(lazy(() => import("../pages/Rating")));
-const RatingForm = Loadable(lazy(() => import("../pages/Rating/RatingForm")));
+
+//Admin
+const AdminRatingList = Loadable(
+  lazy(() => import("../pages/Admin/Rating/RatingList"))
+);
+const AdminRatingDetails = Loadable(
+  lazy(() => import("../pages/Admin/Rating/RatingDetails"))
+);
+const AdminRatingForm = Loadable(
+  lazy(() => import("../pages/Admin/Rating/RatingForm"))
+);
