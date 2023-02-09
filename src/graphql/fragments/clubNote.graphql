@@ -1,0 +1,17 @@
+fragment clubNoteMutationResponse on ClubNoteMutationResponse {
+  ...mutationStatuses
+  note {
+    ...clubNoteInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+
+fragment clubNoteInfo on ClubNote {
+  id
+  description
+  createdAt
+  updatedAt
+  isPublic
+}

@@ -4,6 +4,7 @@ import {
   CardHeader,
   Paper,
   Stack,
+  styled,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -16,17 +17,59 @@ import {
   useGetCandidatesQuery,
   useVoteCandidateMutation,
 } from "generated/graphql";
+import useCountdown from "hooks/useCountdown";
 import { useSnackbar } from "notistack";
 import { RatingCandidateData, RatingData } from "pages/Admin/Rating/data.t";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 interface CandidatesProps {
   rating: RatingData;
   postVoted: any;
 }
+const CountdownStyle = styled("div")({
+  display: "flex",
+});
+
+const SeparatorStyle = styled(Typography)(({ theme }: { theme: any }) => ({
+  margin: theme.spacing(0, 1),
+  [theme.breakpoints.up("sm")]: {
+    margin: theme.spacing(0, 0.5),
+  },
+}));
+const RenderCountdown = ({ date, onEnd }) => {
+  const countdown = useCountdown(new Date(date));
+  useEffect(() => {
+    const now = new Date();
+    if (now > new Date(date)) {
+      onEnd();
+    }
+  }, [countdown]);
+  return (
+    <CountdownStyle>
+      <div>
+        <Typography>{countdown.hours}</Typography>
+      </div>
+
+      <SeparatorStyle>:</SeparatorStyle>
+
+      <div>
+        <Typography>{countdown.minutes}</Typography>
+      </div>
+
+      <SeparatorStyle>:</SeparatorStyle>
+
+      <div>
+        <Typography>{countdown.seconds}</Typography>
+      </div>
+    </CountdownStyle>
+  );
+};
+
 const Candidates: FC<CandidatesProps> = ({ rating, postVoted }) => {
   const theme = useTheme();
-
+  const [isClose, setIsClose] = useState<boolean>(
+    new Date() > new Date(rating?.end)
+  );
   const { data, loading } = useGetCandidatesQuery({
     variables: { ratingId: rating?.id },
     skip: !rating,
@@ -70,9 +113,22 @@ const Candidates: FC<CandidatesProps> = ({ rating, postVoted }) => {
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box>
       <CardHeader
-        title={rating.name}
+        title={
+          <>
+            {rating.name}{" "}
+            {!isClose && (
+              <RenderCountdown
+                onEnd={() => {
+                  setIsClose(true);
+                }}
+                date={rating.end}
+              />
+            )}
+          </>
+        }
+        subheader={`${data?.getCandidates?.totalCount || 0} candidates`}
         action={
           <Stack direction="row" spacing={3}>
             {data?.getCandidates?.totalCount > 0 && (
@@ -99,6 +155,7 @@ const Candidates: FC<CandidatesProps> = ({ rating, postVoted }) => {
               voteFor={rating?.votedFor}
               rating={rating}
               postVoted={postVoted}
+              isClose={isClose}
             />
           ))}
         </Carousel>
@@ -113,6 +170,7 @@ interface CandidateCardProps {
   voteFor?: RatingCandidateData;
   rating: RatingData;
   postVoted: any;
+  isClose: boolean;
 }
 const CandidateCard: FC<CandidateCardProps> = ({
   data,
@@ -120,6 +178,7 @@ const CandidateCard: FC<CandidateCardProps> = ({
   voteFor,
   rating,
   postVoted,
+  isClose,
 }) => {
   const { photo1, name, bio } = data;
   const [onVote] = useVoteCandidateMutation();
@@ -128,7 +187,7 @@ const CandidateCard: FC<CandidateCardProps> = ({
   return (
     <Paper
       sx={{
-        mx: 1.5,
+        mx: 1,
         borderRadius: 2,
         bgcolor: isVoted
           ? (theme: any) => theme.palette["primary"].lighter
@@ -189,6 +248,7 @@ const CandidateCard: FC<CandidateCardProps> = ({
                         if (res?.data?.voteCandidate?.success) {
                           enqueueSnackbar("Thanks for your vote!");
                           postVoted();
+                          setOpenVote(false);
                         }
                       } catch (e) {
                         console.error(e);
@@ -203,7 +263,7 @@ const CandidateCard: FC<CandidateCardProps> = ({
               <Button
                 variant="contained"
                 fullWidth
-                disabled={isVoted}
+                disabled={isVoted || isClose}
                 onClick={() => {
                   setOpenVote(true);
                 }}

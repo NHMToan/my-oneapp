@@ -18,6 +18,7 @@ export const PATH_AUTH = {
 
 export const PATH_DASHBOARD = {
   root: "/home",
+  event: "/event",
   general: {
     app: "/home",
   },

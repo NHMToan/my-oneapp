@@ -1,0 +1,26 @@
+query MyClubNotes {
+  myClubNotes {
+    totalCount
+    hasMore
+    results {
+      ...clubNoteInfo
+      club {
+        id
+        title
+      }
+    }
+  }
+}
+query ClubNotes($limit: Int!, $offset: Int!, $clubId: ID!) {
+  clubNotes(limit: $limit, offset: $offset, clubId: $clubId) {
+    totalCount
+    hasMore
+    results {
+      ...clubNoteInfo
+      club {
+        id
+        title
+      }
+    }
+  }
+}

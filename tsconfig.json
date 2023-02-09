@@ -20,5 +20,5 @@
     "noUnusedLocals": true,
     "rootDir": "src"
   },
-  "include": ["src", "config-overrides.js"]
+  "include": ["src", "config-overrides.js", "OneSignalSDKWorker.js"]
 }

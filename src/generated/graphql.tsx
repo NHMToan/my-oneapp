@@ -130,6 +130,32 @@ export type ClubMutationResponse = IMutationResponse & {
   success: Scalars['Boolean'];
 };
 
+export type ClubNote = {
+  __typename?: 'ClubNote';
+  club: Club;
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  isPublic: Scalars['Boolean'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ClubNoteMutationResponse = IMutationResponse & {
+  __typename?: 'ClubNoteMutationResponse';
+  code: Scalars['Float'];
+  errors?: Maybe<Array<FieldError>>;
+  message?: Maybe<Scalars['String']>;
+  note?: Maybe<ClubNote>;
+  success: Scalars['Boolean'];
+};
+
+export type ClubNotes = {
+  __typename?: 'ClubNotes';
+  hasMore: Scalars['Boolean'];
+  results: Array<ClubNote>;
+  totalCount: Scalars['Float'];
+};
+
 export type Clubmembers = {
   __typename?: 'Clubmembers';
   hasMore: Scalars['Boolean'];
@@ -214,6 +240,12 @@ export type CreateClubInput = {
   key: Scalars['String'];
   publish: Scalars['Boolean'];
   title: Scalars['String'];
+};
+
+export type CreateClubNoteInput = {
+  clubId: Scalars['String'];
+  description: Scalars['String'];
+  isPublic: Scalars['Boolean'];
 };
 
 export type CreateEventInput = {
@@ -388,6 +420,7 @@ export type Mutation = {
   cancelRequest: ClubMutationResponse;
   cancelRequestClub: ClubMutationResponse;
   changeAdmin: ClubMutationResponse;
+  changeClubNoteStatus: ClubNoteMutationResponse;
   changeEventStatus: EventMutationResponse;
   changeEventVote: EventMutationResponse;
   changePassword: UserMutationResponse;
@@ -395,12 +428,14 @@ export type Mutation = {
   commentPost: CommentMutationResponse;
   createCandidate: RatingMutationResponse;
   createClub: ClubMutationResponse;
+  createClubNote: ClubNoteMutationResponse;
   createEvent: EventMutationResponse;
   createPost: PostMutationResponse;
   createRating: RatingMutationResponse;
   deleteCandidate: RatingMutationResponse;
   deleteClub: ClubMutationResponse;
   deleteClubMember: ClubMutationResponse;
+  deleteClubNote: ClubNoteMutationResponse;
   deleteComment: CommentMutationResponse;
   deleteEvent: EventMutationResponse;
   deleteFriendShip: FriendMutaionResponse;
@@ -423,6 +458,7 @@ export type Mutation = {
   unVoteEvent: EventMutationResponse;
   updateCandidate: RatingMutationResponse;
   updateClub: ClubMutationResponse;
+  updateClubNote: ClubNoteMutationResponse;
   updateEvent: EventMutationResponse;
   updatePost: PostMutationResponse;
   updateProfile: ProfileMutationResponse;
@@ -497,6 +533,12 @@ export type MutationChangeAdminArgs = {
 };
 
 
+export type MutationChangeClubNoteStatusArgs = {
+  id: Scalars['ID'];
+  isPublic: Scalars['Boolean'];
+};
+
+
 export type MutationChangeEventStatusArgs = {
   id: Scalars['ID'];
   status: Scalars['Int'];
@@ -541,6 +583,11 @@ export type MutationCreateClubArgs = {
 };
 
 
+export type MutationCreateClubNoteArgs = {
+  createClubNoteInput: CreateClubNoteInput;
+};
+
+
 export type MutationCreateEventArgs = {
   createEventInput: CreateEventInput;
 };
@@ -567,6 +614,11 @@ export type MutationDeleteClubArgs = {
 
 
 export type MutationDeleteClubMemberArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteClubNoteArgs = {
   id: Scalars['ID'];
 };
 
@@ -680,6 +732,12 @@ export type MutationUpdateCandidateArgs = {
 export type MutationUpdateClubArgs = {
   id: Scalars['String'];
   updateClubInput: UpdateClubInput;
+};
+
+
+export type MutationUpdateClubNoteArgs = {
+  id: Scalars['ID'];
+  updateClubNoteInput: UpdateClubNoteInput;
 };
 
 
@@ -859,6 +917,7 @@ export type Profiles = {
 export type Query = {
   __typename?: 'Query';
   club?: Maybe<Club>;
+  clubNotes?: Maybe<ClubNotes>;
   clubmembers?: Maybe<Clubmembers>;
   clubs?: Maybe<Clubs>;
   comments?: Maybe<Comments>;
@@ -885,7 +944,9 @@ export type Query = {
   getWaitingVote: Scalars['Float'];
   hello: Scalars['Float'];
   me?: Maybe<User>;
+  myClubNotes?: Maybe<ClubNotes>;
   myEvents?: Maybe<Events>;
+  myEventsCount?: Maybe<Scalars['Float']>;
   myProfile?: Maybe<Profile>;
   myRatings?: Maybe<Ratings>;
   post?: Maybe<Post>;
@@ -898,6 +959,14 @@ export type Query = {
 
 export type QueryClubArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryClubNotesArgs = {
+  clubId: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  ordering?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1176,6 +1245,11 @@ export type UpdateClubInput = {
   title: Scalars['String'];
 };
 
+export type UpdateClubNoteInput = {
+  description: Scalars['String'];
+  isPublic: Scalars['Boolean'];
+};
+
 export type UpdateEventInput = {
   address?: InputMaybe<Scalars['String']>;
   addressLink?: InputMaybe<Scalars['String']>;
@@ -1315,6 +1389,10 @@ export type ClubInfoFragment = { __typename?: 'Club', id: string, title: string,
 
 export type ClubMemberInfoFragment = { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } };
 
+export type ClubNoteMutationResponseFragment = { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
+
+export type ClubNoteInfoFragment = { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean };
+
 export type CommentInfoFragment = { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string }, replyComments?: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } }> | null };
 
 export type CommentMutationResponseFragment = { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null, comment?: { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
@@ -1336,6 +1414,8 @@ type MutationStatuses_AdminMutationResponse_Fragment = { __typename?: 'AdminMuta
 type MutationStatuses_ClubMemberMutationResponse_Fragment = { __typename?: 'ClubMemberMutationResponse', code: number, success: boolean, message?: string | null };
 
 type MutationStatuses_ClubMutationResponse_Fragment = { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null };
+
+type MutationStatuses_ClubNoteMutationResponse_Fragment = { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null };
 
 type MutationStatuses_CommentMutationResponse_Fragment = { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null };
 
@@ -1359,7 +1439,7 @@ type MutationStatuses_RatingMutationResponse_Fragment = { __typename?: 'RatingMu
 
 type MutationStatuses_UserMutationResponse_Fragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
-export type MutationStatusesFragment = MutationStatuses_AdminMutationResponse_Fragment | MutationStatuses_ClubMemberMutationResponse_Fragment | MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_EventVoteMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_RatingMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
+export type MutationStatusesFragment = MutationStatuses_AdminMutationResponse_Fragment | MutationStatuses_ClubMemberMutationResponse_Fragment | MutationStatuses_ClubMutationResponse_Fragment | MutationStatuses_ClubNoteMutationResponse_Fragment | MutationStatuses_CommentMutationResponse_Fragment | MutationStatuses_ConversationMutationResponse_Fragment | MutationStatuses_EventMutationResponse_Fragment | MutationStatuses_EventVoteMutationResponse_Fragment | MutationStatuses_FollowingMutaionResponse_Fragment | MutationStatuses_FriendMutaionResponse_Fragment | MutationStatuses_MutationResponse_Fragment | MutationStatuses_PostMutationResponse_Fragment | MutationStatuses_ProfileMutationResponse_Fragment | MutationStatuses_RatingMutationResponse_Fragment | MutationStatuses_UserMutationResponse_Fragment;
 
 export type UserMutationStatusesFragment = { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null };
 
@@ -1489,6 +1569,36 @@ export type CancelRequestMutationVariables = Exact<{
 
 
 export type CancelRequestMutation = { __typename?: 'Mutation', cancelRequest: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type CreateClubNoteMutationVariables = Exact<{
+  createClubNoteInput: CreateClubNoteInput;
+}>;
+
+
+export type CreateClubNoteMutation = { __typename?: 'Mutation', createClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type UpdateClubNoteMutationVariables = Exact<{
+  id: Scalars['ID'];
+  updateClubNoteInput: UpdateClubNoteInput;
+}>;
+
+
+export type UpdateClubNoteMutation = { __typename?: 'Mutation', updateClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type ChangeClubNoteStatusMutationVariables = Exact<{
+  id: Scalars['ID'];
+  isPublic: Scalars['Boolean'];
+}>;
+
+
+export type ChangeClubNoteStatusMutation = { __typename?: 'Mutation', changeClubNoteStatus: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type DeleteClubNoteMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteClubNoteMutation = { __typename?: 'Mutation', deleteClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CreateEventMutationVariables = Exact<{
   createEventInput: CreateEventInput;
@@ -1808,6 +1918,20 @@ export type ClubMembersQueryVariables = Exact<{
 
 export type ClubMembersQuery = { __typename?: 'Query', clubmembers?: { __typename?: 'Clubmembers', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } }> } | null };
 
+export type MyClubNotesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyClubNotesQuery = { __typename?: 'Query', myClubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, club: { __typename?: 'Club', id: string, title: string } }> } | null };
+
+export type ClubNotesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  clubId: Scalars['ID'];
+}>;
+
+
+export type ClubNotesQuery = { __typename?: 'Query', clubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, club: { __typename?: 'Club', id: string, title: string } }> } | null };
+
 export type CommentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1840,6 +1964,11 @@ export type MyEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MyEventsQuery = { __typename?: 'Query', myEvents?: { __typename?: 'Events', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
+
+export type MyEventsCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyEventsCountQuery = { __typename?: 'Query', myEventsCount?: number | null };
 
 export type GetVotesQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -2175,6 +2304,28 @@ export const ClubMemberMutationResponseFragmentDoc = gql`
 }
     ${MutationStatusesFragmentDoc}
 ${ClubMemberInfoFragmentDoc}
+${FieldErrorFragmentDoc}`;
+export const ClubNoteInfoFragmentDoc = gql`
+    fragment clubNoteInfo on ClubNote {
+  id
+  description
+  createdAt
+  updatedAt
+  isPublic
+}
+    `;
+export const ClubNoteMutationResponseFragmentDoc = gql`
+    fragment clubNoteMutationResponse on ClubNoteMutationResponse {
+  ...mutationStatuses
+  note {
+    ...clubNoteInfo
+  }
+  errors {
+    ...fieldError
+  }
+}
+    ${MutationStatusesFragmentDoc}
+${ClubNoteInfoFragmentDoc}
 ${FieldErrorFragmentDoc}`;
 export const CommentInfoFragmentDoc = gql`
     fragment commentInfo on Comment {
@@ -2897,6 +3048,140 @@ export function useCancelRequestMutation(baseOptions?: Apollo.MutationHookOption
 export type CancelRequestMutationHookResult = ReturnType<typeof useCancelRequestMutation>;
 export type CancelRequestMutationResult = Apollo.MutationResult<CancelRequestMutation>;
 export type CancelRequestMutationOptions = Apollo.BaseMutationOptions<CancelRequestMutation, CancelRequestMutationVariables>;
+export const CreateClubNoteDocument = gql`
+    mutation CreateClubNote($createClubNoteInput: CreateClubNoteInput!) {
+  createClubNote(createClubNoteInput: $createClubNoteInput) {
+    ...clubNoteMutationResponse
+  }
+}
+    ${ClubNoteMutationResponseFragmentDoc}`;
+export type CreateClubNoteMutationFn = Apollo.MutationFunction<CreateClubNoteMutation, CreateClubNoteMutationVariables>;
+
+/**
+ * __useCreateClubNoteMutation__
+ *
+ * To run a mutation, you first call `useCreateClubNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateClubNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createClubNoteMutation, { data, loading, error }] = useCreateClubNoteMutation({
+ *   variables: {
+ *      createClubNoteInput: // value for 'createClubNoteInput'
+ *   },
+ * });
+ */
+export function useCreateClubNoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateClubNoteMutation, CreateClubNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateClubNoteMutation, CreateClubNoteMutationVariables>(CreateClubNoteDocument, options);
+      }
+export type CreateClubNoteMutationHookResult = ReturnType<typeof useCreateClubNoteMutation>;
+export type CreateClubNoteMutationResult = Apollo.MutationResult<CreateClubNoteMutation>;
+export type CreateClubNoteMutationOptions = Apollo.BaseMutationOptions<CreateClubNoteMutation, CreateClubNoteMutationVariables>;
+export const UpdateClubNoteDocument = gql`
+    mutation UpdateClubNote($id: ID!, $updateClubNoteInput: UpdateClubNoteInput!) {
+  updateClubNote(id: $id, updateClubNoteInput: $updateClubNoteInput) {
+    ...clubNoteMutationResponse
+  }
+}
+    ${ClubNoteMutationResponseFragmentDoc}`;
+export type UpdateClubNoteMutationFn = Apollo.MutationFunction<UpdateClubNoteMutation, UpdateClubNoteMutationVariables>;
+
+/**
+ * __useUpdateClubNoteMutation__
+ *
+ * To run a mutation, you first call `useUpdateClubNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClubNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClubNoteMutation, { data, loading, error }] = useUpdateClubNoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      updateClubNoteInput: // value for 'updateClubNoteInput'
+ *   },
+ * });
+ */
+export function useUpdateClubNoteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateClubNoteMutation, UpdateClubNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateClubNoteMutation, UpdateClubNoteMutationVariables>(UpdateClubNoteDocument, options);
+      }
+export type UpdateClubNoteMutationHookResult = ReturnType<typeof useUpdateClubNoteMutation>;
+export type UpdateClubNoteMutationResult = Apollo.MutationResult<UpdateClubNoteMutation>;
+export type UpdateClubNoteMutationOptions = Apollo.BaseMutationOptions<UpdateClubNoteMutation, UpdateClubNoteMutationVariables>;
+export const ChangeClubNoteStatusDocument = gql`
+    mutation ChangeClubNoteStatus($id: ID!, $isPublic: Boolean!) {
+  changeClubNoteStatus(id: $id, isPublic: $isPublic) {
+    ...clubNoteMutationResponse
+  }
+}
+    ${ClubNoteMutationResponseFragmentDoc}`;
+export type ChangeClubNoteStatusMutationFn = Apollo.MutationFunction<ChangeClubNoteStatusMutation, ChangeClubNoteStatusMutationVariables>;
+
+/**
+ * __useChangeClubNoteStatusMutation__
+ *
+ * To run a mutation, you first call `useChangeClubNoteStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeClubNoteStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeClubNoteStatusMutation, { data, loading, error }] = useChangeClubNoteStatusMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      isPublic: // value for 'isPublic'
+ *   },
+ * });
+ */
+export function useChangeClubNoteStatusMutation(baseOptions?: Apollo.MutationHookOptions<ChangeClubNoteStatusMutation, ChangeClubNoteStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeClubNoteStatusMutation, ChangeClubNoteStatusMutationVariables>(ChangeClubNoteStatusDocument, options);
+      }
+export type ChangeClubNoteStatusMutationHookResult = ReturnType<typeof useChangeClubNoteStatusMutation>;
+export type ChangeClubNoteStatusMutationResult = Apollo.MutationResult<ChangeClubNoteStatusMutation>;
+export type ChangeClubNoteStatusMutationOptions = Apollo.BaseMutationOptions<ChangeClubNoteStatusMutation, ChangeClubNoteStatusMutationVariables>;
+export const DeleteClubNoteDocument = gql`
+    mutation DeleteClubNote($id: ID!) {
+  deleteClubNote(id: $id) {
+    ...clubNoteMutationResponse
+  }
+}
+    ${ClubNoteMutationResponseFragmentDoc}`;
+export type DeleteClubNoteMutationFn = Apollo.MutationFunction<DeleteClubNoteMutation, DeleteClubNoteMutationVariables>;
+
+/**
+ * __useDeleteClubNoteMutation__
+ *
+ * To run a mutation, you first call `useDeleteClubNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClubNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClubNoteMutation, { data, loading, error }] = useDeleteClubNoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteClubNoteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteClubNoteMutation, DeleteClubNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteClubNoteMutation, DeleteClubNoteMutationVariables>(DeleteClubNoteDocument, options);
+      }
+export type DeleteClubNoteMutationHookResult = ReturnType<typeof useDeleteClubNoteMutation>;
+export type DeleteClubNoteMutationResult = Apollo.MutationResult<DeleteClubNoteMutation>;
+export type DeleteClubNoteMutationOptions = Apollo.BaseMutationOptions<DeleteClubNoteMutation, DeleteClubNoteMutationVariables>;
 export const CreateEventDocument = gql`
     mutation CreateEvent($createEventInput: CreateEventInput!) {
   createEvent(createEventInput: $createEventInput) {
@@ -4381,6 +4666,93 @@ export function useClubMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type ClubMembersQueryHookResult = ReturnType<typeof useClubMembersQuery>;
 export type ClubMembersLazyQueryHookResult = ReturnType<typeof useClubMembersLazyQuery>;
 export type ClubMembersQueryResult = Apollo.QueryResult<ClubMembersQuery, ClubMembersQueryVariables>;
+export const MyClubNotesDocument = gql`
+    query MyClubNotes {
+  myClubNotes {
+    totalCount
+    hasMore
+    results {
+      ...clubNoteInfo
+      club {
+        id
+        title
+      }
+    }
+  }
+}
+    ${ClubNoteInfoFragmentDoc}`;
+
+/**
+ * __useMyClubNotesQuery__
+ *
+ * To run a query within a React component, call `useMyClubNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyClubNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyClubNotesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyClubNotesQuery(baseOptions?: Apollo.QueryHookOptions<MyClubNotesQuery, MyClubNotesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyClubNotesQuery, MyClubNotesQueryVariables>(MyClubNotesDocument, options);
+      }
+export function useMyClubNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyClubNotesQuery, MyClubNotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyClubNotesQuery, MyClubNotesQueryVariables>(MyClubNotesDocument, options);
+        }
+export type MyClubNotesQueryHookResult = ReturnType<typeof useMyClubNotesQuery>;
+export type MyClubNotesLazyQueryHookResult = ReturnType<typeof useMyClubNotesLazyQuery>;
+export type MyClubNotesQueryResult = Apollo.QueryResult<MyClubNotesQuery, MyClubNotesQueryVariables>;
+export const ClubNotesDocument = gql`
+    query ClubNotes($limit: Int!, $offset: Int!, $clubId: ID!) {
+  clubNotes(limit: $limit, offset: $offset, clubId: $clubId) {
+    totalCount
+    hasMore
+    results {
+      ...clubNoteInfo
+      club {
+        id
+        title
+      }
+    }
+  }
+}
+    ${ClubNoteInfoFragmentDoc}`;
+
+/**
+ * __useClubNotesQuery__
+ *
+ * To run a query within a React component, call `useClubNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClubNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClubNotesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      clubId: // value for 'clubId'
+ *   },
+ * });
+ */
+export function useClubNotesQuery(baseOptions: Apollo.QueryHookOptions<ClubNotesQuery, ClubNotesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ClubNotesQuery, ClubNotesQueryVariables>(ClubNotesDocument, options);
+      }
+export function useClubNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ClubNotesQuery, ClubNotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ClubNotesQuery, ClubNotesQueryVariables>(ClubNotesDocument, options);
+        }
+export type ClubNotesQueryHookResult = ReturnType<typeof useClubNotesQuery>;
+export type ClubNotesLazyQueryHookResult = ReturnType<typeof useClubNotesLazyQuery>;
+export type ClubNotesQueryResult = Apollo.QueryResult<ClubNotesQuery, ClubNotesQueryVariables>;
 export const CommentsDocument = gql`
     query Comments($limit: Int, $offset: Int, $ordering: String, $postId: ID!) {
   comments(limit: $limit, offset: $offset, ordering: $ordering, postId: $postId) {
@@ -4545,6 +4917,38 @@ export function useMyEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<M
 export type MyEventsQueryHookResult = ReturnType<typeof useMyEventsQuery>;
 export type MyEventsLazyQueryHookResult = ReturnType<typeof useMyEventsLazyQuery>;
 export type MyEventsQueryResult = Apollo.QueryResult<MyEventsQuery, MyEventsQueryVariables>;
+export const MyEventsCountDocument = gql`
+    query MyEventsCount {
+  myEventsCount
+}
+    `;
+
+/**
+ * __useMyEventsCountQuery__
+ *
+ * To run a query within a React component, call `useMyEventsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyEventsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyEventsCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyEventsCountQuery(baseOptions?: Apollo.QueryHookOptions<MyEventsCountQuery, MyEventsCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyEventsCountQuery, MyEventsCountQueryVariables>(MyEventsCountDocument, options);
+      }
+export function useMyEventsCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyEventsCountQuery, MyEventsCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyEventsCountQuery, MyEventsCountQueryVariables>(MyEventsCountDocument, options);
+        }
+export type MyEventsCountQueryHookResult = ReturnType<typeof useMyEventsCountQuery>;
+export type MyEventsCountLazyQueryHookResult = ReturnType<typeof useMyEventsCountLazyQuery>;
+export type MyEventsCountQueryResult = Apollo.QueryResult<MyEventsCountQuery, MyEventsCountQueryVariables>;
 export const GetVotesDocument = gql`
     query GetVotes($limit: Int!, $offset: Int!, $status: Int!, $eventId: ID!) {
   getVotes(limit: $limit, offset: $offset, status: $status, eventId: $eventId) {

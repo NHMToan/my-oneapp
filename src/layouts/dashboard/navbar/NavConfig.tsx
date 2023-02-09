@@ -20,6 +20,7 @@ const ICONS = {
   club: getIcon("ic_menu_item"),
   rating: getIcon("ic_label"),
   lock: getIcon("ic_lock"),
+  banking: getIcon("ic_banking"),
 };
 
 const navConfig = [
@@ -28,8 +29,13 @@ const navConfig = [
   {
     items: [
       {
+        title: "menu.home",
+        path: PATH_DASHBOARD.root,
+        icon: ICONS.banking,
+      },
+      {
         title: "menu.events",
-        path: PATH_DASHBOARD.general.app,
+        path: PATH_DASHBOARD.event,
         icon: ICONS.dashboard,
       },
       {
@@ -43,7 +49,7 @@ const navConfig = [
       //   icon: ICONS.people,
       // },
       // {
-      //   title: "blog",
+      //   title: "menu.blog",
       //   path: PATH_DASHBOARD.blog.posts,
       //   icon: ICONS.blog,
       // },

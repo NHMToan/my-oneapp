@@ -1,0 +1,22 @@
+mutation CreateClubNote($createClubNoteInput: CreateClubNoteInput!) {
+  createClubNote(createClubNoteInput: $createClubNoteInput) {
+    ...clubNoteMutationResponse
+  }
+}
+
+mutation UpdateClubNote($id: ID!, $updateClubNoteInput: UpdateClubNoteInput!) {
+  updateClubNote(id: $id, updateClubNoteInput: $updateClubNoteInput) {
+    ...clubNoteMutationResponse
+  }
+}
+
+mutation ChangeClubNoteStatus($id: ID!, $isPublic: Boolean!) {
+  changeClubNoteStatus(id: $id, isPublic: $isPublic) {
+    ...clubNoteMutationResponse
+  }
+}
+mutation DeleteClubNote($id: ID!) {
+  deleteClubNote(id: $id) {
+    ...clubNoteMutationResponse
+  }
+}

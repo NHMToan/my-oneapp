@@ -11,6 +11,7 @@ import {
 import Page from "../../components/Page";
 import useSettings from "../../hooks/useSettings";
 import useTabs from "../../hooks/useTabs";
+import UserNotification from "./sections/notitication";
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,12 @@ export default function UserAccount() {
       value: "social_links",
       icon: <Iconify icon={"eva:share-fill"} width={20} height={20} />,
       component: <AccountSocialLinks profile={data?.myProfile as any} />,
+    },
+    {
+      value: "notifications",
+      label: "Notifications",
+      icon: <Iconify icon="eva:bell-fill" />,
+      component: <UserNotification />,
     },
     {
       value: "change_password",

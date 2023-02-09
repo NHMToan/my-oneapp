@@ -16,6 +16,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getValueFromUrlParams } from "utils/location";
 import ClubEvents from "../ClubEvents";
 import { ClubFormContent } from "../sections";
+import ClubNotes from "../sections/clubNote";
 import ClubAdmins from "../sections/clubpage/ClubAdmins";
 import ClubCover from "../sections/clubpage/ClubCover";
 import ClubGeneral from "../sections/clubpage/ClubGeneral";
@@ -117,6 +118,15 @@ const ClubPage: FC<ClubPageProps> = (props) => {
           {requestCount?.getClubRequestingNumber || 0}
         </Label>
       ),
+    },
+    {
+      hidden: !isAdmin,
+      value: "notes",
+      label: translate("club.details.settings.notes"),
+      icon: (
+        <Iconify icon={"mdi:notification-settings"} width={20} height={20} />
+      ),
+      component: <ClubNotes club={club as any} />,
     },
     {
       hidden: !isAdmin,

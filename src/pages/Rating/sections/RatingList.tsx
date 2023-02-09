@@ -6,13 +6,15 @@ import RatingCard from "./RatingCard";
 
 interface RatingListProps {}
 const RatingList: FC<RatingListProps> = (props) => {
-  const { data, loading, refetch } = useMyRatingsQuery();
+  const { data, loading, refetch } = useMyRatingsQuery({
+    fetchPolicy: "no-cache",
+  });
 
   if (loading) return <SkeletionComment />;
   if (!data || data.myRatings.totalCount === 0) return <div>Empty</div>;
 
   return (
-    <Grid container spacing={3}>
+    <Grid container>
       <Grid item xs={12}>
         <Stack direction="column" justifyContent="center" spacing={4}>
           {data.myRatings.results.map((item) => (

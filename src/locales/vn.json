@@ -187,7 +187,7 @@
     "events": "Hoạt động"
   },
   "activity": {
-    "no_event_label": "Xin chào!",
+    "no_event_label": "Xin chào",
     "no_event_message": "Hiện chưa có hoạt động nào mở đăng kí tham gia, bạn quay lại sau nghen!"
   },
   "notification": {
