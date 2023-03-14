@@ -15,6 +15,7 @@ interface MultiFilePreviewProps {
   showPreview?: boolean;
   thumbnail?: boolean;
   sx?: SxProps;
+  onClick?: any;
 }
 export default function MultiFilePreview({
   showPreview = false,
@@ -22,6 +23,7 @@ export default function MultiFilePreview({
   onRemove,
   sx,
   thumbnail,
+  onClick,
 }: MultiFilePreviewProps) {
   const hasFile = files?.length > 0;
 
@@ -59,6 +61,7 @@ export default function MultiFilePreview({
                   file={file}
                   sx={{ position: "absolute" }}
                   imgSx={{ position: "absolute" }}
+                  onClick={onClick}
                 />
 
                 {onRemove && (

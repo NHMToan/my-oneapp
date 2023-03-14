@@ -6,6 +6,7 @@ export interface ConversationData {
   unreadCount?: number;
   messages: MessageData[];
   members: IProfile[];
+  isRead: boolean;
 }
 export interface MessageData {
   id: string;

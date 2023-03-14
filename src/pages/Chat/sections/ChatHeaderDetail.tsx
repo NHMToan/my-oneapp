@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  IconButton,
-  Link,
-  Typography,
-} from "@mui/material";
+import { Avatar, AvatarGroup, Box, Link, Typography } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
 import { capitalCase } from "change-case";
@@ -45,7 +38,7 @@ export default function ChatHeaderDetail({
       )}
 
       <Box sx={{ flexGrow: 1 }} />
-      <IconButton>
+      {/* <IconButton>
         <Iconify icon="eva:phone-fill" width={20} height={20} />
       </IconButton>
       <IconButton>
@@ -53,7 +46,7 @@ export default function ChatHeaderDetail({
       </IconButton>
       <IconButton>
         <Iconify icon="eva:more-vertical-fill" width={20} height={20} />
-      </IconButton>
+      </IconButton> */}
     </RootStyle>
   );
 }

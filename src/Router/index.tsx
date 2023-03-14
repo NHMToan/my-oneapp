@@ -126,13 +126,17 @@ export default function Router() {
             },
           ],
         },
+        {
+          path: "chat",
+          children: [
+            { element: <Chat />, index: true },
+            { path: "new", element: <Chat /> },
+            { path: ":conversationKey", element: <Chat /> },
+          ],
+        },
         // {
-        //   path: "chat",
-        //   children: [
-        //     { element: <Chat />, index: true },
-        //     { path: "new", element: <Chat /> },
-        //     { path: ":conversationKey", element: <Chat /> },
-        //   ],
+        //   path: "chatbot",
+        //   children: [{ element: <ChatBot />, index: true }],
         // },
       ],
     },
@@ -175,7 +179,8 @@ const ClubsList = Loadable(lazy(() => import("../pages/Clubs/ClubsList")));
 const ClubForm = Loadable(lazy(() => import("../pages/Clubs/ClubFrom")));
 const ClubPage = Loadable(lazy(() => import("../pages/Clubs/ClubPage")));
 
-// const Chat = Loadable(lazy(() => import("../pages/Chat")));
+const Chat = Loadable(lazy(() => import("../pages/Chat")));
+// const ChatBot = Loadable(lazy(() => import("../pages/ChatBot")));
 const Notification = Loadable(lazy(() => import("../pages/Notification")));
 
 //Rating

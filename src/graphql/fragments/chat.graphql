@@ -3,6 +3,7 @@ fragment messageInfo on Message {
   createdAt
   content
   contentType
+  isRead
   sender {
     id
     avatar
@@ -14,6 +15,7 @@ fragment conversationInfo on Conversation {
   id
   type
   updatedAt
+  isRead
   members {
     id
     displayName
@@ -21,6 +23,11 @@ fragment conversationInfo on Conversation {
     email
     phoneNumber
     country
+    instagramLink
+    portfolioLink
+    twitterLink
+    linkedinLink
+    facebookLink
   }
   messages {
     ...messageInfo

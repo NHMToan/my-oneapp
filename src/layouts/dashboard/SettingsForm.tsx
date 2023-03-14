@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogTitle,
@@ -99,19 +98,6 @@ const SettingsForm = (props) => {
     <Dialog open={isOpen} maxWidth="xs">
       <DialogTitle sx={{ m: 0, p: 2, minWidth: "350px" }}>
         {translate("user.setting_form_modal.title")}{" "}
-        <Button
-          aria-label="close"
-          onClick={() => {
-            setIsOpen(false);
-          }}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 13,
-          }}
-        >
-          Skip
-        </Button>
       </DialogTitle>
       <Divider />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

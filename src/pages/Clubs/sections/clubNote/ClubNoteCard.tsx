@@ -1,16 +1,24 @@
 import { Box, CardHeader } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Iconify from "components/Iconify";
+import LightboxModal from "components/LightboxModal";
 import Markdown from "components/Markdown";
-import useLocales from "hooks/useLocales";
+import { MultiFilePreview } from "components/upload";
+import { useState } from "react";
 import { fDate } from "utils/formatTime";
+
 interface Props {
   note: any;
 }
-
+const SPEED = 160;
 const ClubNoteCard: React.FC<Props> = ({ note }) => {
   const theme: any = useTheme();
-  const { translate } = useLocales();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const handleCloseLightbox = () => {
+    setIsOpen(false);
+  };
+  const imagesLightbox = note?.images;
   return (
     <Box
       sx={{
@@ -22,14 +30,41 @@ const ClubNoteCard: React.FC<Props> = ({ note }) => {
       }}
     >
       <CardHeader
-        title={`${translate("club.note.info.title")} - ${note.club.title}`}
+        title={`${note.club.title}`}
         subheader={fDate(note?.createdAt)}
         avatar={<Iconify icon="mingcute:notification-fill" />}
-        sx={{ p: 2 }}
+        sx={{ p: 1 }}
       />
       <Box sx={{ px: 2 }}>
         <Markdown children={note?.description || ""} />
       </Box>
+      {note?.images?.length > 0 && (
+        <MultiFilePreview
+          files={note.images}
+          thumbnail={true}
+          onClick={(file) => {
+            setSelectedImage(imagesLightbox.findIndex((item) => item === file));
+            setIsOpen(true);
+          }}
+        />
+      )}
+      <LightboxModal
+        animationDuration={SPEED}
+        images={imagesLightbox}
+        mainSrc={imagesLightbox[selectedImage]}
+        photoIndex={selectedImage}
+        setPhotoIndex={setSelectedImage}
+        isOpen={isOpen}
+        onCloseRequest={handleCloseLightbox}
+        onMovePrevRequest={() => {
+          setSelectedImage(
+            (selectedImage + imagesLightbox.length - 1) % imagesLightbox.length
+          );
+        }}
+        onMoveNextRequest={() => {
+          setSelectedImage((selectedImage + 1) % imagesLightbox.length);
+        }}
+      />
     </Box>
   );
 };

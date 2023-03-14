@@ -5,6 +5,7 @@ import {
   CardHeader,
   Divider,
   IconButton,
+  InputAdornment,
   MenuItem,
   Popover,
   Stack,
@@ -22,8 +23,10 @@ import {
   useUnVoteEventMutation,
   useVoteChangePaidMutation,
 } from "generated/graphql";
+import useAuth from "hooks/useAuth";
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
+import SendMessageButton from "pages/Chat/components/SendMessageModal";
 import { PAID_STATUS } from "pages/Clubs/consts";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
@@ -33,14 +36,31 @@ interface EventVoteListProps {
   event: ClubEvent;
   refetchStats?: () => void;
 }
-
+function applySortFilter({ tableData, filterName }) {
+  if (filterName) {
+    tableData = tableData.filter(
+      (item) =>
+        item.member.profile.displayName
+          .toLowerCase()
+          .indexOf(filterName.toLowerCase()) !== -1
+    );
+  }
+  return tableData;
+}
 const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
   const { data, loading, refetch } = useGetVotesQuery({
     fetchPolicy: "no-cache",
     skip: !event,
     variables: { status: 1, limit: 100, offset: 0, eventId: event.id },
   });
+  const [filterName, setFilterName] = useState("");
   const { translate } = useLocales();
+
+  const dataFiltered = applySortFilter({
+    tableData: data?.getVotes?.results || [],
+    filterName,
+  });
+
   const renderList = () => {
     if (loading)
       return (
@@ -49,7 +69,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
         </Stack>
       );
 
-    if (!data || !data.getVotes || data?.getVotes?.totalCount === 0)
+    if (dataFiltered.length === 0)
       return (
         <Typography sx={{ p: 3, color: "text.secondary" }}>
           {translate("club.event.details.tab_vote_info.confirm_list.no_data")}
@@ -58,7 +78,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
 
     return (
       <Stack spacing={3} sx={{ p: 3 }}>
-        {data?.getVotes?.results.map((vote, index) => (
+        {dataFiltered.map((vote, index) => (
           <Voter
             key={vote.id}
             vote={vote as any}
@@ -84,7 +104,27 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
           </IconButton>
         }
       />
-
+      <Stack
+        spacing={2}
+        direction={{ xs: "column", sm: "row" }}
+        sx={{ pt: 2, pb: 0, px: 3 }}
+      >
+        <TextField
+          fullWidth
+          placeholder="Search name..."
+          onChange={(event) => setFilterName(event.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Iconify
+                  icon={"eva:search-fill"}
+                  sx={{ color: "text.disabled", width: 20, height: 20 }}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Stack>
       {renderList()}
     </Card>
   );
@@ -102,7 +142,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   const [onDeleteVote] = useUnVoteEventMutation({ fetchPolicy: "no-cache" });
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openNote, setOpenNote] = useState<boolean>(false);
-
+  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
 
@@ -219,168 +259,184 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
         </Typography>
       </Box>
 
-      {isAdmin && (
+      {((!isAdmin && vote.member.profile.id !== user.profile.id) ||
+        isAdmin) && (
         <DropdownMenu
           actions={
             <>
-              <MenuItem
-                onClick={() => {
-                  onPaidChange("cash");
-                }}
-              >
-                <Iconify icon={"bxs:dollar-circle"} />
-                {translate(
-                  "club.event.details.tab_vote_info.confirm_list.cash"
-                )}
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  onPaidChange("momo");
-                }}
-              >
-                <Iconify icon={"bxs:dollar-circle"} />
-                {translate(
-                  "club.event.details.tab_vote_info.confirm_list.momo"
-                )}
-              </MenuItem>
-
-              <MenuItem
-                onClick={async () => {
-                  onPaidChange("bank");
-                }}
-              >
-                <Iconify icon={"bxs:dollar-circle"} />
-                {translate(
-                  "club.event.details.tab_vote_info.confirm_list.bank"
-                )}
-              </MenuItem>
-
-              <MenuItem
-                onClick={async () => {
-                  onPaidChange("prepaid");
-                }}
-              >
-                <Iconify icon={"bxs:dollar-circle"} />
-                {translate(
-                  "club.event.details.tab_vote_info.confirm_list.prepaid"
-                )}
-              </MenuItem>
-              <Divider sx={{ borderStyle: "dashed" }} />
-              <PopConfirm
-                open={openNote}
-                onClose={() => {
-                  setMessage("");
-                  setOpenNote(false);
-                }}
-                title={
-                  <TextField
-                    fullWidth
-                    multiline
-                    minRows={2}
-                    maxRows={8}
-                    value={message}
-                    placeholder="Type a note"
-                    onChange={handleChangeMessage}
-                  />
-                }
-                actions={
-                  <>
-                    <Button
-                      variant="outlined"
-                      color="inherit"
-                      onClick={() => {
-                        setMessage("");
-                        setOpenNote(false);
-                      }}
-                    >
-                      {translate("common.btn.cancel")}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      disabled={!message}
-                      onClick={() => {
-                        try {
-                          onNote();
-                        } catch (e) {
-                          console.error(e);
-                        }
-                      }}
-                    >
-                      {translate("common.btn.save")}
-                    </Button>
-                  </>
-                }
-              >
+              {isAdmin && (
                 <MenuItem
                   onClick={() => {
-                    setOpenNote(true);
-                    setMessage(vote.note || "");
+                    onPaidChange("cash");
                   }}
                 >
-                  {translate("common.btn.note")}
+                  <Iconify icon={"bxs:dollar-circle"} />
+                  {translate(
+                    "club.event.details.tab_vote_info.confirm_list.cash"
+                  )}
                 </MenuItem>
-              </PopConfirm>
-              <PopConfirm
-                open={openDelete}
-                onClose={() => setOpenDelete(false)}
-                title={
-                  <CardHeader
-                    title={translate(
-                      /*i18n*/ "club.event.details.tab_vote_info.confirm_list.delete.confirmation"
-                    )}
-                    subheader={translate(
-                      /*i18n*/ "club.event.details.tab_vote_info.confirm_list.delete.sub_confirmation"
-                    )}
-                  />
-                }
-                actions={
-                  <>
-                    <Button
-                      variant="outlined"
-                      color="inherit"
-                      onClick={() => setOpenDelete(false)}
-                    >
-                      {translate("common.btn.cancel")}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={async () => {
-                        try {
-                          const deleteVoteRes = await onDeleteVote({
-                            variables: {
-                              voteId: vote.id,
-                              eventId: event.id,
-                              eventSlot: event.slot,
-                            },
-                          });
-                          if (deleteVoteRes?.data?.unVoteEvent?.success) {
-                            enqueueSnackbar(
-                              translate(
-                                "club.event.details.tab_vote_info.confirm_list.delete.success"
-                              )
-                            );
-                            postActions();
+              )}
+              {isAdmin && (
+                <MenuItem
+                  onClick={() => {
+                    onPaidChange("momo");
+                  }}
+                >
+                  <Iconify icon={"bxs:dollar-circle"} />
+                  {translate(
+                    "club.event.details.tab_vote_info.confirm_list.momo"
+                  )}
+                </MenuItem>
+              )}
+
+              {isAdmin && (
+                <MenuItem
+                  onClick={async () => {
+                    onPaidChange("bank");
+                  }}
+                >
+                  <Iconify icon={"bxs:dollar-circle"} />
+                  {translate(
+                    "club.event.details.tab_vote_info.confirm_list.bank"
+                  )}
+                </MenuItem>
+              )}
+
+              {isAdmin && (
+                <MenuItem
+                  onClick={async () => {
+                    onPaidChange("prepaid");
+                  }}
+                >
+                  <Iconify icon={"bxs:dollar-circle"} />
+                  {translate(
+                    "club.event.details.tab_vote_info.confirm_list.prepaid"
+                  )}
+                </MenuItem>
+              )}
+              {isAdmin && <Divider sx={{ borderStyle: "dashed" }} />}
+              {isAdmin && (
+                <PopConfirm
+                  open={openNote}
+                  onClose={() => {
+                    setMessage("");
+                    setOpenNote(false);
+                  }}
+                  title={
+                    <TextField
+                      fullWidth
+                      multiline
+                      minRows={2}
+                      maxRows={8}
+                      value={message}
+                      placeholder="Type a note"
+                      onChange={handleChangeMessage}
+                    />
+                  }
+                  actions={
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => {
+                          setMessage("");
+                          setOpenNote(false);
+                        }}
+                      >
+                        {translate("common.btn.cancel")}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        disabled={!message}
+                        onClick={() => {
+                          try {
+                            onNote();
+                          } catch (e) {
+                            console.error(e);
                           }
-                        } catch (e) {
-                          console.error(e);
-                        }
-                      }}
-                    >
-                      {translate("common.btn.delete")}
-                    </Button>
-                  </>
-                }
-              >
-                <MenuItem
-                  sx={{ color: "error.main" }}
-                  onClick={() => {
-                    setOpenDelete(true);
-                  }}
+                        }}
+                      >
+                        {translate("common.btn.save")}
+                      </Button>
+                    </>
+                  }
                 >
-                  {translate("common.btn.delete")}
-                </MenuItem>
-              </PopConfirm>
+                  <MenuItem
+                    onClick={() => {
+                      setOpenNote(true);
+                      setMessage(vote.note || "");
+                    }}
+                  >
+                    {translate("common.btn.note")}
+                  </MenuItem>
+                </PopConfirm>
+              )}
+              {vote.member.profile.id !== user.profile.id && (
+                <SendMessageButton to={vote.member.profile} />
+              )}
+              {isAdmin && (
+                <PopConfirm
+                  open={openDelete}
+                  onClose={() => setOpenDelete(false)}
+                  title={
+                    <CardHeader
+                      title={translate(
+                        /*i18n*/ "club.event.details.tab_vote_info.confirm_list.delete.confirmation"
+                      )}
+                      subheader={translate(
+                        /*i18n*/ "club.event.details.tab_vote_info.confirm_list.delete.sub_confirmation"
+                      )}
+                    />
+                  }
+                  actions={
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => setOpenDelete(false)}
+                      >
+                        {translate("common.btn.cancel")}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={async () => {
+                          try {
+                            const deleteVoteRes = await onDeleteVote({
+                              variables: {
+                                voteId: vote.id,
+                                eventId: event.id,
+                                eventSlot: event.slot,
+                              },
+                            });
+                            if (deleteVoteRes?.data?.unVoteEvent?.success) {
+                              enqueueSnackbar(
+                                translate(
+                                  "club.event.details.tab_vote_info.confirm_list.delete.success"
+                                )
+                              );
+                              postActions();
+                            }
+                          } catch (e) {
+                            console.error(e);
+                          }
+                        }}
+                      >
+                        {translate("common.btn.delete")}
+                      </Button>
+                    </>
+                  }
+                >
+                  <MenuItem
+                    sx={{ color: "error.main" }}
+                    onClick={() => {
+                      setOpenDelete(true);
+                    }}
+                  >
+                    {translate("common.btn.delete")}
+                  </MenuItem>
+                </PopConfirm>
+              )}
             </>
           }
         />

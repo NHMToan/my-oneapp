@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Button, Card, Stack, Typography } from "@mui/material";
 import Iconify from "components/Iconify";
 import { useMyEventsCountQuery } from "generated/graphql";
 import useAuth from "hooks/useAuth";
@@ -14,6 +14,8 @@ const RootStyle = styled(Card)<RootStyleProps>(({ theme }) => ({
   boxShadow: "none",
   textAlign: "center",
   backgroundColor: theme.palette.primary.lighter,
+  color: theme.palette.primary.darker,
+
   [theme.breakpoints.up("md")]: {
     height: "100%",
     display: "flex",
@@ -31,30 +33,31 @@ const Welcome: FC<WelcomeProps> = ({}) => {
 
   return (
     <RootStyle>
-      <CardContent
+      <Stack
         sx={{
-          color: "grey.800",
+          pl: 5,
+          py: { xs: 3, md: 2 },
+          pr: { xs: 3, md: 0 },
+          textAlign: { xs: "center", md: "left" },
         }}
       >
-        <Stack>
-          <Typography variant="h4">
-            {`${translate("activity.no_event_label")} \n ${user?.displayName}!`}
-          </Typography>
+        <Typography variant="h4">
+          {`${translate("activity.no_event_label")} \n ${user?.displayName}!`}
+        </Typography>
 
-          {data?.myEventsCount > 0 && (
-            <Button
-              to={PATH_DASHBOARD.event}
-              component={RouterLink}
-              variant="text"
-              startIcon={
-                <Iconify icon="material-symbols:notification-important" />
-              }
-            >
-              You have {data?.myEventsCount} activities.
-            </Button>
-          )}
-        </Stack>
-      </CardContent>
+        {data?.myEventsCount > 0 && (
+          <Button
+            to={PATH_DASHBOARD.event}
+            component={RouterLink}
+            startIcon={
+              <Iconify icon="material-symbols:notification-important" />
+            }
+            variant="outlined"
+          >
+            You have {data?.myEventsCount} activities.
+          </Button>
+        )}
+      </Stack>
     </RootStyle>
   );
 };

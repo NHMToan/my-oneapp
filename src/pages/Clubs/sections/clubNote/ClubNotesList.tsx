@@ -70,6 +70,9 @@ const ClubNotesList: FC<ClubNotesListProps> = ({
                         setOpenInfo(true);
                         setSelectedRow(row);
                       }}
+                      postChangedStatus={() => {
+                        refetch();
+                      }}
                       onEdit={onEdit}
                     />
                   ))}

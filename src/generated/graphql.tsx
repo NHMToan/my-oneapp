@@ -136,6 +136,7 @@ export type ClubNote = {
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['ID'];
+  images?: Maybe<Array<Scalars['String']>>;
   isPublic: Scalars['Boolean'];
   updatedAt: Scalars['DateTime'];
 };
@@ -205,6 +206,7 @@ export type Comments = {
 export type Conversation = {
   __typename?: 'Conversation';
   id: Scalars['ID'];
+  isRead: Scalars['Boolean'];
   members: Array<Profile>;
   messages: Array<Message>;
   type: Scalars['String'];
@@ -245,6 +247,7 @@ export type CreateClubInput = {
 export type CreateClubNoteInput = {
   clubId: Scalars['String'];
   description: Scalars['String'];
+  images: Array<Scalars['Upload']>;
   isPublic: Scalars['Boolean'];
 };
 
@@ -389,6 +392,7 @@ export type Message = {
   contentType: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  isRead?: Maybe<Scalars['Boolean']>;
   sender: Profile;
 };
 
@@ -416,6 +420,7 @@ export type Mutation = {
   adminLogin: AdminMutationResponse;
   adminLogout: AdminMutationResponse;
   adminRegister: AdminMutationResponse;
+  adminSetAvatar: UserMutationResponse;
   adminSetRole: UserMutationResponse;
   cancelRequest: ClubMutationResponse;
   cancelRequestClub: ClubMutationResponse;
@@ -452,6 +457,7 @@ export type Mutation = {
   register: UserMutationResponse;
   replyComment: CommentMutationResponse;
   requestJoinClub: ClubMutationResponse;
+  setConversationRead: ConversationMutationResponse;
   setIsAdvanced: ClubMemberMutationResponse;
   setRole: ClubMutationResponse;
   unFollow: FollowingMutaionResponse;
@@ -508,6 +514,12 @@ export type MutationAdminLogoutArgs = {
 
 export type MutationAdminRegisterArgs = {
   adminRegisterInput: AdminRegisterInput;
+};
+
+
+export type MutationAdminSetAvatarArgs = {
+  profileId: Scalars['ID'];
+  updateProfileInput: UpdateProfileInput;
 };
 
 
@@ -696,6 +708,11 @@ export type MutationReplyCommentArgs = {
 
 export type MutationRequestJoinClubArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationSetConversationReadArgs = {
+  converId: Scalars['ID'];
 };
 
 
@@ -1326,6 +1343,7 @@ export type UserMutationResponse = IMutationResponse & {
   accessToken?: Maybe<Scalars['String']>;
   code: Scalars['Float'];
   message?: Maybe<Scalars['String']>;
+  profile?: Maybe<Profile>;
   success: Scalars['Boolean'];
   user?: Maybe<User>;
 };
@@ -1375,9 +1393,9 @@ export type Votes = {
   totalCount: Scalars['Float'];
 };
 
-export type MessageInfoFragment = { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } };
+export type MessageInfoFragment = { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } };
 
-export type ConversationInfoFragment = { __typename?: 'Conversation', id: string, type: string, updatedAt: any, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> };
+export type ConversationInfoFragment = { __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> };
 
 export type ConversationMutationResponseFragment = { __typename?: 'ConversationMutationResponse', code: number, success: boolean, message?: string | null, conversation?: { __typename?: 'Conversation', id: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
@@ -1389,9 +1407,9 @@ export type ClubInfoFragment = { __typename?: 'Club', id: string, title: string,
 
 export type ClubMemberInfoFragment = { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } };
 
-export type ClubNoteMutationResponseFragment = { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
+export type ClubNoteMutationResponseFragment = { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
-export type ClubNoteInfoFragment = { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean };
+export type ClubNoteInfoFragment = { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null };
 
 export type CommentInfoFragment = { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string }, replyComments?: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } }> | null };
 
@@ -1489,6 +1507,13 @@ export type CreateMessageMutationVariables = Exact<{
 
 export type CreateMessageMutation = { __typename?: 'Mutation', addNewMessage: boolean };
 
+export type SetConversationReadMutationVariables = Exact<{
+  converId: Scalars['ID'];
+}>;
+
+
+export type SetConversationReadMutation = { __typename?: 'Mutation', setConversationRead: { __typename?: 'ConversationMutationResponse', code: number, success: boolean, message?: string | null, conversation?: { __typename?: 'Conversation', id: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type DeleteClubMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1575,7 +1600,7 @@ export type CreateClubNoteMutationVariables = Exact<{
 }>;
 
 
-export type CreateClubNoteMutation = { __typename?: 'Mutation', createClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateClubNoteMutation = { __typename?: 'Mutation', createClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateClubNoteMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1583,7 +1608,7 @@ export type UpdateClubNoteMutationVariables = Exact<{
 }>;
 
 
-export type UpdateClubNoteMutation = { __typename?: 'Mutation', updateClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type UpdateClubNoteMutation = { __typename?: 'Mutation', updateClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ChangeClubNoteStatusMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1591,14 +1616,14 @@ export type ChangeClubNoteStatusMutationVariables = Exact<{
 }>;
 
 
-export type ChangeClubNoteStatusMutation = { __typename?: 'Mutation', changeClubNoteStatus: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type ChangeClubNoteStatusMutation = { __typename?: 'Mutation', changeClubNoteStatus: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteClubNoteMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteClubNoteMutation = { __typename?: 'Mutation', deleteClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type DeleteClubNoteMutation = { __typename?: 'Mutation', deleteClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CreateEventMutationVariables = Exact<{
   createEventInput: CreateEventInput;
@@ -1866,7 +1891,7 @@ export type ConversationsQueryVariables = Exact<{
 }>;
 
 
-export type ConversationsQuery = { __typename?: 'Query', getConversations?: { __typename?: 'Conversations', totalCount: number, hasMore: boolean, error: boolean, results: Array<{ __typename?: 'Conversation', id: string, type: string, updatedAt: any, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> }> } | null };
+export type ConversationsQuery = { __typename?: 'Query', getConversations?: { __typename?: 'Conversations', totalCount: number, hasMore: boolean, error: boolean, results: Array<{ __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> }> } | null };
 
 export type GetMessagesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -1875,14 +1900,14 @@ export type GetMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GetMessagesQuery = { __typename?: 'Query', getMessages?: { __typename?: 'Messages', totalCount: number, hasMore: boolean, error?: boolean | null, results: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } | null };
+export type GetMessagesQuery = { __typename?: 'Query', getMessages?: { __typename?: 'Messages', totalCount: number, hasMore: boolean, error?: boolean | null, results: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } | null };
 
 export type ConversationQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type ConversationQuery = { __typename?: 'Query', getConversation?: { __typename?: 'Conversation', id: string, type: string, updatedAt: any, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } | null };
+export type ConversationQuery = { __typename?: 'Query', getConversation?: { __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } | null };
 
 export type ClubQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1921,7 +1946,7 @@ export type ClubMembersQuery = { __typename?: 'Query', clubmembers?: { __typenam
 export type MyClubNotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyClubNotesQuery = { __typename?: 'Query', myClubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, club: { __typename?: 'Club', id: string, title: string } }> } | null };
+export type MyClubNotesQuery = { __typename?: 'Query', myClubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null, club: { __typename?: 'Club', id: string, title: string } }> } | null };
 
 export type ClubNotesQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1930,7 +1955,7 @@ export type ClubNotesQueryVariables = Exact<{
 }>;
 
 
-export type ClubNotesQuery = { __typename?: 'Query', clubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, club: { __typename?: 'Club', id: string, title: string } }> } | null };
+export type ClubNotesQuery = { __typename?: 'Query', clubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null, club: { __typename?: 'Club', id: string, title: string } }> } | null };
 
 export type CommentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -2135,14 +2160,14 @@ export type MessageSendSubscriptionSubscriptionVariables = Exact<{
 }>;
 
 
-export type MessageSendSubscriptionSubscription = { __typename?: 'Subscription', newMessageSent: { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } } };
+export type MessageSendSubscriptionSubscription = { __typename?: 'Subscription', newMessageSent: { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } } };
 
 export type ConversationChangedSubscriptionVariables = Exact<{
   profileId: Scalars['ID'];
 }>;
 
 
-export type ConversationChangedSubscription = { __typename?: 'Subscription', conversationChanged: { __typename?: 'Conversation', id: string, type: string, updatedAt: any, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } };
+export type ConversationChangedSubscription = { __typename?: 'Subscription', conversationChanged: { __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } };
 
 export type EventVoteChangedSubscriptionSubscriptionVariables = Exact<{
   eventId: Scalars['ID'];
@@ -2165,6 +2190,7 @@ export const MessageInfoFragmentDoc = gql`
   createdAt
   content
   contentType
+  isRead
   sender {
     id
     avatar
@@ -2177,6 +2203,7 @@ export const ConversationInfoFragmentDoc = gql`
   id
   type
   updatedAt
+  isRead
   members {
     id
     displayName
@@ -2184,6 +2211,11 @@ export const ConversationInfoFragmentDoc = gql`
     email
     phoneNumber
     country
+    instagramLink
+    portfolioLink
+    twitterLink
+    linkedinLink
+    facebookLink
   }
   messages {
     ...messageInfo
@@ -2312,6 +2344,7 @@ export const ClubNoteInfoFragmentDoc = gql`
   createdAt
   updatedAt
   isPublic
+  images
 }
     `;
 export const ClubNoteMutationResponseFragmentDoc = gql`
@@ -2681,6 +2714,39 @@ export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const SetConversationReadDocument = gql`
+    mutation SetConversationRead($converId: ID!) {
+  setConversationRead(converId: $converId) {
+    ...conversationMutationResponse
+  }
+}
+    ${ConversationMutationResponseFragmentDoc}`;
+export type SetConversationReadMutationFn = Apollo.MutationFunction<SetConversationReadMutation, SetConversationReadMutationVariables>;
+
+/**
+ * __useSetConversationReadMutation__
+ *
+ * To run a mutation, you first call `useSetConversationReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetConversationReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setConversationReadMutation, { data, loading, error }] = useSetConversationReadMutation({
+ *   variables: {
+ *      converId: // value for 'converId'
+ *   },
+ * });
+ */
+export function useSetConversationReadMutation(baseOptions?: Apollo.MutationHookOptions<SetConversationReadMutation, SetConversationReadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetConversationReadMutation, SetConversationReadMutationVariables>(SetConversationReadDocument, options);
+      }
+export type SetConversationReadMutationHookResult = ReturnType<typeof useSetConversationReadMutation>;
+export type SetConversationReadMutationResult = Apollo.MutationResult<SetConversationReadMutation>;
+export type SetConversationReadMutationOptions = Apollo.BaseMutationOptions<SetConversationReadMutation, SetConversationReadMutationVariables>;
 export const DeleteClubDocument = gql`
     mutation DeleteClub($id: ID!) {
   deleteClub(id: $id) {

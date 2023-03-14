@@ -21,6 +21,7 @@ const ICONS = {
   rating: getIcon("ic_label"),
   lock: getIcon("ic_lock"),
   banking: getIcon("ic_banking"),
+  chatbot: getIcon("ic_label"),
 };
 
 const navConfig = [
@@ -38,11 +39,11 @@ const navConfig = [
         path: PATH_DASHBOARD.event,
         icon: ICONS.dashboard,
       },
-      {
-        title: "menu.ratings",
-        path: PATH_DASHBOARD.rating.root,
-        icon: ICONS.rating,
-      },
+      // {
+      //   title: "menu.ratings",
+      //   path: PATH_DASHBOARD.rating.root,
+      //   icon: ICONS.rating,
+      // },
       // {
       //   title: "people",
       //   path: PATH_DASHBOARD.peple.root,
@@ -53,7 +54,12 @@ const navConfig = [
       //   path: PATH_DASHBOARD.blog.posts,
       //   icon: ICONS.blog,
       // },
-      // { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      { title: "menu.chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      // {
+      //   title: "menu.chatbot",
+      //   path: PATH_DASHBOARD.chatbot.root,
+      //   icon: ICONS.chatbot,
+      // },
 
       { title: "menu.clubs", path: PATH_DASHBOARD.club.root, icon: ICONS.club },
       {

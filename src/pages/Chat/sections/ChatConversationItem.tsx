@@ -9,7 +9,12 @@ import {
 // @mui
 import { styled } from "@mui/material/styles";
 import { formatDistanceToNowStrict } from "date-fns";
+import {
+  useConversationLazyQuery,
+  useSetConversationReadMutation,
+} from "generated/graphql";
 import useAuth from "hooks/useAuth";
+import { useState } from "react";
 //
 import BadgeStatus from "../../../components/BadgeStatus";
 import { ConversationData } from "../data.t";
@@ -61,24 +66,33 @@ const getDetails = (conversation: ConversationData, currentUserId: String) => {
 
 interface ChatConversationItemProps {
   isSelected?: boolean;
-  conversation: ConversationData;
+  defaultConversation: ConversationData;
   isOpenSidebar?: boolean;
   onSelectConversation: (conversation: ConversationData) => void;
 }
 export default function ChatConversationItem({
   isSelected,
-  conversation,
+  defaultConversation,
   isOpenSidebar,
   onSelectConversation,
 }: ChatConversationItemProps) {
   const { user } = useAuth();
-  const details = getDetails(conversation, user.profile.id);
 
+  const [fetchDetails] = useConversationLazyQuery({
+    variables: { id: defaultConversation.id },
+    fetchPolicy: "no-cache",
+  });
+  const [conversation, setConversation] = useState<any>(defaultConversation);
+
+  const details = getDetails(conversation, user.profile.id);
+  const [setRead] = useSetConversationReadMutation({
+    variables: { converId: conversation.id },
+  });
   const displayLastActivity =
     conversation.messages[conversation.messages.length - 1]?.createdAt;
 
   const isGroup = details.otherParticipants.length > 1;
-  const isUnread = conversation.unreadCount > 0;
+  const isUnread = !conversation.isRead;
   const isOnlineGroup =
     isGroup &&
     details.otherParticipants.map((item) => item.status).includes("online");
@@ -87,6 +101,11 @@ export default function ChatConversationItem({
     <RootStyle
       onClick={() => {
         onSelectConversation(conversation);
+        setRead().then(() => {
+          fetchDetails().then((data) => {
+            setConversation(data.data.getConversation);
+          });
+        });
       }}
       sx={{
         ...(isSelected && { bgcolor: "action.selected" }),

@@ -6,3 +6,8 @@ mutation AddConversation($input: ConversationInput!) {
 mutation CreateMessage($messageInput: MessageInput!) {
   addNewMessage(messageInput: $messageInput)
 }
+mutation SetConversationRead($converId: ID!) {
+  setConversationRead(converId: $converId) {
+    ...conversationMutationResponse
+  }
+}

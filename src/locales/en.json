@@ -47,7 +47,9 @@
       "vote": "Confirm",
       "register": "Register",
       "note": "Note",
-      "save": "Save"
+      "save": "Save",
+      "send_message": "Send message",
+      "send": "Send"
     }
   },
   "account_menu": {
@@ -62,7 +64,9 @@
     "ratings": "Rating",
     "admin": "Admin",
     "blog": "Blogs",
-    "home": "Home"
+    "home": "Home",
+    "chat": "Message",
+    "chatbot": "Chatbot"
   },
   "club": {
     "list": {
@@ -239,5 +243,8 @@
     "details": {
       "title": "Rating details"
     }
+  },
+  "chat": {
+    "title": "Messages"
   }
 }

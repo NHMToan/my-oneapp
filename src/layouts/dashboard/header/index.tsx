@@ -14,6 +14,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import cssStyles from "../../../utils/cssStyles";
 import AccountPopover from "./AccountPopover";
 import LanguagePopover from "./LanguagePopover";
+import MessagePopover from "./MessagePopover";
 import NotificationsPopover from "./NotificationsPopover";
 //
 import Searchbar from "./Searchbar";
@@ -103,6 +104,7 @@ export default function DashboardHeader({
           spacing={{ xs: 0.5, sm: 1.5 }}
         >
           <LanguagePopover />
+          <MessagePopover />
           <NotificationsPopover />
           <AccountPopover />
         </Stack>

@@ -105,9 +105,6 @@ export default function AccountPopover() {
           <Typography variant="subtitle2" noWrap>
             {user.displayName}
           </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {user?.email}
-          </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: "dashed" }} />

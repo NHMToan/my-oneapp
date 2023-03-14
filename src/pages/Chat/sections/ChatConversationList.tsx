@@ -13,6 +13,7 @@ interface ChatConversationListProps extends ListProps {
   isOpenSidebar?: boolean;
   activeConversationId?: string;
   loading?: boolean;
+  isPreview?: boolean;
 }
 export default function ChatConversationList({
   conversations = [],
@@ -20,6 +21,7 @@ export default function ChatConversationList({
   activeConversationId,
   sx,
   loading,
+  isPreview,
   ...other
 }: ChatConversationListProps) {
   const navigate = useNavigate();
@@ -36,11 +38,11 @@ export default function ChatConversationList({
             <ChatConversationItem
               key={conversation.id}
               isOpenSidebar={isOpenSidebar}
-              conversation={conversation}
+              defaultConversation={conversation}
               isSelected={conversationKey === conversation.id}
-              onSelectConversation={() =>
-                handleSelectConversation(conversation.id)
-              }
+              onSelectConversation={() => {
+                handleSelectConversation(conversation.id);
+              }}
             />
           ) : (
             <SkeletonConversationItem key={index} />

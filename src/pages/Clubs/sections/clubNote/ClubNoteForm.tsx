@@ -8,13 +8,14 @@ import {
 } from "generated/graphql";
 import { useSnackbar } from "notistack";
 import { ClubData } from "pages/Clubs/data.t";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import {
   FormProvider,
   RHFEditor,
   RHFSwitch,
+  RHFUploadMultiFile,
 } from "../../../../components/hook-form";
 interface ClubNoteFormProps {
   club: ClubData;
@@ -37,6 +38,7 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
 }) => {
   const [createNote] = useCreateClubNoteMutation({ fetchPolicy: "no-cache" });
   const [updateNote] = useUpdateClubNoteMutation({ fetchPolicy: "no-cache" });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { enqueueSnackbar } = useSnackbar();
   const NewNoteSchema = Yup.object().shape({
@@ -47,6 +49,7 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
     () => ({
       description: currentNote?.description || "",
       isPublic: currentNote?.isPublic || true,
+      images: currentNote?.images || [],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentNote]
@@ -57,14 +60,8 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
     defaultValues,
   });
 
-  const {
-    reset,
-    handleSubmit,
-    setValue,
-
-    formState: { isSubmitting },
-  } = methods;
-
+  const { reset, handleSubmit, setValue, watch } = methods;
+  const values = watch();
   useEffect(() => {
     if (currentNote) {
       setValue("description", currentNote.description);
@@ -76,6 +73,7 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
 
   const onSubmit = async (values) => {
     try {
+      setIsLoading(true);
       if (currentNote) {
         updateNote({
           variables: {
@@ -84,6 +82,7 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
           },
         })
           .then((response) => {
+            setIsLoading(false);
             if (response?.data?.updateClubNote?.success) {
               reset();
               enqueueSnackbar("Updated success!");
@@ -94,7 +93,9 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
               );
             }
           })
-          .catch((e) => {});
+          .catch((e) => {
+            setIsLoading(false);
+          });
       } else {
         createNote({
           variables: {
@@ -102,6 +103,7 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
           },
         })
           .then((response) => {
+            setIsLoading(false);
             if (response?.data?.createClubNote?.success) {
               reset();
               enqueueSnackbar("Create success!");
@@ -112,13 +114,39 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
               );
             }
           })
-          .catch((e) => {});
+          .catch((e) => {
+            setIsLoading(false);
+          });
       }
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
     }
   };
 
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const files = values.images || [];
+
+      const newFiles = acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      );
+
+      setValue("images", [...files, ...newFiles]);
+    },
+    [setValue, values.images]
+  );
+  const handleRemoveFile = (inputFile) => {
+    const filtered =
+      values.images && values.images?.filter((file) => file !== inputFile);
+    setValue("images", filtered);
+  };
+
+  const handleRemoveAllFiles = () => {
+    setValue("images", []);
+  };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ p: 3 }}>
@@ -137,6 +165,18 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
               width: 1,
               justifyContent: "space-between",
             }}
+          />
+
+          <RHFUploadMultiFile
+            multiple
+            thumbnail
+            name="images"
+            maxSize={3145728}
+            onDrop={handleDrop}
+            onRemove={handleRemoveFile}
+            onRemoveAll={handleRemoveAllFiles}
+            onUpload={() => console.log("ON UPLOAD")}
+            maxFiles={10}
           />
         </Stack>
 
@@ -160,7 +200,7 @@ const ClubNoteForm: FC<ClubNoteFormProps> = ({
             type="submit"
             variant="contained"
             size="large"
-            loading={isSubmitting}
+            loading={isLoading}
           >
             {!currentNote ? "Post" : "Update"}
           </LoadingButton>

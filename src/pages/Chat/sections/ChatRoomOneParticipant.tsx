@@ -63,8 +63,18 @@ export default function ChatRoomOneParticipant({
   if (!participant) {
     return null;
   }
-  const { country, displayName, avatar, email, phoneNumber, position } =
-    participant;
+  const {
+    displayName,
+    avatar,
+    email,
+    phoneNumber,
+    position,
+    facebookLink,
+    linkedinLink,
+    twitterLink,
+    instagramLink,
+    portfolioLink,
+  } = participant;
   return (
     <>
       <Box
@@ -108,12 +118,6 @@ export default function ChatRoomOneParticipant({
 
       <Collapse in={isCollapse}>
         <Box sx={{ px: 2.5, pb: 1 }}>
-          {country && (
-            <RowStyle>
-              <RowIconStyle icon={"eva:pin-fill"} />
-              <RowTextStyle>{country}</RowTextStyle>
-            </RowStyle>
-          )}
           {phoneNumber && (
             <RowStyle>
               <RowIconStyle icon={"eva:phone-fill"} />
@@ -124,6 +128,75 @@ export default function ChatRoomOneParticipant({
             <RowStyle>
               <RowIconStyle icon={"eva:email-fill"} />
               <RowTextStyle>{email}</RowTextStyle>
+            </RowStyle>
+          )}
+          {facebookLink && (
+            <RowStyle>
+              <RowIconStyle icon={"ic:baseline-facebook"} />
+              <RowTextStyle>
+                <a
+                  href={facebookLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {facebookLink}
+                </a>
+              </RowTextStyle>
+            </RowStyle>
+          )}
+          {linkedinLink && (
+            <RowStyle>
+              <RowIconStyle icon={"mdi:linkedin"} />
+              <RowTextStyle>
+                <a
+                  href={linkedinLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {linkedinLink}
+                </a>
+              </RowTextStyle>
+            </RowStyle>
+          )}
+          {twitterLink && (
+            <RowStyle>
+              <RowIconStyle icon={"mdi:twitter"} />
+              <RowTextStyle>
+                {" "}
+                <a href={twitterLink} target="_blank" rel="noopener noreferrer">
+                  {twitterLink}
+                </a>
+              </RowTextStyle>
+            </RowStyle>
+          )}
+          {instagramLink && (
+            <RowStyle>
+              <RowIconStyle icon={"ph:instagram-logo-fill"} />
+              <RowTextStyle>
+                {" "}
+                <a
+                  href={instagramLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {instagramLink}
+                </a>
+              </RowTextStyle>
+            </RowStyle>
+          )}
+          {portfolioLink && (
+            <RowStyle>
+              <RowIconStyle icon={"mdi:user-box"} />
+              <RowTextStyle>
+                {" "}
+                <a
+                  href={portfolioLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {portfolioLink}
+                </a>
+              </RowTextStyle>
             </RowStyle>
           )}
         </Box>

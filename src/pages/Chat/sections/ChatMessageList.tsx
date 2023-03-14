@@ -31,6 +31,8 @@ export default function ChatMessageList({
   const { data, loading, error } = useGetMessagesQuery({
     variables: {
       conversationId: conversation?.id,
+      limit: 100,
+      offset: 0,
     },
     skip: !conversation,
     fetchPolicy: "no-cache",

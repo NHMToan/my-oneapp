@@ -13,6 +13,7 @@ interface FileThumbnailProps {
   tooltip?: any;
   imageView?: any;
   onDownload?: any;
+  onClick?: any;
 }
 export default function FileThumbnail({
   file,
@@ -21,6 +22,7 @@ export default function FileThumbnail({
   onDownload,
   sx,
   imgSx,
+  onClick,
 }: FileThumbnailProps) {
   const { name = "", path = "", preview = "" } = fileData(file);
 
@@ -37,6 +39,10 @@ export default function FileThumbnail({
           flexShrink: 0,
           objectFit: "cover",
           ...imgSx,
+          cursor: onClick && "zoom-in",
+        }}
+        onClick={() => {
+          if (onClick) onClick(file);
         }}
       />
     ) : (

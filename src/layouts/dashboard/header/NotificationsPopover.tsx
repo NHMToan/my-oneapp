@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import EmptyContent from "components/EmptyContent";
+import SvgIconStyle from "components/SvgIconStyle";
 import {
   useGetNotificationsQuery,
   useGetNotiUnreadCountQuery,
@@ -155,7 +155,20 @@ export default function NotificationsPopover() {
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
-        <EmptyContent />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            py: 2,
+            px: 2.5,
+          }}
+        >
+          <SvgIconStyle
+            src={`/assets/icons/navbar/ic_mail.svg`}
+            sx={{ width: 50, height: 50 }}
+          />
+        </Box>
       </>
     );
   };
