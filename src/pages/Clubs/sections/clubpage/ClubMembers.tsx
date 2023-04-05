@@ -2,12 +2,13 @@
 import {
   Box,
   Card,
-  CircularProgress,
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   Link,
   MenuItem,
+  TextField,
   Typography,
 } from "@mui/material";
 import Avatar from "components/Avatar";
@@ -24,59 +25,68 @@ import {
 import useLocales from "hooks/useLocales";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
 import { useState } from "react";
-import InfiniteScroll from "react-infinite-scroller";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD } from "Router/paths";
+import { searchVietnameseName } from "utils/search";
 
 // ----------------------------------------------------------------------
 
 interface ClubMembersProps {
   club: ClubData;
 }
+
+function applySortFilter({ tableData, searchValue }) {
+  if (searchValue) {
+    tableData = tableData.filter((item) =>
+      searchVietnameseName(item.profile.displayName, searchValue)
+    );
+  }
+
+  return tableData;
+}
+
 export default function ClubMembers({ club }: ClubMembersProps) {
-  const { data, loading, error, refetch, fetchMore } = useClubMembersQuery({
-    variables: { clubId: club?.id, status: 2, role: 1, limit: 30, offset: 0 },
+  const [searchValue, setSearchValue] = useState<string>(null);
+
+  const { data, loading, error, refetch } = useClubMembersQuery({
+    variables: {
+      clubId: club?.id,
+      status: 2,
+      role: 1,
+      limit: 1000,
+      offset: 0,
+    },
     skip: !club,
   });
+
   const { translate } = useLocales();
-  const [loadingMore, setLoadingMore] = useState<boolean>(false);
+  const dataFiltered = applySortFilter({
+    tableData: data?.clubmembers?.results || [],
+    searchValue,
+  });
 
-  const handleInfiniteOnLoad = (page) => {
-    setLoadingMore(true);
-    fetchMore({
-      updateQuery: (pv, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return pv;
-        }
-        return {
-          clubmembers: {
-            __typename: "Clubmembers",
-            results: [
-              ...pv?.clubmembers?.results,
-              ...fetchMoreResult?.clubmembers?.results,
-            ],
-            totalCount: pv.clubmembers.totalCount,
-            hasMore: pv.clubmembers.hasMore,
-          },
-        };
-      },
-      variables: {
-        limit: 30,
-        offset: page * 30,
-      },
-    })
-      .then(() => {
-        setLoadingMore(false);
-      })
-      .catch(() => {
-        setLoadingMore(false);
-      });
+  const renderList = () => {
+    if (loading) return <SimpleSkeleton />;
+    if (!data) return <p>{error.message}</p>;
+
+    return (
+      <div>
+        <Grid container spacing={3}>
+          {dataFiltered?.map((member) => (
+            <Grid key={member.id} item xs={12} md={4}>
+              <MemberCard
+                member={member as any}
+                refetch={refetch}
+                isAuth={club.isAdmin || club.isSubAdmin}
+                isAdmin={club.isAdmin}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+    );
   };
-  if (loading) return <SimpleSkeleton />;
-  if (!data) return <p>{error.message}</p>;
 
-  const hasMore =
-    data?.clubmembers?.results?.length < data?.clubmembers?.totalCount;
   return (
     <>
       <Box sx={{ mt: 5 }}>
@@ -88,45 +98,27 @@ export default function ClubMembers({ club }: ClubMembersProps) {
             </IconButton>
           }
         />
-        <div
-          style={{
-            height: "calc(100vh - 240px)",
-            overflow: "auto",
-          }}
-        >
-          <InfiniteScroll
-            initialLoad={false}
-            pageStart={0}
-            loadMore={handleInfiniteOnLoad}
-            hasMore={!loadingMore && hasMore}
-            useWindow={false}
-          >
-            <Grid container spacing={3}>
-              {data?.clubmembers?.results.map((member) => (
-                <Grid key={member.id} item xs={12} md={4}>
-                  <MemberCard
-                    member={member as any}
-                    refetch={refetch}
-                    isAuth={club.isAdmin || club.isSubAdmin}
-                    isAdmin={club.isAdmin}
+        <div>
+          <TextField
+            fullWidth
+            placeholder="Search member..."
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+            sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify
+                    icon={"eva:search-fill"}
+                    sx={{ color: "text.disabled", width: 20, height: 20 }}
                   />
-                </Grid>
-              ))}
-              <Grid key="loadingMore" item xs={12} md={12}>
-                {!loadingMore && (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      textAlign: "center",
-                    }}
-                  >
-                    <CircularProgress />
-                  </Box>
-                )}
-              </Grid>
-            </Grid>
-          </InfiniteScroll>
+                </InputAdornment>
+              ),
+            }}
+          />
         </div>
+        {renderList()}
       </Box>
     </>
   );

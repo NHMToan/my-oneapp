@@ -84,6 +84,7 @@ export type ClubEvent = {
   isAdmin: Scalars['Boolean'];
   isVoted: Scalars['Boolean'];
   maxVote?: Maybe<Scalars['Float']>;
+  myConfirmedCount: Scalars['Float'];
   price?: Maybe<Scalars['Float']>;
   show: Scalars['Boolean'];
   slot: Scalars['Float'];
@@ -422,6 +423,7 @@ export type Mutation = {
   adminRegister: AdminMutationResponse;
   adminSetAvatar: UserMutationResponse;
   adminSetRole: UserMutationResponse;
+  adminSetStatus: UserMutationResponse;
   cancelRequest: ClubMutationResponse;
   cancelRequestClub: ClubMutationResponse;
   changeAdmin: ClubMutationResponse;
@@ -525,6 +527,12 @@ export type MutationAdminSetAvatarArgs = {
 
 export type MutationAdminSetRoleArgs = {
   newRole: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+
+export type MutationAdminSetStatusArgs = {
+  status?: InputMaybe<Scalars['Int']>;
   userId: Scalars['ID'];
 };
 
@@ -911,6 +919,7 @@ export type Profile = {
   position?: Maybe<Scalars['String']>;
   role?: Maybe<Scalars['String']>;
   school?: Maybe<Scalars['String']>;
+  status: Scalars['Float'];
   twitterLink?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
 };
@@ -962,6 +971,7 @@ export type Query = {
   hello: Scalars['Float'];
   me?: Maybe<User>;
   myClubNotes?: Maybe<ClubNotes>;
+  myConfirmedEvents?: Maybe<Events>;
   myEvents?: Maybe<Events>;
   myEventsCount?: Maybe<Scalars['Float']>;
   myProfile?: Maybe<Profile>;
@@ -992,6 +1002,7 @@ export type QueryClubmembersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   role?: InputMaybe<Scalars['Int']>;
+  searchName?: InputMaybe<Scalars['String']>;
   status: Scalars['Int'];
 };
 
@@ -1094,6 +1105,7 @@ export type QueryGetProfilesArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   ordering?: InputMaybe<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1106,6 +1118,7 @@ export type QueryGetUsersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   ordering?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1336,6 +1349,7 @@ export type User = {
   profile: Profile;
   provider?: Maybe<Scalars['String']>;
   role: Scalars['String'];
+  status: Scalars['Float'];
 };
 
 export type UserMutationResponse = IMutationResponse & {
@@ -1938,6 +1952,7 @@ export type ClubMembersQueryVariables = Exact<{
   clubId: Scalars['ID'];
   status: Scalars['Int'];
   role?: InputMaybe<Scalars['Int']>;
+  searchName?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1989,6 +2004,11 @@ export type MyEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MyEventsQuery = { __typename?: 'Query', myEvents?: { __typename?: 'Events', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
+
+export type MyConfirmedEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyConfirmedEventsQuery = { __typename?: 'Query', myEvents?: { __typename?: 'Events', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubEvent', myConfirmedCount: number, id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } }> } | null };
 
 export type MyEventsCountQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4684,13 +4704,14 @@ export type GetClubRequestingNumberQueryHookResult = ReturnType<typeof useGetClu
 export type GetClubRequestingNumberLazyQueryHookResult = ReturnType<typeof useGetClubRequestingNumberLazyQuery>;
 export type GetClubRequestingNumberQueryResult = Apollo.QueryResult<GetClubRequestingNumberQuery, GetClubRequestingNumberQueryVariables>;
 export const ClubMembersDocument = gql`
-    query ClubMembers($limit: Int, $offset: Int, $clubId: ID!, $status: Int!, $role: Int) {
+    query ClubMembers($limit: Int, $offset: Int, $clubId: ID!, $status: Int!, $role: Int, $searchName: String) {
   clubmembers(
     limit: $limit
     offset: $offset
     clubId: $clubId
     status: $status
     role: $role
+    searchName: $searchName
   ) {
     totalCount
     hasMore
@@ -4718,6 +4739,7 @@ export const ClubMembersDocument = gql`
  *      clubId: // value for 'clubId'
  *      status: // value for 'status'
  *      role: // value for 'role'
+ *      searchName: // value for 'searchName'
  *   },
  * });
  */
@@ -4983,6 +5005,45 @@ export function useMyEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<M
 export type MyEventsQueryHookResult = ReturnType<typeof useMyEventsQuery>;
 export type MyEventsLazyQueryHookResult = ReturnType<typeof useMyEventsLazyQuery>;
 export type MyEventsQueryResult = Apollo.QueryResult<MyEventsQuery, MyEventsQueryVariables>;
+export const MyConfirmedEventsDocument = gql`
+    query MyConfirmedEvents {
+  myEvents {
+    totalCount
+    hasMore
+    results {
+      ...eventInfo
+      myConfirmedCount
+    }
+  }
+}
+    ${EventInfoFragmentDoc}`;
+
+/**
+ * __useMyConfirmedEventsQuery__
+ *
+ * To run a query within a React component, call `useMyConfirmedEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyConfirmedEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyConfirmedEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyConfirmedEventsQuery(baseOptions?: Apollo.QueryHookOptions<MyConfirmedEventsQuery, MyConfirmedEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyConfirmedEventsQuery, MyConfirmedEventsQueryVariables>(MyConfirmedEventsDocument, options);
+      }
+export function useMyConfirmedEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyConfirmedEventsQuery, MyConfirmedEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyConfirmedEventsQuery, MyConfirmedEventsQueryVariables>(MyConfirmedEventsDocument, options);
+        }
+export type MyConfirmedEventsQueryHookResult = ReturnType<typeof useMyConfirmedEventsQuery>;
+export type MyConfirmedEventsLazyQueryHookResult = ReturnType<typeof useMyConfirmedEventsLazyQuery>;
+export type MyConfirmedEventsQueryResult = Apollo.QueryResult<MyConfirmedEventsQuery, MyConfirmedEventsQueryVariables>;
 export const MyEventsCountDocument = gql`
     query MyEventsCount {
   myEventsCount

@@ -35,6 +35,18 @@ query MyEvents {
     }
   }
 }
+
+query MyConfirmedEvents {
+  myEvents {
+    totalCount
+    hasMore
+    results {
+      ...eventInfo
+      myConfirmedCount
+    }
+  }
+}
+
 query MyEventsCount {
   myEventsCount
 }

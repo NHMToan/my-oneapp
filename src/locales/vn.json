@@ -67,7 +67,8 @@
         "menu_label": "Yêu cầu"
       },
       "settings": {
-        "menu_label": "Chỉnh sửa"
+        "menu_label": "Chỉnh sửa",
+        "notes": "Ghi chú"
       }
     },
     "event": {
@@ -151,13 +152,19 @@
     },
     "list": {
       "btn_new_club": "Tạo câu lạc bộ",
-      "title": "Câu lạc bộ"
+      "title": "Câu lạc bộ",
+      "btn_new": "Thêm mới"
     },
     "member": {
       "status": {
         "admin": "Quản trị viên",
         "member": "Thành viên",
         "sub_admin": "Trợ lý"
+      }
+    },
+    "note": {
+      "info": {
+        "title": "Thông báo"
       }
     }
   },
@@ -174,7 +181,9 @@
       "vote": "Đăng ký",
       "register": "Đăng ký",
       "note": "Ghi chú",
-      "save": "Lưu"
+      "save": "Lưu",
+      "send": "Gửi",
+      "send_message": "Gửi tin nhắn"
     },
     "word": {
       "prepositions": {
@@ -184,11 +193,23 @@
   },
   "menu": {
     "clubs": "Câu lạc bộ",
-    "events": "Hoạt động"
+    "events": "Hoạt động",
+    "blog": "Nhật kí",
+    "admin": "Quản trị",
+    "chatbot": "Trò chuyện tự động",
+    "chat": "Tin nhắn",
+    "home": "Trang chủ",
+    "ratings": "Bầu chọn"
   },
   "activity": {
     "no_event_label": "Xin chào",
-    "no_event_message": "Hiện chưa có hoạt động nào mở đăng kí tham gia, bạn quay lại sau nghen!"
+    "no_event_message": "Hiện chưa có hoạt động nào mở đăng kí tham gia, bạn quay lại sau nghen!",
+    "event_count_one": "Bạn có {{count}} hoạt động.",
+    "event_count_other": "Bạn có {{count}} hoạt động.",
+    "my_confirmed_event": {
+      "title": "Hoạt động đã xác nhận",
+      "subtitle": "Vui lòng đến đúng giờ và địa điểm."
+    }
   },
   "notification": {
     "key": {
@@ -215,6 +236,21 @@
   "user": {
     "setting_form_modal": {
       "title": "Thêm ảnh đại diện"
+    }
+  },
+  "chat": {
+    "title": "Tin nhắn"
+  },
+  "rating": {
+    "form": {
+      "end_date": "Ngày kết thúc",
+      "start_date": "Ngày bắt đầu"
+    },
+    "details": {
+      "title": "Danh sách bầu chọn"
+    },
+    "list": {
+      "title": "Bầu chọn"
     }
   }
 }

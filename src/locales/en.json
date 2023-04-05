@@ -11,7 +11,7 @@
       }
     },
     "register": {
-      "title": "Register to join with us.",
+      "title": "Register to join with us",
       "form": {
         "login": "Login",
         "login_warning": "Already have an account?",
@@ -24,7 +24,7 @@
     },
     "forgot_password": {
       "title": "Forgot your password?",
-      "sub_title": "Please enter the email address associated with your account to get an email with a link to reset your password.",
+      "sub_title": "Please enter the email address associated with your account to get an email with a link to reset your password",
       "btn_send": "Send request",
       "email": "Email address"
     }
@@ -185,7 +185,8 @@
           "vote_waiting_title": "Get a waiting slot",
           "vote_confirmed_title": "Get a slot",
           "confirmed_full_message": "Slots are full!"
-        }
+        },
+        "my_vote_count": "Your slots"
       },
       "delete": {
         "confirmation": "Are you sure you want to delete the activity?",
@@ -197,13 +198,19 @@
     },
     "note": {
       "info": {
-        "title": "Notification"
+        "title": "Notifications"
       }
     }
   },
   "activity": {
     "no_event_label": "Welcome",
-    "no_event_message": "There is no events for now! Please come back later!"
+    "no_event_message": "There is no events for now! Please come back later!",
+    "event_count_one": "You have {{count}} activity.",
+    "event_count_other": "You have {{count}} activities.",
+    "my_confirmed_event": {
+      "title": "Confirmed activities",
+      "subtitle": "Please arrive at the right time and place."
+    }
   },
   "notification": {
     "key": {
@@ -211,12 +218,12 @@
       "accept_join_club": "You have been accepted to join club <1>{{action_object}}</1>",
       "remove_confirm_vote_one": "<0>{{actor_name}}</0> has removed <2>{{count}} slot</2>  from activity <4>{{action_object}}</4>",
       "remove_confirm_vote_other": "<0>{{actor_name}}</0> has removed <2>{{count}} slots</2>  from activity <4>{{action_object}}</4>",
-      "confirm_waiting_slot_one": "You has been confirmed <1>{{count}} slot</1> from activity <3>{{action_object}}</3>",
-      "confirm_waiting_slot_other": "You has been confirmed <1>{{count}} slots</1> from activity <3>{{action_object}}</3>"
+      "confirm_waiting_slot_one": "You have been confirmed <1>{{count}} slot</1> from activity <3>{{action_object}}</3>",
+      "confirm_waiting_slot_other": "You have been confirmed <1>{{count}} slots</1> from activity <3>{{action_object}}</3>"
     },
     "unread_subtitle_one": "You have {{count}} unread message",
     "unread_subtitle_other": "You have {{count}} unread messages",
-    "title": "Notification",
+    "title": "Notifications",
     "btn": {
       "mark_all_read": "Mark all as read",
       "view_all": "View all"

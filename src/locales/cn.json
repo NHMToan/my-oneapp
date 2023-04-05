@@ -67,7 +67,8 @@
         "menu_label": "要求"
       },
       "settings": {
-        "menu_label": "设置"
+        "menu_label": "设置",
+        "notes": "笔记"
       }
     },
     "event": {
@@ -151,13 +152,19 @@
     },
     "list": {
       "btn_new_club": "创建一个新俱乐部",
-      "title": "俱乐部"
+      "title": "俱乐部",
+      "btn_new": "添新"
     },
     "member": {
       "status": {
         "admin": "管理员",
         "member": "成员",
         "sub_admin": "助理"
+      }
+    },
+    "note": {
+      "info": {
+        "title": "通知"
       }
     }
   },
@@ -174,7 +181,9 @@
       "vote": "登记",
       "register": "登记",
       "note": "笔记",
-      "save": "Save"
+      "save": "保存",
+      "send": "发送",
+      "send_message": "发信息"
     },
     "word": {
       "prepositions": {
@@ -184,11 +193,19 @@
   },
   "menu": {
     "clubs": "俱乐部",
-    "events": "活动"
+    "events": "活动",
+    "blog": "博客",
+    "admin": "管理",
+    "chatbot": "聊天机器人",
+    "chat": "信息",
+    "home": "主页",
+    "ratings": "评分"
   },
   "activity": {
     "no_event_label": "欢迎光临",
-    "no_event_message": "目前没有可注册的活动。请待会再过来！"
+    "no_event_message": "目前没有可注册的活动。请待会再过来！",
+    "event_count_one": "您有 {{count}} 个活动",
+    "event_count_other": "您有 {{count}} 个活动"
   },
   "notification": {
     "key": {
@@ -215,6 +232,21 @@
   "user": {
     "setting_form_modal": {
       "title": "请提供以下信息以继续"
+    }
+  },
+  "chat": {
+    "title": "信息"
+  },
+  "rating": {
+    "form": {
+      "end_date": "结束日期",
+      "start_date": "开始日期"
+    },
+    "details": {
+      "title": "评分详情"
+    },
+    "list": {
+      "title": "评分"
     }
   }
 }

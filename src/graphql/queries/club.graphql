@@ -24,6 +24,7 @@ query ClubMembers(
   $clubId: ID!
   $status: Int!
   $role: Int
+  $searchName: String
 ) {
   clubmembers(
     limit: $limit
@@ -31,6 +32,7 @@ query ClubMembers(
     clubId: $clubId
     status: $status
     role: $role
+    searchName: $searchName
   ) {
     totalCount
     hasMore

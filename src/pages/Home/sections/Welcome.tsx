@@ -28,38 +28,38 @@ const RootStyle = styled(Card)<RootStyleProps>(({ theme }) => ({
 interface WelcomeProps {}
 const Welcome: FC<WelcomeProps> = ({}) => {
   const { data } = useMyEventsCountQuery({ fetchPolicy: "no-cache" });
+
   const { user } = useAuth();
   const { translate } = useLocales();
-
-  return (
-    <RootStyle>
-      <Stack
-        sx={{
-          pl: 5,
-          py: { xs: 3, md: 2 },
-          pr: { xs: 3, md: 0 },
-          textAlign: { xs: "center", md: "left" },
-        }}
+  if (data?.myEventsCount > 0) {
+    return (
+      <Button
+        to={PATH_DASHBOARD.event}
+        component={RouterLink}
+        startIcon={<Iconify icon="material-symbols:notification-important" />}
+        variant="outlined"
       >
-        <Typography variant="h4">
-          {`${translate("activity.no_event_label")} \n ${user?.displayName}!`}
-        </Typography>
-
-        {data?.myEventsCount > 0 && (
-          <Button
-            to={PATH_DASHBOARD.event}
-            component={RouterLink}
-            startIcon={
-              <Iconify icon="material-symbols:notification-important" />
-            }
-            variant="outlined"
-          >
-            You have {data?.myEventsCount} activities.
-          </Button>
-        )}
-      </Stack>
-    </RootStyle>
-  );
+        {translate("activity.event_count", { count: data?.myEventsCount })}
+      </Button>
+    );
+  } else {
+    return (
+      <RootStyle>
+        <Stack
+          sx={{
+            pl: 5,
+            py: { xs: 3, md: 2 },
+            pr: { xs: 3, md: 0 },
+            textAlign: { xs: "center", md: "left" },
+          }}
+        >
+          <Typography variant="h4">
+            {`${translate("activity.no_event_label")} \n ${user?.displayName}!`}
+          </Typography>
+        </Stack>
+      </RootStyle>
+    );
+  }
 };
 
 export default Welcome;

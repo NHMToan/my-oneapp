@@ -1,7 +1,7 @@
-import { Container } from "@mui/material";
-import { Box } from "@mui/system";
+import { Container, Stack } from "@mui/material";
 import Page from "../../components/Page";
 import useSettings from "../../hooks/useSettings";
+import MyConfirmedEvents from "./sections/MyConfirmedEvents";
 import MyNotes from "./sections/MyNotes";
 import Welcome from "./sections/Welcome";
 // ----------------------------------------------------------------------
@@ -12,10 +12,12 @@ export default function Rating() {
   return (
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <Box sx={{ py: 2 }}>
+        <Stack spacing={2}>
           <Welcome />
-        </Box>
-        <MyNotes />
+
+          <MyConfirmedEvents />
+          <MyNotes />
+        </Stack>
       </Container>
     </Page>
   );

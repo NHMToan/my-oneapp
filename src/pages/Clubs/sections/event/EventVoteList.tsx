@@ -31,6 +31,7 @@ import { PAID_STATUS } from "pages/Clubs/consts";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
 import { fSDateTime } from "utils/formatTime";
+import { searchVietnameseName } from "utils/search";
 
 interface EventVoteListProps {
   event: ClubEvent;
@@ -38,11 +39,8 @@ interface EventVoteListProps {
 }
 function applySortFilter({ tableData, filterName }) {
   if (filterName) {
-    tableData = tableData.filter(
-      (item) =>
-        item.member.profile.displayName
-          .toLowerCase()
-          .indexOf(filterName.toLowerCase()) !== -1
+    tableData = tableData.filter((item) =>
+      searchVietnameseName(item.member.profile.displayName, filterName)
     );
   }
   return tableData;
