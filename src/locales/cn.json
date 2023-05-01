@@ -126,7 +126,8 @@
         "vote_close": "注册已关闭",
         "vote_end_at": "注册截止",
         "vote_start_at": "注册开始",
-        "waiting": "等待"
+        "waiting": "等待",
+        "my_vote_count": ""
       },
       "form": {
         "add_title": "添加新活动",
@@ -205,7 +206,11 @@
     "no_event_label": "欢迎光临",
     "no_event_message": "目前没有可注册的活动。请待会再过来！",
     "event_count_one": "您有 {{count}} 个活动",
-    "event_count_other": "您有 {{count}} 个活动"
+    "event_count_other": "您有 {{count}} 个活动",
+    "my_confirmed_event": {
+      "subtitle": "",
+      "title": ""
+    }
   },
   "notification": {
     "key": {

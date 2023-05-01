@@ -7,12 +7,12 @@ export const PAID_STATUS = {
     </Label>
   ),
   momo: (
-    <Label variant="filled" color="success">
+    <Label variant="filled" color="#ad006c">
       Momo
     </Label>
   ),
   bank: (
-    <Label variant="filled" color="success">
+    <Label variant="filled" color="#826AF9">
       Bank
     </Label>
   ),

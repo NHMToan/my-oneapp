@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import Avatar from "components/Avatar";
-import DropdownMenu from "components/DropdownMenu";
+import DropdownMenu, { DropdownMenuRef } from "components/DropdownMenu";
 import Iconify from "components/Iconify";
 import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
@@ -29,7 +29,7 @@ import { useSnackbar } from "notistack";
 import SendMessageButton from "pages/Chat/components/SendMessageModal";
 import { PAID_STATUS } from "pages/Clubs/consts";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { fSDateTime } from "utils/formatTime";
 import { searchVietnameseName } from "utils/search";
 
@@ -150,6 +150,8 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
+  const dropdownRef = useRef<DropdownMenuRef>();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -172,6 +174,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       });
 
       if (res?.data?.voteChangePaid?.success) {
+        dropdownRef?.current?.close();
         postActions();
       }
     } catch (e) {
@@ -260,6 +263,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       {((!isAdmin && vote.member.profile.id !== user.profile.id) ||
         isAdmin) && (
         <DropdownMenu
+          ref={dropdownRef}
           actions={
             <>
               {isAdmin && (
@@ -268,7 +272,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                     onPaidChange("cash");
                   }}
                 >
-                  <Iconify icon={"bxs:dollar-circle"} />
+                  <Iconify icon={"bxs:dollar-circle"} color="#54D62C" />
                   {translate(
                     "club.event.details.tab_vote_info.confirm_list.cash"
                   )}
@@ -280,7 +284,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                     onPaidChange("momo");
                   }}
                 >
-                  <Iconify icon={"bxs:dollar-circle"} />
+                  <Iconify icon={"bxs:dollar-circle"} color="#ad006c" />
                   {translate(
                     "club.event.details.tab_vote_info.confirm_list.momo"
                   )}
@@ -293,7 +297,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                     onPaidChange("bank");
                   }}
                 >
-                  <Iconify icon={"bxs:dollar-circle"} />
+                  <Iconify icon={"bxs:dollar-circle"} color="#826AF9" />
                   {translate(
                     "club.event.details.tab_vote_info.confirm_list.bank"
                   )}
@@ -306,12 +310,23 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                     onPaidChange("prepaid");
                   }}
                 >
-                  <Iconify icon={"bxs:dollar-circle"} />
+                  <Iconify icon={"bxs:dollar-circle"} color="#1890FF" />
                   {translate(
                     "club.event.details.tab_vote_info.confirm_list.prepaid"
                   )}
                 </MenuItem>
               )}
+              {isAdmin && (
+                <MenuItem
+                  onClick={async () => {
+                    onPaidChange("");
+                  }}
+                >
+                  <Iconify icon={"mdi:dollar-off"} color="#f50" />
+                  Remove tag
+                </MenuItem>
+              )}
+
               {isAdmin && <Divider sx={{ borderStyle: "dashed" }} />}
               {isAdmin && (
                 <PopConfirm

@@ -13,8 +13,8 @@ const RootStyle = styled("span")<RootStyleProps>(({ theme, ownerState }) => {
   const { color, variant } = ownerState;
 
   const styleFilled = (color) => ({
-    color: theme.palette[color].contrastText,
-    backgroundColor: theme.palette[color].main,
+    color: theme?.palette[color]?.contrastText || "#fff",
+    backgroundColor: theme?.palette[color]?.main || color,
   });
 
   const styleOutlined = (color) => ({
@@ -80,7 +80,8 @@ interface LabelProps {
     | "info"
     | "success"
     | "warning"
-    | "error";
+    | "error"
+    | string;
   variant?: "filled" | "outlined" | "ghost";
   sx?: SxProps;
 }

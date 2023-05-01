@@ -126,7 +126,8 @@
         "vote_close": "Đăng ký đã đóng!",
         "vote_end_at": "Kết thúc",
         "vote_start_at": "Bắt đầu",
-        "waiting": "Chờ"
+        "waiting": "Chờ",
+        "my_vote_count": ""
       },
       "form": {
         "add_title": "Thêm hoạt động",
