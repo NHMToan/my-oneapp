@@ -17,11 +17,10 @@ import { getValueFromUrlParams } from "utils/location";
 import ClubEvents from "../ClubEvents";
 import { ClubFormContent } from "../sections";
 import ClubNotes from "../sections/clubNote";
-import ClubAdmins from "../sections/clubpage/ClubAdmins";
 import ClubCover from "../sections/clubpage/ClubCover";
 import ClubGeneral from "../sections/clubpage/ClubGeneral";
-import ClubMembers from "../sections/clubpage/ClubMembers";
 import ClubRequests from "../sections/clubpage/ClubRequests";
+import MembersList from "../sections/clubpage/MembersList";
 interface ClubPageProps {}
 
 const TabsWrapperStyle = styled("div")(({ theme }) => ({
@@ -89,8 +88,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
       ),
       component: (
         <div>
-          <ClubAdmins club={club as any} />
-          <ClubMembers club={club as any} />
+          <MembersList club={club as any} />
         </div>
       ),
     },

@@ -1,6 +1,6 @@
 {
   "name": "vsg-frontend",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.6.1",
@@ -17,7 +17,7 @@
     "@iconify/react": "^3.2.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/lab": "^5.0.0-alpha.79",
-    "@mui/material": "^5.6.3",
+    "@mui/material": "^5.13.1",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
@@ -79,7 +79,7 @@
     "stream-browserify": "^3.0.0",
     "stylis-plugin-rtl": "^2.1.1",
     "subscriptions-transport-ws": "^0.11.0",
-    "typescript": "^4.6.0",
+    "typescript": "^5.0.4",
     "unidecode": "^0.1.8",
     "util": "^0.12.4",
     "web-vitals": "^2.1.0",
@@ -98,8 +98,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -116,7 +115,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
-    "@babel/eslint-parser": "^7.17.0",
+    "@babel/eslint-parser": "^7.19.1",
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/typescript": "2.4.8",
     "@graphql-codegen/typescript-operations": "2.3.5",
@@ -132,6 +131,8 @@
     "@types/react-slick": "^0.23.8",
     "@types/unidecode": "^0.1.1",
     "babel-eslint": "^10.1.0",
+    "eslint": "^8.32.0",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "node-sass": "^7.0.1"
   }
 }

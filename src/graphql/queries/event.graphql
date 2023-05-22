@@ -76,6 +76,37 @@ query GetMyVotes($eventId: ID!) {
     }
   }
 }
+
+query GetMyVotes($eventId: ID!) {
+  getMyVotes(eventId: $eventId) {
+    totalCount
+    hasMore
+    results {
+      ...voteInfo
+    }
+  }
+}
+
+query GetMyHistoryVotes($limit: Int!, $offset: Int!) {
+  getMyHistoryVotes(limit: $limit, offset: $offset) {
+    totalCount
+    hasMore
+    results {
+      ...voteInfo
+    }
+  }
+}
+
+query GetMemberVotes($limit: Int!, $offset: Int!, $memberId: String!) {
+  getMemberVotes(limit: $limit, offset: $offset, memberId: $memberId) {
+    totalCount
+    hasMore
+    results {
+      ...voteInfo
+    }
+  }
+}
+
 query GetVoteCount($id: ID!) {
   getVoteCount(id: $id)
 }

@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = function override(config) {
   config.resolve.fallback = {
@@ -14,6 +15,14 @@ module.exports = function override(config) {
     new webpack.ProvidePlugin({
       process: "process/browser.js",
       Buffer: ["buffer", "Buffer"],
+    })
+  );
+
+  config.plugins.push(
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        memoryLimit: 8192,
+      },
     })
   );
 

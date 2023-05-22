@@ -66,7 +66,8 @@
     "blog": "Blogs",
     "home": "Home",
     "chat": "Message",
-    "chatbot": "Chatbot"
+    "chatbot": "Chatbot",
+    "history_vote": "Votes history"
   },
   "club": {
     "list": {
@@ -253,5 +254,10 @@
   },
   "chat": {
     "title": "Messages"
+  },
+  "history": {
+    "list": {
+      "title": "Votes history"
+    }
   }
 }

@@ -9,6 +9,7 @@ export interface ClubMemberData {
   updatedAt?: string;
   id?: string;
   isAdvanced?: boolean;
+  isAdmin?: boolean;
 }
 export interface ClubData {
   id: string;

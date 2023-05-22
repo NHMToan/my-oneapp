@@ -88,7 +88,7 @@ export default function CarouselArrows({
   }
 
   return (
-    <Stack direction="row" spacing={1} {...other}>
+    <Stack direction="row" spacing={1} {...(other as any)}>
       <ArrowStyle className="arrow left" filled={filled} onClick={onPrevious}>
         {leftIcon(customIcon, isRTL)}
       </ArrowStyle>

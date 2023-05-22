@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 
 // ----------------------------------------------------------------------
 
-const isValidToken = (accessToken) => {
+const isValidToken = (accessToken: string): boolean => {
   if (!accessToken) {
     return false;
   }
@@ -13,13 +13,11 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime;
 };
 
-const handleTokenExpired = (exp) => {
-  let expiredTimer;
+const handleTokenExpired = (exp: number): void => {
+  let expiredTimer: NodeJS.Timeout;
 
   const currentTime = Date.now();
 
-  // Test token expires after 10s
-  // const timeLeft = currentTime + 10000 - currentTime; // ~10s
   const timeLeft = exp * 1000 - currentTime;
 
   clearTimeout(expiredTimer);
@@ -27,28 +25,22 @@ const handleTokenExpired = (exp) => {
   expiredTimer = setTimeout(getRefreshToken, timeLeft);
 };
 
-const setSession = (accessToken?) => {
+const setSession = (accessToken?: string): void => {
   if (accessToken) {
     localStorage.setItem("accessToken", accessToken);
-    //setToken
 
-    // This function below will handle when token is expired
-    const { exp } = jwtDecode(accessToken) as any; // ~5 days by minimals server
+    const { exp } = jwtDecode(accessToken) as { exp: number };
     handleTokenExpired(exp);
   } else {
-    //Remove token
     localStorage.removeItem("accessToken");
   }
 };
 
-const getRefreshToken = async () => {
+const getRefreshToken = async (): Promise<boolean> => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}refresh_token`,
-      {
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}refresh_token`, {
+      credentials: "include",
+    });
 
     const data = (await response.json()) as {
       success: boolean;

@@ -200,7 +200,8 @@
     "chatbot": "Trò chuyện tự động",
     "chat": "Tin nhắn",
     "home": "Trang chủ",
-    "ratings": "Bầu chọn"
+    "ratings": "Bầu chọn",
+    "history_vote": "Lịch sử"
   },
   "activity": {
     "no_event_label": "Xin chào",
@@ -252,6 +253,11 @@
     },
     "list": {
       "title": "Bầu chọn"
+    }
+  },
+  "history": {
+    "list": {
+      "title": "Lịch sử hoạt động"
     }
   }
 }

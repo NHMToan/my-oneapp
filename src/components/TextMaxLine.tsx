@@ -1,8 +1,7 @@
 // @mui
 import { Link, LinkProps, Typography } from "@mui/material";
-import { forwardRef, ReactNode } from "react";
+import { ReactNode, forwardRef } from "react";
 // utils
-import GetFontValue from "../utils/getFontValue";
 
 // ----------------------------------------------------------------------
 
@@ -27,17 +26,13 @@ const TextMaxLine = forwardRef(
     }: TextMaxLineProps,
     ref: any
   ) => {
-    const { lineHeight } = GetFontValue(variant);
-
     const style = {
       overflow: "hidden",
       textOverflow: "ellipsis",
       display: "-webkit-box",
       WebkitLineClamp: line,
       WebkitBoxOrient: "vertical",
-      ...(persistent && {
-        height: lineHeight * line,
-      }),
+      ...(persistent && {}),
       ...sx,
     };
 

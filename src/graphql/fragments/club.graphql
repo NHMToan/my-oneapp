@@ -39,6 +39,10 @@ fragment clubMemberInfo on ClubMember {
   profile {
     ...profileInfo
   }
+  club {
+    id
+    title
+  }
   status
   role
   isAdmin
