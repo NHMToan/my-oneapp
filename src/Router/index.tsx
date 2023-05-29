@@ -105,6 +105,15 @@ export default function Router() {
           ],
         },
         {
+          path: "history",
+          children: [
+            {
+              element: <HistoryVotes />,
+              index: true,
+            },
+          ],
+        },
+        {
           path: "admin-rating",
           element: <AdminLayout />,
           children: [
@@ -196,3 +205,4 @@ const AdminRatingDetails = Loadable(
 const AdminRatingForm = Loadable(
   lazy(() => import("../pages/Admin/Rating/RatingForm"))
 );
+const HistoryVotes = Loadable(lazy(() => import("../pages/HistoryVotes")));

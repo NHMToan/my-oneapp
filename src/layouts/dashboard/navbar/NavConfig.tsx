@@ -22,6 +22,7 @@ const ICONS = {
   lock: getIcon("ic_lock"),
   banking: getIcon("ic_banking"),
   chatbot: getIcon("ic_label"),
+  history: getIcon("ic_analytics"),
 };
 
 const navConfig = [
@@ -38,6 +39,11 @@ const navConfig = [
         title: "menu.events",
         path: PATH_DASHBOARD.event,
         icon: ICONS.dashboard,
+      },
+      {
+        title: "menu.history_vote",
+        path: PATH_DASHBOARD.history,
+        icon: ICONS.history,
       },
       // {
       //   title: "menu.ratings",

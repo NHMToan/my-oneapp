@@ -1,8 +1,8 @@
 // i18n
 // @mui
 import { ApolloProvider } from "@apollo/client";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 // lightbox
@@ -38,8 +38,8 @@ import apolloClient from "./lib/apolloClient";
 import { persistor, store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 // highlight
+import en from "date-fns/locale/en-GB";
 
-import enLocale from "date-fns/locale/en-GB";
 import "./utils/highlight";
 //
 const container = document.getElementById("root")!;
@@ -52,8 +52,8 @@ root.render(
         <ReduxProvider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <LocalizationProvider
-              locale={enLocale}
               dateAdapter={AdapterDateFns}
+              adapterLocale={en}
             >
               <SettingsProvider>
                 <CollapseDrawerProvider>

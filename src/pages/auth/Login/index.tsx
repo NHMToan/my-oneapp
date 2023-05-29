@@ -1,9 +1,11 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Link, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Page from "components/Page";
 import useLocales from "hooks/useLocales";
+import { useState } from "react";
 import AuthSocial from "sections/auth/AuthSocial";
 import { LoginForm } from "sections/auth/login";
+import PolicyModal from "../components/PolicyModal";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled("div")(({ theme }) => ({
@@ -26,6 +28,12 @@ const ContentStyle = styled("div")(({ theme }) => ({
 
 export default function Login() {
   const { translate } = useLocales();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const onOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <Page title="Login">
       <RootStyle>
@@ -42,6 +50,28 @@ export default function Login() {
             <AuthSocial />
 
             <LoginForm />
+
+            <Typography
+              component="div"
+              sx={{
+                color: "text.secondary",
+                mt: 3,
+                typography: "caption",
+                textAlign: "center",
+              }}
+            >
+              {"By signing in, I agree to "}
+              <Link underline="always" color="text.primary" onClick={onOpen}>
+                Terms of Service
+              </Link>
+              {" and "}
+              <Link underline="always" color="text.primary" onClick={onOpen}>
+                Privacy Policy
+              </Link>
+              .
+            </Typography>
+
+            <PolicyModal open={open} onClose={() => setOpen(false)} />
           </ContentStyle>
         </Container>
       </RootStyle>

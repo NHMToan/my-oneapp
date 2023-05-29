@@ -200,7 +200,8 @@
     "chatbot": "聊天机器人",
     "chat": "信息",
     "home": "主页",
-    "ratings": "评分"
+    "ratings": "评分",
+    "history_vote": "Votes history"
   },
   "activity": {
     "no_event_label": "欢迎光临",

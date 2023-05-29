@@ -2,7 +2,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 // @mui
 import {
-  Alert,
   IconButton,
   InputAdornment,
   Link,
@@ -17,10 +16,13 @@ import { FormProvider, RHFTextField } from "../../../components/hook-form";
 // components
 import Iconify from "../../../components/Iconify";
 // hooks
+import axios from "axios";
+import useLocales from "hooks/useLocales";
+import { useSnackbar } from "notistack";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Link as RouterLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
-import useLocales from "hooks/useLocales";
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
@@ -30,6 +32,8 @@ export default function RegisterForm() {
   const { translate } = useLocales();
   const [showPassword, setShowPassword] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required("First name required"),
     lastName: Yup.string().required("Last name required"),
@@ -37,6 +41,7 @@ export default function RegisterForm() {
       .email("Email must be a valid email address")
       .required("Email is required"),
     password: Yup.string().required("Password is required"),
+    recaptcha: Yup.string().required("Please complete the CAPTCHA"),
   });
 
   const defaultValues: any = {
@@ -53,30 +58,39 @@ export default function RegisterForm() {
 
   const {
     reset,
-    setError,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async (data) => {
     try {
-      await register(data.email, data.password, data.firstName, data.lastName);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}verify-recaptcha`,
+        { recaptcha: data.recaptcha }
+      );
+
+      if (response.data.success) {
+        // CAPTCHA verification successful, proceed with registration
+        await register(
+          data.email,
+          data.password,
+          data.firstName,
+          data.lastName
+        );
+      } else {
+        enqueueSnackbar("CAPTCHA verification failed", { variant: "error" });
+      }
     } catch (error) {
       console.error(error);
       reset();
-      if (isMountedRef.current) {
-        setError("afterSubmit", { ...error, message: error });
-      }
+
+      enqueueSnackbar("Server error", { variant: "error" });
     }
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        {!!errors.afterSubmit && (
-          <Alert severity="error">{errors.afterSubmit.message}</Alert>
-        )}
-
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <RHFTextField
             name="firstName"
@@ -112,6 +126,23 @@ export default function RegisterForm() {
             ),
           }}
         />
+
+        <ReCAPTCHA
+          sitekey="6LcTxEsmAAAAAAgU7klK1MTsFXK2hpCQLwR2HJoC"
+          onChange={(value) => {
+            methods.setValue("recaptcha", value); // Set the reCAPTCHA value in the form data
+          }}
+        />
+        <LoadingButton
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          loading={isSubmitting}
+        >
+          {translate("auth.register.form.register")}
+        </LoadingButton>
+
         <Stack
           direction="row"
           alignItems="center"
@@ -125,15 +156,6 @@ export default function RegisterForm() {
             </Link>
           </Typography>
         </Stack>
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-        >
-          {translate("auth.register.form.register")}
-        </LoadingButton>
       </Stack>
     </FormProvider>
   );

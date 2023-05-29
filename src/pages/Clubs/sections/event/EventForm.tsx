@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { LoadingButton, MobileDateTimePicker } from "@mui/lab";
+import { LoadingButton } from "@mui/lab";
 // @mui
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import { ColorSinglePicker } from "components/color-utils";
 import { FormProvider, RHFTextField } from "components/hook-form";
 import { isBefore } from "date-fns";
@@ -197,8 +198,9 @@ export default function EventForm({
               render={({ field }) => (
                 <MobileDateTimePicker
                   {...field}
+                  ampm={false}
                   label={translate("club.event.form.start_date")}
-                  inputFormat="dd/MM/yyyy hh:mm a"
+                  inputFormat="dd/MM/yyyy HH:mm"
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               )}
@@ -211,7 +213,8 @@ export default function EventForm({
                 <MobileDateTimePicker
                   {...field}
                   label={translate("club.event.form.end_date")}
-                  inputFormat="dd/MM/yyyy hh:mm a"
+                  inputFormat="dd/MM/yyyy HH:mm"
+                  ampm={false}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -262,7 +265,8 @@ export default function EventForm({
                 <MobileDateTimePicker
                   {...field}
                   label={translate("club.event.form.event_time")}
-                  inputFormat="dd/MM/yyyy hh:mm a"
+                  ampm={false}
+                  inputFormat="dd/MM/yyyy HH:mm"
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
               )}

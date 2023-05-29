@@ -19,6 +19,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const { pathname } = useLocation();
 
   // useEffect(() => {
+  //   console.log(isAuthenticated, isInitialized);
   //   if (!isAuthenticated) logout();
   // }, []);
 

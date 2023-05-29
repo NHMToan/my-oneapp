@@ -19,7 +19,6 @@ import { SimpleSkeleton } from "components/skeleton";
 import {
   useClubMembersQuery,
   useDeleteClubMemberMutation,
-  useSetIsAdvancedMutation,
   useSetRoleMutation,
 } from "generated/graphql";
 import useLocales from "hooks/useLocales";
@@ -134,12 +133,9 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
   const {
     profile: { displayName, avatar, id: userId },
     id,
-    isAdvanced,
   } = member;
   const [onSetRole] = useSetRoleMutation({ fetchPolicy: "no-cache" });
-  const [onSetIsAdvanced] = useSetIsAdvancedMutation({
-    fetchPolicy: "no-cache",
-  });
+
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   return (
     <Card sx={{ display: "flex", alignItems: "center", p: 1.5 }}>
@@ -165,7 +161,7 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
         <DropdownMenu
           actions={
             <>
-              {isAdmin && (
+              {/* {isAdmin && (
                 <MenuItem
                   onClick={async () => {
                     try {
@@ -192,7 +188,7 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
                   />
                   {isAdvanced ? "Set not prepaid" : "Set prepaid"}
                 </MenuItem>
-              )}
+              )} */}
 
               {isAdmin && (
                 <MenuItem

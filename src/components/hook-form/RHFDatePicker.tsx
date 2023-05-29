@@ -1,7 +1,7 @@
 // @mui
 import { TextField } from "@mui/material";
 // form
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useFormContext } from "react-hook-form";
 // ----------------------------------------------------------------------
 

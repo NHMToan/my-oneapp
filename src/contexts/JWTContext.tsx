@@ -4,7 +4,7 @@ import {
   useMeLazyQuery,
   useRegisterMutation,
 } from "generated/graphql";
-import { createContext, ReactNode, useEffect, useReducer } from "react";
+import { ReactNode, createContext, useEffect, useReducer } from "react";
 import { IUser } from "types/user";
 // utils
 import { getRefreshToken, isValidToken, setSession } from "../utils/jwt2";

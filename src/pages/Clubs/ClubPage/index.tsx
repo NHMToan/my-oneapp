@@ -10,18 +10,16 @@ import {
 import useLocales from "hooks/useLocales";
 import { useNavigateSearch } from "hooks/useNavigateSearch";
 import useResponsive from "hooks/useResponsive";
-import useSettings from "hooks/useSettings";
 import { FC } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { getValueFromUrlParams } from "utils/location";
 import ClubEvents from "../ClubEvents";
 import { ClubFormContent } from "../sections";
 import ClubNotes from "../sections/clubNote";
-import ClubAdmins from "../sections/clubpage/ClubAdmins";
 import ClubCover from "../sections/clubpage/ClubCover";
 import ClubGeneral from "../sections/clubpage/ClubGeneral";
-import ClubMembers from "../sections/clubpage/ClubMembers";
 import ClubRequests from "../sections/clubpage/ClubRequests";
+import MembersList from "../sections/clubpage/MembersList";
 interface ClubPageProps {}
 
 const TabsWrapperStyle = styled("div")(({ theme }) => ({
@@ -40,7 +38,6 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
   },
 }));
 const ClubPage: FC<ClubPageProps> = (props) => {
-  const { themeStretch } = useSettings();
   const { id } = useParams();
   const location = useLocation();
   const currentTab = getValueFromUrlParams(location.search, "tab") || "general";
@@ -89,8 +86,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
       ),
       component: (
         <div>
-          <ClubAdmins club={club as any} />
-          <ClubMembers club={club as any} />
+          <MembersList club={club as any} />
         </div>
       ),
     },
@@ -138,7 +134,7 @@ const ClubPage: FC<ClubPageProps> = (props) => {
   ];
 
   return (
-    <Container maxWidth={themeStretch ? false : "lg"}>
+    <Container>
       <Card
         sx={{
           mb: 3,
