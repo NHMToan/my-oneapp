@@ -6,6 +6,7 @@ import { useState } from "react";
 import AuthSocial from "sections/auth/AuthSocial";
 import { LoginForm } from "sections/auth/login";
 import PolicyModal from "../components/PolicyModal";
+import TOSModal from "../components/TOSModal";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled("div")(({ theme }) => ({
@@ -28,12 +29,15 @@ const ContentStyle = styled("div")(({ theme }) => ({
 
 export default function Login() {
   const { translate } = useLocales();
-  const [open, setOpen] = useState<boolean>(false);
+  const [openPP, setOpenPP] = useState<boolean>(false);
+  const [openTOS, setOpenTOS] = useState<boolean>(false);
 
-  const onOpen = () => {
-    setOpen(true);
+  const onOpenPP = () => {
+    setOpenPP(true);
   };
-
+  const onOpenTOS = () => {
+    setOpenTOS(true);
+  };
   return (
     <Page title="Login">
       <RootStyle>
@@ -61,17 +65,18 @@ export default function Login() {
               }}
             >
               {"By signing in, I agree to "}
-              <Link underline="always" color="text.primary" onClick={onOpen}>
+              <Link underline="always" color="text.primary" onClick={onOpenTOS}>
                 Terms of Service
               </Link>
               {" and "}
-              <Link underline="always" color="text.primary" onClick={onOpen}>
+              <Link underline="always" color="text.primary" onClick={onOpenPP}>
                 Privacy Policy
               </Link>
               .
             </Typography>
 
-            <PolicyModal open={open} onClose={() => setOpen(false)} />
+            <PolicyModal open={openPP} onClose={() => setOpenPP(false)} />
+            <TOSModal open={openTOS} onClose={() => setOpenTOS(false)} />
           </ContentStyle>
         </Container>
       </RootStyle>
