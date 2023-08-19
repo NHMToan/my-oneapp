@@ -36,6 +36,7 @@ import { fNumber } from "utils/formatNumber";
 import { fDateTime } from "utils/formatTime";
 import EventDetailsVotesTab from "./EventDetailsVotesTab";
 import EventForm from "./EventForm";
+import EventHistory from "./EventHistory";
 const IconStyle = styled(Iconify)(({ theme }) => ({
   width: 20,
   height: 20,
@@ -172,6 +173,14 @@ const Content: FC<EventDetailsContentProps> = ({
       component: (
         <EventDetailsVotesTab event={eventData} refetchStats={refetchStats} />
       ),
+    },
+    {
+      title: "History",
+      value: "history",
+      icon: (
+        <Iconify icon={"material-symbols:history"} width={20} height={20} />
+      ),
+      component: <EventHistory event={eventData} />,
     },
   ];
 

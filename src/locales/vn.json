@@ -259,5 +259,15 @@
     "list": {
       "title": "Lịch sử hoạt động"
     }
+  },
+  "event_history": {
+    "key": {
+      "add_note": "",
+      "bank": "",
+      "cash": "",
+      "momo": "",
+      "prepaid": "",
+      "remove_tag": ""
+    }
   }
 }

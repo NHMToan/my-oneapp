@@ -10,11 +10,12 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { PATH_DASHBOARD } from "Router/paths";
 import Avatar from "components/Avatar";
 import DropdownMenu from "components/DropdownMenu";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
-import Label from "components/Label";
 import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
 import {
@@ -26,10 +27,9 @@ import {
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
-import SocialsButton from "pages/People/sections/SocialsButton";
 import { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { PATH_DASHBOARD } from "Router/paths";
+import { useNavigate } from "react-router-dom";
+import MemberVotesModal from "./MembersList/components/MemberVotesModal";
 // ----------------------------------------------------------------------
 
 interface ClubAdminsProps {
@@ -62,6 +62,7 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
             member={{ profile: club.admin }}
             isAdmin
             refetch={refetch}
+            isSubAdmin={club.isSubAdmin}
           />
         </Grid>
         {data?.clubmembers?.results
@@ -73,6 +74,7 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
                 refetch={refetch}
                 showAction={club.isAdmin}
                 clubId={club?.id}
+                isSubAdmin={club.isSubAdmin}
               />
             </Grid>
           ))}
@@ -80,6 +82,23 @@ export default function ClubAdmins({ club }: ClubAdminsProps) {
     </Box>
   );
 }
+interface RootStyleProps {
+  theme?: any;
+  isAdmin?: any;
+}
+const RootStyle = styled(Card)<RootStyleProps>(({ theme, isAdmin }) => ({
+  textAlign: "center",
+  backgroundColor: isAdmin
+    ? theme.palette.error.lighter
+    : theme.palette.warning.lighter,
+  [theme.breakpoints.up("md")]: {
+    height: "100%",
+    display: "flex",
+    textAlign: "left",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+}));
 
 interface AdminCardProps {
   member: ClubMemberData;
@@ -87,6 +106,7 @@ interface AdminCardProps {
   showAction?: boolean;
   refetch: any;
   clubId?: string;
+  isSubAdmin: boolean;
 }
 function AdminCard({
   member,
@@ -94,17 +114,10 @@ function AdminCard({
   showAction,
   refetch,
   clubId,
+  isSubAdmin,
 }: AdminCardProps) {
   const {
-    profile: {
-      displayName,
-      avatar,
-      facebookLink,
-      portfolioLink,
-      linkedinLink,
-      twitterLink,
-      id: userId,
-    },
+    profile: { displayName, avatar },
     id,
   } = member;
   const [openChangeAdmin, setOpenChangeAdmin] = useState<boolean>(false);
@@ -113,34 +126,7 @@ function AdminCard({
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   const [onSetAdmin] = useChangeAdminMutation({ fetchPolicy: "no-cache" });
   const { enqueueSnackbar } = useSnackbar();
-  const { translate } = useLocales();
-
-  const SOCIALS = [
-    {
-      name: "FaceBook",
-      icon: "eva:facebook-fill",
-      socialColor: "#1877F2",
-      path: facebookLink,
-    },
-    {
-      name: "Portfolio",
-      icon: "bxs:user-rectangle",
-      socialColor: "#E02D69",
-      path: portfolioLink,
-    },
-    {
-      name: "Linkedin",
-      icon: "eva:linkedin-fill",
-      socialColor: "#007EBB",
-      path: linkedinLink,
-    },
-    {
-      name: "Twitter",
-      icon: "eva:twitter-fill",
-      socialColor: "#00AAEC",
-      path: twitterLink,
-    },
-  ];
+  const [openInfo, setOpenInfo] = useState<boolean>(false);
 
   const handleChangeAdmin = async () => {
     try {
@@ -158,45 +144,41 @@ function AdminCard({
     }
   };
   return (
-    <Card
+    <RootStyle
       sx={{
-        py: 5,
         display: "flex",
-        position: "relative",
         alignItems: "center",
-        flexDirection: "column",
+        p: 1.5,
       }}
+      isAdmin={isAdmin}
     >
+      <MemberVotesModal
+        open={openInfo}
+        onClose={() => {
+          setOpenInfo(false);
+        }}
+        member={member}
+        isAdmin={isAdmin || isSubAdmin}
+      />
       <Avatar
         alt={displayName}
         src={avatar}
-        sx={{ width: 64, height: 64, mb: 3 }}
+        sx={{ width: 40, height: 40 }}
         clickable
       />
-      <Typography variant="subtitle2" noWrap>
-        <Link to={PATH_DASHBOARD.user.profile(userId)} component={RouterLink}>
-          {displayName}
-        </Link>
-      </Typography>
-
-      <Typography
-        variant="body2"
-        sx={{
-          color: "text.secondary",
-          mb: 1,
-          top: 12,
-          left: 12,
-          position: "absolute",
-        }}
-      >
-        <Label variant="filled" color={isAdmin ? "error" : "success"}>
-          {isAdmin
-            ? translate("club.member.status.admin")
-            : translate("club.member.status.sub_admin")}
-        </Label>
-      </Typography>
-
-      <SocialsButton initialColor links={SOCIALS} />
+      <Box sx={{ flexGrow: 1, minWidth: 0, pl: 2, pr: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="subtitle2" noWrap>
+            <Link
+              onClick={() => {
+                setOpenInfo(true);
+              }}
+            >
+              {displayName}
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
 
       {showAction && (
         <DropdownMenu
@@ -285,6 +267,6 @@ function AdminCard({
           }
         />
       )}
-    </Card>
+    </RootStyle>
   );
 }

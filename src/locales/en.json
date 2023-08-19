@@ -259,5 +259,15 @@
     "list": {
       "title": "Votes history"
     }
+  },
+  "event_history": {
+    "key": {
+      "remove_tag": "<0>{{actor_name}}</0> remove tag for the vote of <2>{{action_object}}</2>",
+      "add_note": "<0>{{actor_name}}</0> add note for the vote of <2>{{action_object}}</2>",
+      "prepaid": "<0>{{actor_name}}</0> add [Prepaid] tag for the vote of <2>{{action_object}}</2>",
+      "bank": "<0>{{actor_name}}</0> add [Bank] tag for the vote of <2>{{action_object}}</2>",
+      "momo": "<0>{{actor_name}}</0> add [Momo] tag for the vote of <2>{{action_object}}</2>",
+      "cash": "<0>{{actor_name}}</0> add [Cash] tag for the vote of <2>{{action_object}}</2>"
+    }
   }
 }

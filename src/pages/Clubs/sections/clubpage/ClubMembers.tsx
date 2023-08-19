@@ -24,9 +24,8 @@ import {
 import useLocales from "hooks/useLocales";
 import { ClubData, ClubMemberData } from "pages/Clubs/data.t";
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { PATH_DASHBOARD } from "Router/paths";
 import { searchVietnameseName } from "utils/search";
+import MemberVotesModal from "./MembersList/components/MemberVotesModal";
 
 // ----------------------------------------------------------------------
 
@@ -78,6 +77,7 @@ export default function ClubMembers({ club }: ClubMembersProps) {
                 refetch={refetch}
                 isAuth={club.isAdmin || club.isSubAdmin}
                 isAdmin={club.isAdmin}
+                isSubAdmin={club.isSubAdmin}
               />
             </Grid>
           ))}
@@ -129,16 +129,34 @@ interface MemberCardProps {
   isAuth: boolean;
   isAdmin?: boolean;
 }
-function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
+function MemberCard({
+  member,
+  refetch,
+  isAuth,
+  isAdmin,
+  isSubAdmin,
+}: MemberCardProps) {
   const {
-    profile: { displayName, avatar, id: userId },
+    profile: { displayName, avatar },
     id,
   } = member;
+
+  const [openInfo, setOpenInfo] = useState<boolean>(false);
+
   const [onSetRole] = useSetRoleMutation({ fetchPolicy: "no-cache" });
 
   const [onRemove] = useDeleteClubMemberMutation({ fetchPolicy: "no-cache" });
   return (
     <Card sx={{ display: "flex", alignItems: "center", p: 1.5 }}>
+      <MemberVotesModal
+        open={openInfo}
+        onClose={() => {
+          setOpenInfo(false);
+        }}
+        member={member}
+        isAdmin={isAdmin || isSubAdmin}
+      />
+
       <Avatar
         alt={displayName}
         src={avatar}
@@ -149,8 +167,9 @@ function MemberCard({ member, refetch, isAuth, isAdmin }: MemberCardProps) {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="subtitle2" noWrap>
             <Link
-              to={PATH_DASHBOARD.user.profile(userId)}
-              component={RouterLink}
+              onClick={() => {
+                setOpenInfo(true);
+              }}
             >
               {displayName}
             </Link>

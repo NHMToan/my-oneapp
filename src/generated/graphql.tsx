@@ -5,408 +5,428 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
-  Upload: any;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type Admin = {
   __typename?: 'Admin';
-  account: Scalars['String'];
-  id: Scalars['ID'];
+  account: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type AdminLoginInput = {
-  account: Scalars['String'];
-  password: Scalars['String'];
+  account: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type AdminMutationResponse = IMutationResponse & {
   __typename?: 'AdminMutationResponse';
-  accessToken?: Maybe<Scalars['String']>;
-  code: Scalars['Float'];
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  accessToken?: Maybe<Scalars['String']['output']>;
+  code: Scalars['Float']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
   user?: Maybe<Admin>;
 };
 
 export type AdminRegisterInput = {
-  account: Scalars['String'];
-  key: Scalars['String'];
-  password: Scalars['String'];
+  account: Scalars['String']['input'];
+  key: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Candidates = {
   __typename?: 'Candidates';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<RatingCandidate>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Club = {
   __typename?: 'Club';
   admin: Profile;
-  cover: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id: Scalars['ID'];
-  isAdmin: Scalars['Boolean'];
-  isMember: Scalars['Boolean'];
-  isRequesting: Scalars['Boolean'];
-  isSubAdmin: Scalars['Boolean'];
-  memberCount: Scalars['Float'];
+  cover: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isAdmin: Scalars['Boolean']['output'];
+  isMember: Scalars['Boolean']['output'];
+  isRequesting: Scalars['Boolean']['output'];
+  isSubAdmin: Scalars['Boolean']['output'];
+  memberCount: Scalars['Float']['output'];
   members: Array<ClubMember>;
-  publish: Scalars['Boolean'];
-  title: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  publish: Scalars['Boolean']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ClubEvent = {
   __typename?: 'ClubEvent';
-  address?: Maybe<Scalars['String']>;
-  addressLink?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']['output']>;
+  addressLink?: Maybe<Scalars['String']['output']>;
   club: Club;
-  color: Scalars['String'];
-  createdAt: Scalars['DateTime'];
+  color: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   createdBy: ClubMember;
-  description: Scalars['String'];
-  end: Scalars['String'];
-  id: Scalars['ID'];
-  isAdmin: Scalars['Boolean'];
-  isVoted: Scalars['Boolean'];
-  maxVote?: Maybe<Scalars['Float']>;
-  myConfirmedCount: Scalars['Float'];
-  price?: Maybe<Scalars['Float']>;
-  show: Scalars['Boolean'];
-  slot: Scalars['Float'];
-  start: Scalars['String'];
-  status: Scalars['Float'];
-  time?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  description: Scalars['String']['output'];
+  end: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isAdmin: Scalars['Boolean']['output'];
+  isVoted: Scalars['Boolean']['output'];
+  maxVote?: Maybe<Scalars['Float']['output']>;
+  myConfirmedCount: Scalars['Float']['output'];
+  price?: Maybe<Scalars['Float']['output']>;
+  show: Scalars['Boolean']['output'];
+  slot: Scalars['Float']['output'];
+  start: Scalars['String']['output'];
+  status: Scalars['Float']['output'];
+  time?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
   vote?: Maybe<Vote>;
-  voteCount: Scalars['Float'];
+  voteCount: Scalars['Float']['output'];
   votes: Array<Vote>;
-  waitingCount: Scalars['Float'];
+  waitingCount: Scalars['Float']['output'];
 };
 
 export type ClubMember = {
   __typename?: 'ClubMember';
   club: Club;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  isAdmin: Scalars['Boolean'];
-  isAdvanced: Scalars['Boolean'];
-  isKicked?: Maybe<Scalars['Boolean']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  isAdmin: Scalars['Boolean']['output'];
+  isAdvanced: Scalars['Boolean']['output'];
+  isKicked?: Maybe<Scalars['Boolean']['output']>;
   profile: Profile;
-  role?: Maybe<Scalars['Float']>;
-  status: Scalars['Float'];
-  updatedAt: Scalars['DateTime'];
+  role?: Maybe<Scalars['Float']['output']>;
+  status: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ClubMemberMutationResponse = IMutationResponse & {
   __typename?: 'ClubMemberMutationResponse';
   clubMember?: Maybe<ClubMember>;
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type ClubMutationResponse = IMutationResponse & {
   __typename?: 'ClubMutationResponse';
   club?: Maybe<Club>;
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type ClubNote = {
   __typename?: 'ClubNote';
   club: Club;
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id: Scalars['ID'];
-  images?: Maybe<Array<Scalars['String']>>;
-  isPublic: Scalars['Boolean'];
-  updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  images?: Maybe<Array<Scalars['String']['output']>>;
+  isPublic: Scalars['Boolean']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ClubNoteMutationResponse = IMutationResponse & {
   __typename?: 'ClubNoteMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']['output']>;
   note?: Maybe<ClubNote>;
-  success: Scalars['Boolean'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type ClubNotes = {
   __typename?: 'ClubNotes';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<ClubNote>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Clubmembers = {
   __typename?: 'Clubmembers';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<ClubMember>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Clubs = {
   __typename?: 'Clubs';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Club>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Comment = {
   __typename?: 'Comment';
   author: User;
   comment: Comment;
-  content: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
   replyComments?: Maybe<Array<Comment>>;
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type CommentInput = {
-  content: Scalars['String'];
-  postId: Scalars['ID'];
+  content: Scalars['String']['input'];
+  postId: Scalars['ID']['input'];
 };
 
 export type CommentMutationResponse = IMutationResponse & {
   __typename?: 'CommentMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   comment?: Maybe<Comment>;
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type Comments = {
   __typename?: 'Comments';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Comment>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Conversation = {
   __typename?: 'Conversation';
-  id: Scalars['ID'];
-  isRead: Scalars['Boolean'];
+  id: Scalars['ID']['output'];
+  isRead: Scalars['Boolean']['output'];
   members: Array<Profile>;
   messages: Array<Message>;
-  type: Scalars['String'];
-  unreadCount: Scalars['Float'];
-  updatedAt: Scalars['DateTime'];
+  type: Scalars['String']['output'];
+  unreadCount: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ConversationInput = {
-  content: Scalars['String'];
-  members: Array<Scalars['String']>;
+  content: Scalars['String']['input'];
+  members: Array<Scalars['String']['input']>;
 };
 
 export type ConversationMutationResponse = IMutationResponse & {
   __typename?: 'ConversationMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   conversation?: Maybe<Conversation>;
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type Conversations = {
   __typename?: 'Conversations';
-  error: Scalars['Boolean'];
-  hasMore: Scalars['Boolean'];
+  error: Scalars['Boolean']['output'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Conversation>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type CreateClubInput = {
-  coverFile: Scalars['Upload'];
-  description: Scalars['String'];
-  key: Scalars['String'];
-  publish: Scalars['Boolean'];
-  title: Scalars['String'];
+  coverFile: Scalars['Upload']['input'];
+  description: Scalars['String']['input'];
+  key: Scalars['String']['input'];
+  publish: Scalars['Boolean']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type CreateClubNoteInput = {
-  clubId: Scalars['String'];
-  description: Scalars['String'];
-  images: Array<Scalars['Upload']>;
-  isPublic: Scalars['Boolean'];
+  clubId: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  images: Array<Scalars['Upload']['input']>;
+  isPublic: Scalars['Boolean']['input'];
 };
 
 export type CreateEventInput = {
-  address?: InputMaybe<Scalars['String']>;
-  addressLink?: InputMaybe<Scalars['String']>;
-  clubId: Scalars['String'];
-  color: Scalars['String'];
-  description: Scalars['String'];
-  end: Scalars['String'];
-  isInstant?: InputMaybe<Scalars['Boolean']>;
-  maxVote: Scalars['Float'];
-  price?: InputMaybe<Scalars['Float']>;
-  slot: Scalars['Float'];
-  start: Scalars['String'];
-  time: Scalars['String'];
-  title: Scalars['String'];
+  address?: InputMaybe<Scalars['String']['input']>;
+  addressLink?: InputMaybe<Scalars['String']['input']>;
+  clubId: Scalars['String']['input'];
+  color: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  end: Scalars['String']['input'];
+  isInstant?: InputMaybe<Scalars['Boolean']['input']>;
+  maxVote: Scalars['Float']['input'];
+  price?: InputMaybe<Scalars['Float']['input']>;
+  slot: Scalars['Float']['input'];
+  start: Scalars['String']['input'];
+  time: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type CreatePostInput = {
-  allowComments: Scalars['Boolean'];
-  content: Scalars['String'];
-  coverFile: Scalars['Upload'];
-  description?: InputMaybe<Scalars['String']>;
-  metaDescription?: InputMaybe<Scalars['String']>;
-  metaKeywords?: InputMaybe<Array<Scalars['String']>>;
-  metaTitle?: InputMaybe<Scalars['String']>;
-  publish: Scalars['Boolean'];
-  tags?: InputMaybe<Array<Scalars['String']>>;
-  title: Scalars['String'];
+  allowComments: Scalars['Boolean']['input'];
+  content: Scalars['String']['input'];
+  coverFile: Scalars['Upload']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  metaDescription?: InputMaybe<Scalars['String']['input']>;
+  metaKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
+  metaTitle?: InputMaybe<Scalars['String']['input']>;
+  publish: Scalars['Boolean']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
 };
 
 export type CreateRatingCandidateInput = {
-  bio: Scalars['String'];
-  name: Scalars['String'];
-  photo1?: InputMaybe<Scalars['Upload']>;
-  photo2?: InputMaybe<Scalars['Upload']>;
-  photo3?: InputMaybe<Scalars['Upload']>;
+  bio: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  photo1?: InputMaybe<Scalars['Upload']['input']>;
+  photo2?: InputMaybe<Scalars['Upload']['input']>;
+  photo3?: InputMaybe<Scalars['Upload']['input']>;
 };
 
 export type CreateRatingInput = {
-  description: Scalars['String'];
-  end: Scalars['String'];
-  name: Scalars['String'];
-  start: Scalars['String'];
-  status?: InputMaybe<Scalars['Float']>;
+  description: Scalars['String']['input'];
+  end: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  start: Scalars['String']['input'];
+  status?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CreateVoteInput = {
-  eventId: Scalars['String'];
-  status: Scalars['Float'];
-  value: Scalars['Float'];
+  eventId: Scalars['String']['input'];
+  status: Scalars['Float']['input'];
+  value: Scalars['Float']['input'];
+};
+
+export type EventHistory = {
+  __typename?: 'EventHistory';
+  createdAt: Scalars['DateTime']['output'];
+  event: ClubEvent;
+  id: Scalars['ID']['output'];
+  member: ClubMember;
+  object?: Maybe<Vote>;
+  objectString?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+  value?: Maybe<Scalars['Float']['output']>;
+};
+
+export type EventHistoryList = {
+  __typename?: 'EventHistoryList';
+  results: Array<EventHistory>;
+  totalCount: Scalars['Float']['output'];
 };
 
 export type EventMutationResponse = IMutationResponse & {
   __typename?: 'EventMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
   event?: Maybe<ClubEvent>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type EventVoteMutationResponse = IMutationResponse & {
   __typename?: 'EventVoteMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
   vote?: Maybe<Vote>;
 };
 
 export type Events = {
   __typename?: 'Events';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<ClubEvent>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type FbLoginInput = {
-  id: Scalars['String'];
-  name: Scalars['String'];
-  picture: Scalars['String'];
+  id: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  picture: Scalars['String']['input'];
 };
 
 export type FieldError = {
   __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
+  field: Scalars['String']['output'];
+  message: Scalars['String']['output'];
 };
 
 export type Following = {
   __typename?: 'Following';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   followedTo: Profile;
   follower: Profile;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
 };
 
 export type FollowingMutaionResponse = IMutationResponse & {
   __typename?: 'FollowingMutaionResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
   following?: Maybe<Following>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type FriendMutaionResponse = IMutationResponse & {
   __typename?: 'FriendMutaionResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
   friendship?: Maybe<Friendship>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type Friendship = {
   __typename?: 'Friendship';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
   sendTo: Profile;
   sender: Profile;
-  status: Scalars['Float'];
+  status: Scalars['Float']['output'];
 };
 
 export type IMutationResponse = {
-  code: Scalars['Float'];
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  code: Scalars['Float']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type LoginInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Message = {
   __typename?: 'Message';
-  attachments?: Maybe<Array<Scalars['String']>>;
-  content: Scalars['String'];
-  contentType: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  isRead?: Maybe<Scalars['Boolean']>;
+  attachments?: Maybe<Array<Scalars['String']['output']>>;
+  content: Scalars['String']['output'];
+  contentType: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  isRead?: Maybe<Scalars['Boolean']['output']>;
   sender: Profile;
 };
 
 export type MessageInput = {
-  content?: InputMaybe<Scalars['String']>;
-  conversationId: Scalars['ID'];
-  image?: InputMaybe<Scalars['Upload']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  conversationId: Scalars['ID']['input'];
+  image?: InputMaybe<Scalars['Upload']['input']>;
 };
 
 export type Messages = {
   __typename?: 'Messages';
-  error?: Maybe<Scalars['Boolean']>;
-  hasMore: Scalars['Boolean'];
+  error?: Maybe<Scalars['Boolean']['output']>;
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Message>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Mutation = {
@@ -414,7 +434,7 @@ export type Mutation = {
   acceptJoin: ClubMutationResponse;
   addFriend: FriendMutaionResponse;
   addNewConversation: ConversationMutationResponse;
-  addNewMessage: Scalars['Boolean'];
+  addNewMessage: Scalars['Boolean']['output'];
   adminChangePassUser: UserMutationResponse;
   adminLogin: AdminMutationResponse;
   adminLogout: AdminMutationResponse;
@@ -454,7 +474,7 @@ export type Mutation = {
   login: UserMutationResponse;
   logout: UserMutationResponse;
   noteVote: EventVoteMutationResponse;
-  readAllNotis: Scalars['Boolean'];
+  readAllNotis: Scalars['Boolean']['output'];
   register: UserMutationResponse;
   replyComment: CommentMutationResponse;
   requestJoinClub: ClubMutationResponse;
@@ -478,12 +498,12 @@ export type Mutation = {
 
 
 export type MutationAcceptJoinArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationAddFriendArgs = {
-  toId: Scalars['ID'];
+  toId: Scalars['ID']['input'];
 };
 
 
@@ -498,8 +518,8 @@ export type MutationAddNewMessageArgs = {
 
 
 export type MutationAdminChangePassUserArgs = {
-  newPassword: Scalars['String'];
-  userId: Scalars['ID'];
+  newPassword: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -509,7 +529,7 @@ export type MutationAdminLoginArgs = {
 
 
 export type MutationAdminLogoutArgs = {
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -519,76 +539,76 @@ export type MutationAdminRegisterArgs = {
 
 
 export type MutationAdminSetAvatarArgs = {
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
   updateProfileInput: UpdateProfileInput;
 };
 
 
 export type MutationAdminSetEmailArgs = {
-  email: Scalars['String'];
-  userId: Scalars['ID'];
+  email: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationAdminSetRoleArgs = {
-  newRole: Scalars['String'];
-  userId: Scalars['ID'];
+  newRole: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationAdminSetStatusArgs = {
-  status?: InputMaybe<Scalars['Int']>;
-  userId: Scalars['ID'];
+  status?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationCancelRequestArgs = {
-  memId: Scalars['ID'];
+  memId: Scalars['ID']['input'];
 };
 
 
 export type MutationCancelRequestClubArgs = {
-  clubId: Scalars['ID'];
+  clubId: Scalars['ID']['input'];
 };
 
 
 export type MutationChangeAdminArgs = {
-  clubId: Scalars['ID'];
-  memberId: Scalars['ID'];
+  clubId: Scalars['ID']['input'];
+  memberId: Scalars['ID']['input'];
 };
 
 
 export type MutationChangeClubNoteStatusArgs = {
-  id: Scalars['ID'];
-  isPublic: Scalars['Boolean'];
+  id: Scalars['ID']['input'];
+  isPublic: Scalars['Boolean']['input'];
 };
 
 
 export type MutationChangeEventStatusArgs = {
-  id: Scalars['ID'];
-  status: Scalars['Int'];
+  id: Scalars['ID']['input'];
+  status: Scalars['Int']['input'];
 };
 
 
 export type MutationChangeEventVoteArgs = {
-  eventId: Scalars['ID'];
-  eventSlot: Scalars['Int'];
-  newValue: Scalars['Int'];
-  voteId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
+  eventSlot: Scalars['Int']['input'];
+  newValue: Scalars['Int']['input'];
+  voteId: Scalars['ID']['input'];
 };
 
 
 export type MutationChangePasswordArgs = {
-  code: Scalars['String'];
-  newPassword: Scalars['String'];
+  code: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 };
 
 
 export type MutationChangeSlotsArgs = {
-  eventId: Scalars['ID'];
-  eventSlot: Scalars['Int'];
-  newValue: Scalars['Int'];
-  status: Scalars['Int'];
+  eventId: Scalars['ID']['input'];
+  eventSlot: Scalars['Int']['input'];
+  newValue: Scalars['Int']['input'];
+  status: Scalars['Int']['input'];
 };
 
 
@@ -599,7 +619,7 @@ export type MutationCommentPostArgs = {
 
 export type MutationCreateCandidateArgs = {
   createCandidateInput: CreateRatingCandidateInput;
-  ratingId: Scalars['ID'];
+  ratingId: Scalars['ID']['input'];
 };
 
 
@@ -629,47 +649,47 @@ export type MutationCreateRatingArgs = {
 
 
 export type MutationDeleteCandidateArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteClubArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteClubMemberArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteClubNoteArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteCommentArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteEventArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteFriendShipArgs = {
-  toId: Scalars['ID'];
+  toId: Scalars['ID']['input'];
 };
 
 
 export type MutationDeletePostArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteRatingArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
@@ -679,17 +699,17 @@ export type MutationFbLoginArgs = {
 
 
 export type MutationFollowArgs = {
-  followId: Scalars['ID'];
+  followId: Scalars['ID']['input'];
 };
 
 
 export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationLikeArgs = {
-  postId: Scalars['ID'];
+  postId: Scalars['ID']['input'];
 };
 
 
@@ -699,13 +719,13 @@ export type MutationLoginArgs = {
 
 
 export type MutationLogoutArgs = {
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationNoteVoteArgs = {
-  note: Scalars['String'];
-  voteId: Scalars['ID'];
+  note: Scalars['String']['input'];
+  voteId: Scalars['ID']['input'];
 };
 
 
@@ -720,65 +740,65 @@ export type MutationReplyCommentArgs = {
 
 
 export type MutationRequestJoinClubArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationSetConversationReadArgs = {
-  converId: Scalars['ID'];
+  converId: Scalars['ID']['input'];
 };
 
 
 export type MutationSetIsAdvancedArgs = {
-  isAdvanced: Scalars['Boolean'];
-  memberId: Scalars['ID'];
+  isAdvanced: Scalars['Boolean']['input'];
+  memberId: Scalars['ID']['input'];
 };
 
 
 export type MutationSetRoleArgs = {
-  id: Scalars['ID'];
-  role: Scalars['Int'];
+  id: Scalars['ID']['input'];
+  role: Scalars['Int']['input'];
 };
 
 
 export type MutationUnFollowArgs = {
-  followId: Scalars['ID'];
+  followId: Scalars['ID']['input'];
 };
 
 
 export type MutationUnVoteEventArgs = {
-  eventId: Scalars['ID'];
-  eventSlot: Scalars['Int'];
-  voteId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
+  eventSlot: Scalars['Int']['input'];
+  voteId: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdateCandidateArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   updateCandidateInput: CreateRatingCandidateInput;
 };
 
 
 export type MutationUpdateClubArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   updateClubInput: UpdateClubInput;
 };
 
 
 export type MutationUpdateClubNoteArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   updateClubNoteInput: UpdateClubNoteInput;
 };
 
 
 export type MutationUpdateEventArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   updateEventInput: UpdateEventInput;
 };
 
 
 export type MutationUpdatePostArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   updatePostInput: UpdatePostInput;
 };
 
@@ -789,7 +809,7 @@ export type MutationUpdateProfileArgs = {
 
 
 export type MutationUpdateRatingArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   updateRatingInput: CreateRatingInput;
 };
 
@@ -800,14 +820,14 @@ export type MutationUpdateUserArgs = {
 
 
 export type MutationVoteCandidateArgs = {
-  candidateId: Scalars['ID'];
-  ratingId: Scalars['ID'];
+  candidateId: Scalars['ID']['input'];
+  ratingId: Scalars['ID']['input'];
 };
 
 
 export type MutationVoteChangePaidArgs = {
-  payStatus: Scalars['String'];
-  voteId: Scalars['ID'];
+  payStatus: Scalars['String']['input'];
+  voteId: Scalars['ID']['input'];
 };
 
 
@@ -817,132 +837,132 @@ export type MutationVoteEventArgs = {
 
 export type MutationResponse = IMutationResponse & {
   __typename?: 'MutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type NewNotiSubscriptionData = {
   __typename?: 'NewNotiSubscriptionData';
   notification: UserNotification;
-  profileId: Scalars['String'];
+  profileId: Scalars['String']['output'];
 };
 
 export type NewVoteSubscriptionData = {
   __typename?: 'NewVoteSubscriptionData';
-  eventId: Scalars['String'];
-  status: Scalars['Float'];
-  voteCount?: Maybe<Scalars['Float']>;
-  waitingCount?: Maybe<Scalars['Float']>;
+  eventId: Scalars['String']['output'];
+  status: Scalars['Float']['output'];
+  voteCount?: Maybe<Scalars['Float']['output']>;
+  waitingCount?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Notification = {
   __typename?: 'Notification';
-  action_object?: Maybe<Scalars['String']>;
-  actor_avatar?: Maybe<Scalars['String']>;
-  actor_name?: Maybe<Scalars['String']>;
-  amount?: Maybe<Scalars['Float']>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  messageKey: Scalars['String'];
+  action_object?: Maybe<Scalars['String']['output']>;
+  actor_avatar?: Maybe<Scalars['String']['output']>;
+  actor_name?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['Float']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  messageKey: Scalars['String']['output'];
 };
 
 export type Notifications = {
   __typename?: 'Notifications';
   results: Array<UserNotification>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Post = {
   __typename?: 'Post';
-  allowComments: Scalars['Boolean'];
+  allowComments: Scalars['Boolean']['output'];
   author: User;
-  comment: Scalars['Float'];
+  comment: Scalars['Float']['output'];
   comments: Array<Comment>;
-  content: Scalars['String'];
-  cover: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  favorite: Scalars['Float'];
+  content: Scalars['String']['output'];
+  cover: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  favorite: Scalars['Float']['output'];
   favoritePerson?: Maybe<Array<User>>;
-  id: Scalars['ID'];
-  metaDescription?: Maybe<Scalars['String']>;
-  metaKeywords?: Maybe<Array<Scalars['String']>>;
-  metaTitle?: Maybe<Scalars['String']>;
-  publish: Scalars['Boolean'];
-  tags?: Maybe<Array<Scalars['String']>>;
-  textSnippet: Scalars['String'];
-  title: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID']['output'];
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  metaKeywords?: Maybe<Array<Scalars['String']['output']>>;
+  metaTitle?: Maybe<Scalars['String']['output']>;
+  publish: Scalars['Boolean']['output'];
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  textSnippet: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type PostMutationResponse = IMutationResponse & {
   __typename?: 'PostMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']['output']>;
   post?: Maybe<Post>;
-  success: Scalars['Boolean'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type Posts = {
   __typename?: 'Posts';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Post>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Profile = {
   __typename?: 'Profile';
-  about?: Maybe<Scalars['String']>;
-  avatar?: Maybe<Scalars['String']>;
-  company?: Maybe<Scalars['String']>;
+  about?: Maybe<Scalars['String']['output']>;
+  avatar?: Maybe<Scalars['String']['output']>;
+  company?: Maybe<Scalars['String']['output']>;
   conversations: Array<Conversation>;
-  country?: Maybe<Scalars['String']>;
-  cover?: Maybe<Scalars['String']>;
-  displayName?: Maybe<Scalars['String']>;
-  dob?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  facebookLink?: Maybe<Scalars['String']>;
-  follower: Scalars['Float'];
+  country?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['String']['output']>;
+  displayName?: Maybe<Scalars['String']['output']>;
+  dob?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  facebookLink?: Maybe<Scalars['String']['output']>;
+  follower: Scalars['Float']['output'];
   followers: Array<Following>;
-  following: Scalars['Float'];
+  following: Scalars['Float']['output'];
   followings: Array<Following>;
-  friend: Scalars['Float'];
+  friend: Scalars['Float']['output'];
   friends: Array<Friendship>;
-  gender?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  instagramLink?: Maybe<Scalars['String']>;
-  isFollowing: Scalars['Boolean'];
-  isFriend: Scalars['Boolean'];
-  isFriendRequest: Scalars['Boolean'];
-  isFriendSending: Scalars['Boolean'];
-  linkedinLink?: Maybe<Scalars['String']>;
-  phoneNumber?: Maybe<Scalars['String']>;
-  portfolioLink?: Maybe<Scalars['String']>;
-  position?: Maybe<Scalars['String']>;
-  role?: Maybe<Scalars['String']>;
-  school?: Maybe<Scalars['String']>;
-  status: Scalars['Float'];
-  twitterLink?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
+  gender?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  instagramLink?: Maybe<Scalars['String']['output']>;
+  isFollowing: Scalars['Boolean']['output'];
+  isFriend: Scalars['Boolean']['output'];
+  isFriendRequest: Scalars['Boolean']['output'];
+  isFriendSending: Scalars['Boolean']['output'];
+  linkedinLink?: Maybe<Scalars['String']['output']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  portfolioLink?: Maybe<Scalars['String']['output']>;
+  position?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Scalars['String']['output']>;
+  school?: Maybe<Scalars['String']['output']>;
+  status: Scalars['Float']['output'];
+  twitterLink?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ProfileMutationResponse = IMutationResponse & {
   __typename?: 'ProfileMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
-  success: Scalars['Boolean'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type Profiles = {
   __typename?: 'Profiles';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Profile>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Query = {
@@ -953,11 +973,12 @@ export type Query = {
   clubs?: Maybe<Clubs>;
   comments?: Maybe<Comments>;
   getCandidates?: Maybe<Candidates>;
-  getClubRequestingNumber?: Maybe<Scalars['Float']>;
+  getClubRequestingNumber?: Maybe<Scalars['Float']['output']>;
   getConversation?: Maybe<Conversation>;
   getConversations?: Maybe<Conversations>;
   getEvent?: Maybe<ClubEvent>;
-  getEventIsVoted: Scalars['Boolean'];
+  getEventHistory?: Maybe<EventHistoryList>;
+  getEventIsVoted: Scalars['Boolean']['output'];
   getEvents?: Maybe<Events>;
   getFollowers?: Maybe<Profiles>;
   getFriends?: Maybe<Profiles>;
@@ -969,18 +990,18 @@ export type Query = {
   getProfile?: Maybe<Profile>;
   getProfiles?: Maybe<Profiles>;
   getRatingVotes?: Maybe<RatingVotes>;
-  getUnreadCount?: Maybe<Scalars['Float']>;
+  getUnreadCount?: Maybe<Scalars['Float']['output']>;
   getUsers?: Maybe<Users>;
-  getVoteCount: Scalars['Float'];
+  getVoteCount: Scalars['Float']['output'];
   getVoteStats?: Maybe<VotCount>;
   getVotes?: Maybe<Votes>;
-  getWaitingVote: Scalars['Float'];
-  hello: Scalars['Float'];
+  getWaitingVote: Scalars['Float']['output'];
+  hello: Scalars['Float']['output'];
   me?: Maybe<User>;
   myClubNotes?: Maybe<ClubNotes>;
   myConfirmedEvents?: Maybe<Events>;
   myEvents?: Maybe<Events>;
-  myEventsCount?: Maybe<Scalars['Float']>;
+  myEventsCount?: Maybe<Scalars['Float']['output']>;
   myProfile?: Maybe<Profile>;
   myRatings?: Maybe<Ratings>;
   post?: Maybe<Post>;
@@ -992,242 +1013,249 @@ export type Query = {
 
 
 export type QueryClubArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryClubNotesArgs = {
-  clubId: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
+  clubId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryClubmembersArgs = {
-  clubId: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
-  role?: InputMaybe<Scalars['Int']>;
-  searchName?: InputMaybe<Scalars['String']>;
-  status: Scalars['Int'];
+  clubId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Scalars['Int']['input']>;
+  searchName?: InputMaybe<Scalars['String']['input']>;
+  status: Scalars['Int']['input'];
 };
 
 
 export type QueryClubsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryCommentsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
-  postId: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
+  postId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetCandidatesArgs = {
-  ratingId: Scalars['ID'];
+  ratingId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetClubRequestingNumberArgs = {
-  clubId: Scalars['ID'];
+  clubId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetConversationArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetConversationsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetEventArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetEventHistoryArgs = {
+  eventId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetEventIsVotedArgs = {
-  eventId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetEventsArgs = {
-  clubId: Scalars['String'];
-  dateAfter?: InputMaybe<Scalars['String']>;
-  dateBefore?: InputMaybe<Scalars['String']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  clubId: Scalars['String']['input'];
+  dateAfter?: InputMaybe<Scalars['String']['input']>;
+  dateBefore?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetFollowersArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  profileId: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  profileId: Scalars['String']['input'];
 };
 
 
 export type QueryGetFriendsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  profileId: Scalars['String'];
-  search?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  profileId: Scalars['String']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryGetMemberVotesArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  memberId: Scalars['String'];
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  memberId: Scalars['String']['input'];
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetMessagesArgs = {
-  conversationId: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  conversationId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetMyHistoryVotesArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetMyVotesArgs = {
-  eventId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetNotificationsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetProfileArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetProfilesArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
-  search?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetRatingVotesArgs = {
-  candidateId?: InputMaybe<Scalars['ID']>;
+  candidateId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
 export type QueryGetUsersArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetVoteCountArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetVoteStatsArgs = {
-  eventId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetVotesArgs = {
-  eventId: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  status?: InputMaybe<Scalars['Int']>;
+  eventId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryGetWaitingVoteArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryPostArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryPostsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryRatingArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryRatingsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Rating = {
   __typename?: 'Rating';
   candidates: Array<RatingCandidate>;
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  end: Scalars['String'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  start: Scalars['String'];
-  status: Scalars['Float'];
-  updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  end: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  start: Scalars['String']['output'];
+  status: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
   votedFor?: Maybe<RatingCandidate>;
 };
 
 export type RatingCandidate = {
   __typename?: 'RatingCandidate';
-  bio?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  order?: Maybe<Scalars['Float']>;
-  photo1: Scalars['String'];
-  photo2?: Maybe<Scalars['String']>;
-  photo3?: Maybe<Scalars['String']>;
+  bio?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  order?: Maybe<Scalars['Float']['output']>;
+  photo1: Scalars['String']['output'];
+  photo2?: Maybe<Scalars['String']['output']>;
+  photo3?: Maybe<Scalars['String']['output']>;
   votes: Array<RatingVote>;
 };
 
 export type RatingMutationResponse = IMutationResponse & {
   __typename?: 'RatingMutationResponse';
-  code: Scalars['Float'];
+  code: Scalars['Float']['output'];
   errors?: Maybe<Array<FieldError>>;
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type RatingVote = {
   __typename?: 'RatingVote';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
   rating: Rating;
   votedFor: RatingCandidate;
   voter: User;
@@ -1235,28 +1263,28 @@ export type RatingVote = {
 
 export type RatingVotes = {
   __typename?: 'RatingVotes';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<RatingVote>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type Ratings = {
   __typename?: 'Ratings';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Rating>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type RegisterInput = {
-  email: Scalars['String'];
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type ReplyCommentInput = {
-  commentId: Scalars['ID'];
-  content: Scalars['String'];
+  commentId: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
 };
 
 export type Subscription = {
@@ -1270,162 +1298,162 @@ export type Subscription = {
 
 
 export type SubscriptionConversationChangedArgs = {
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 };
 
 
 export type SubscriptionNewMessageSentArgs = {
-  conversationId: Scalars['ID'];
+  conversationId: Scalars['ID']['input'];
 };
 
 
 export type SubscriptionNewNotificationArgs = {
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 };
 
 
 export type SubscriptionVoteChangedArgs = {
-  eventId: Scalars['ID'];
-  status: Scalars['Int'];
+  eventId: Scalars['ID']['input'];
+  status: Scalars['Int']['input'];
 };
 
 export type UpdateClubInput = {
-  coverFile?: InputMaybe<Scalars['Upload']>;
-  description: Scalars['String'];
-  publish: Scalars['Boolean'];
-  title: Scalars['String'];
+  coverFile?: InputMaybe<Scalars['Upload']['input']>;
+  description: Scalars['String']['input'];
+  publish: Scalars['Boolean']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type UpdateClubNoteInput = {
-  description: Scalars['String'];
-  isPublic: Scalars['Boolean'];
+  description: Scalars['String']['input'];
+  isPublic: Scalars['Boolean']['input'];
 };
 
 export type UpdateEventInput = {
-  address?: InputMaybe<Scalars['String']>;
-  addressLink?: InputMaybe<Scalars['String']>;
-  color: Scalars['String'];
-  description: Scalars['String'];
-  end: Scalars['String'];
-  maxVote: Scalars['Float'];
-  price?: InputMaybe<Scalars['Float']>;
-  slot: Scalars['Float'];
-  start: Scalars['String'];
-  time?: InputMaybe<Scalars['String']>;
-  title: Scalars['String'];
+  address?: InputMaybe<Scalars['String']['input']>;
+  addressLink?: InputMaybe<Scalars['String']['input']>;
+  color: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  end: Scalars['String']['input'];
+  maxVote: Scalars['Float']['input'];
+  price?: InputMaybe<Scalars['Float']['input']>;
+  slot: Scalars['Float']['input'];
+  start: Scalars['String']['input'];
+  time?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
 };
 
 export type UpdatePostInput = {
-  allowComments: Scalars['Boolean'];
-  content: Scalars['String'];
-  coverFile?: InputMaybe<Scalars['Upload']>;
-  description?: InputMaybe<Scalars['String']>;
-  metaDescription?: InputMaybe<Scalars['String']>;
-  metaKeywords?: InputMaybe<Array<Scalars['String']>>;
-  metaTitle?: InputMaybe<Scalars['String']>;
-  publish: Scalars['Boolean'];
-  tags?: InputMaybe<Array<Scalars['String']>>;
-  title: Scalars['String'];
+  allowComments: Scalars['Boolean']['input'];
+  content: Scalars['String']['input'];
+  coverFile?: InputMaybe<Scalars['Upload']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  metaDescription?: InputMaybe<Scalars['String']['input']>;
+  metaKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
+  metaTitle?: InputMaybe<Scalars['String']['input']>;
+  publish: Scalars['Boolean']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
 };
 
 export type UpdateProfileInput = {
-  about?: InputMaybe<Scalars['String']>;
-  avatar?: InputMaybe<Scalars['String']>;
-  avatarFile?: InputMaybe<Scalars['Upload']>;
-  category?: InputMaybe<Scalars['String']>;
-  company?: InputMaybe<Scalars['String']>;
-  country?: InputMaybe<Scalars['String']>;
-  cover?: InputMaybe<Scalars['String']>;
-  coverFile?: InputMaybe<Scalars['Upload']>;
-  displayName?: InputMaybe<Scalars['String']>;
-  dob?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
-  facebookLink?: InputMaybe<Scalars['String']>;
-  gender?: InputMaybe<Scalars['String']>;
-  instagramLink?: InputMaybe<Scalars['String']>;
-  linkedinLink?: InputMaybe<Scalars['String']>;
-  phoneNumber?: InputMaybe<Scalars['String']>;
-  portfolioLink?: InputMaybe<Scalars['String']>;
-  position?: InputMaybe<Scalars['String']>;
-  role?: InputMaybe<Scalars['String']>;
-  school?: InputMaybe<Scalars['String']>;
-  twitterLink?: InputMaybe<Scalars['String']>;
+  about?: InputMaybe<Scalars['String']['input']>;
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  avatarFile?: InputMaybe<Scalars['Upload']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  company?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  cover?: InputMaybe<Scalars['String']['input']>;
+  coverFile?: InputMaybe<Scalars['Upload']['input']>;
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  dob?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  facebookLink?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
+  instagramLink?: InputMaybe<Scalars['String']['input']>;
+  linkedinLink?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  portfolioLink?: InputMaybe<Scalars['String']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Scalars['String']['input']>;
+  school?: InputMaybe<Scalars['String']['input']>;
+  twitterLink?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
 };
 
 export type User = {
   __typename?: 'User';
-  avatar: Scalars['String'];
-  displayName: Scalars['String'];
-  email: Scalars['String'];
+  avatar: Scalars['String']['output'];
+  displayName: Scalars['String']['output'];
+  email: Scalars['String']['output'];
   favoritePosts: Array<Post>;
-  firstName?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  isPublic: Scalars['Boolean'];
-  lastName: Scalars['String'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isPublic: Scalars['Boolean']['output'];
+  lastName: Scalars['String']['output'];
   profile: Profile;
-  provider?: Maybe<Scalars['String']>;
-  role: Scalars['String'];
-  status: Scalars['Float'];
+  provider?: Maybe<Scalars['String']['output']>;
+  role: Scalars['String']['output'];
+  status: Scalars['Float']['output'];
 };
 
 export type UserMutationResponse = IMutationResponse & {
   __typename?: 'UserMutationResponse';
-  accessToken?: Maybe<Scalars['String']>;
-  code: Scalars['Float'];
-  message?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']['output']>;
+  code: Scalars['Float']['output'];
+  message?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
-  success: Scalars['Boolean'];
+  success: Scalars['Boolean']['output'];
   user?: Maybe<User>;
 };
 
 export type UserNotification = {
   __typename?: 'UserNotification';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  is_read: Scalars['Boolean'];
-  is_seen: Scalars['Boolean'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  is_read: Scalars['Boolean']['output'];
+  is_seen: Scalars['Boolean']['output'];
   notification: Notification;
   profile: Profile;
-  read_at: Scalars['DateTime'];
+  read_at: Scalars['DateTime']['output'];
 };
 
 export type Users = {
   __typename?: 'Users';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<User>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type VotCount = {
   __typename?: 'VotCount';
-  confirmed: Scalars['Float'];
-  total: Scalars['Float'];
-  waiting: Scalars['Float'];
+  confirmed: Scalars['Float']['output'];
+  total: Scalars['Float']['output'];
+  waiting: Scalars['Float']['output'];
 };
 
 export type Vote = {
   __typename?: 'Vote';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   event: ClubEvent;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   member: ClubMember;
-  note?: Maybe<Scalars['String']>;
-  paid?: Maybe<Scalars['String']>;
-  status: Scalars['Int'];
-  updatedAt: Scalars['DateTime'];
-  value: Scalars['Int'];
+  note?: Maybe<Scalars['String']['output']>;
+  paid?: Maybe<Scalars['String']['output']>;
+  status: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  value: Scalars['Int']['output'];
 };
 
 export type Votes = {
   __typename?: 'Votes';
-  hasMore: Scalars['Boolean'];
+  hasMore: Scalars['Boolean']['output'];
   results: Array<Vote>;
-  totalCount: Scalars['Float'];
+  totalCount: Scalars['Float']['output'];
 };
 
 export type MessageInfoFragment = { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } };
@@ -1459,6 +1487,8 @@ export type EventVoteMutationResponseFragment = { __typename?: 'EventVoteMutatio
 export type EventInfoFragment = { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } };
 
 export type VoteInfoFragment = { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } };
+
+export type EventActivityFragment = { __typename?: 'EventHistory', id: string, createdAt: any, value?: number | null, type: string, objectString?: string | null, member: { __typename?: 'ClubMember', id: string, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }, event: { __typename?: 'ClubEvent', id: string, title: string } };
 
 export type FieldErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -1521,8 +1551,8 @@ export type RatingVoteInfoFragment = { __typename?: 'RatingVote', id: string, cr
 export type UserInfoFragment = { __typename?: 'User', id: string, email: string, lastName: string, firstName?: string | null, isPublic: boolean, role: string, avatar: string, displayName: string, profile: { __typename?: 'Profile', id: string } };
 
 export type ChangePasswordMutationVariables = Exact<{
-  code: Scalars['String'];
-  newPassword: Scalars['String'];
+  code: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 }>;
 
 
@@ -1543,14 +1573,14 @@ export type CreateMessageMutationVariables = Exact<{
 export type CreateMessageMutation = { __typename?: 'Mutation', addNewMessage: boolean };
 
 export type SetConversationReadMutationVariables = Exact<{
-  converId: Scalars['ID'];
+  converId: Scalars['ID']['input'];
 }>;
 
 
 export type SetConversationReadMutation = { __typename?: 'Mutation', setConversationRead: { __typename?: 'ConversationMutationResponse', code: number, success: boolean, message?: string | null, conversation?: { __typename?: 'Conversation', id: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteClubMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1564,7 +1594,7 @@ export type CreateClubMutationVariables = Exact<{
 export type CreateClubMutation = { __typename?: 'Mutation', createClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateClubMutationVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   updateClubInput: UpdateClubInput;
 }>;
 
@@ -1572,59 +1602,59 @@ export type UpdateClubMutationVariables = Exact<{
 export type UpdateClubMutation = { __typename?: 'Mutation', updateClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ChangeAdminMutationVariables = Exact<{
-  memberId: Scalars['ID'];
-  clubId: Scalars['ID'];
+  memberId: Scalars['ID']['input'];
+  clubId: Scalars['ID']['input'];
 }>;
 
 
 export type ChangeAdminMutation = { __typename?: 'Mutation', changeAdmin: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type RequestJoinClubMutationVariables = Exact<{
-  clubId: Scalars['ID'];
+  clubId: Scalars['ID']['input'];
 }>;
 
 
 export type RequestJoinClubMutation = { __typename?: 'Mutation', requestJoinClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type AcceptJoinClubMutationVariables = Exact<{
-  clubMemId: Scalars['ID'];
+  clubMemId: Scalars['ID']['input'];
 }>;
 
 
 export type AcceptJoinClubMutation = { __typename?: 'Mutation', acceptJoin: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type SetRoleMutationVariables = Exact<{
-  clubMemId: Scalars['ID'];
-  role: Scalars['Int'];
+  clubMemId: Scalars['ID']['input'];
+  role: Scalars['Int']['input'];
 }>;
 
 
 export type SetRoleMutation = { __typename?: 'Mutation', setRole: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type SetIsAdvancedMutationVariables = Exact<{
-  memberId: Scalars['ID'];
-  isAdvanced: Scalars['Boolean'];
+  memberId: Scalars['ID']['input'];
+  isAdvanced: Scalars['Boolean']['input'];
 }>;
 
 
 export type SetIsAdvancedMutation = { __typename?: 'Mutation', setIsAdvanced: { __typename?: 'ClubMemberMutationResponse', code: number, success: boolean, message?: string | null, clubMember?: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteClubMemberMutationVariables = Exact<{
-  clubMemId: Scalars['ID'];
+  clubMemId: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteClubMemberMutation = { __typename?: 'Mutation', deleteClubMember: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CancelRequestClubMutationVariables = Exact<{
-  clubId: Scalars['ID'];
+  clubId: Scalars['ID']['input'];
 }>;
 
 
 export type CancelRequestClubMutation = { __typename?: 'Mutation', cancelRequestClub: { __typename?: 'ClubMutationResponse', code: number, success: boolean, message?: string | null, club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CancelRequestMutationVariables = Exact<{
-  memId: Scalars['ID'];
+  memId: Scalars['ID']['input'];
 }>;
 
 
@@ -1638,7 +1668,7 @@ export type CreateClubNoteMutationVariables = Exact<{
 export type CreateClubNoteMutation = { __typename?: 'Mutation', createClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateClubNoteMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   updateClubNoteInput: UpdateClubNoteInput;
 }>;
 
@@ -1646,15 +1676,15 @@ export type UpdateClubNoteMutationVariables = Exact<{
 export type UpdateClubNoteMutation = { __typename?: 'Mutation', updateClubNote: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ChangeClubNoteStatusMutationVariables = Exact<{
-  id: Scalars['ID'];
-  isPublic: Scalars['Boolean'];
+  id: Scalars['ID']['input'];
+  isPublic: Scalars['Boolean']['input'];
 }>;
 
 
 export type ChangeClubNoteStatusMutation = { __typename?: 'Mutation', changeClubNoteStatus: { __typename?: 'ClubNoteMutationResponse', code: number, success: boolean, message?: string | null, note?: { __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteClubNoteMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1675,36 +1705,36 @@ export type CreateVoteEventMutationVariables = Exact<{
 export type CreateVoteEventMutation = { __typename?: 'Mutation', voteEvent: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UnVoteEventMutationVariables = Exact<{
-  voteId: Scalars['ID'];
-  eventId: Scalars['ID'];
-  eventSlot: Scalars['Int'];
+  voteId: Scalars['ID']['input'];
+  eventId: Scalars['ID']['input'];
+  eventSlot: Scalars['Int']['input'];
 }>;
 
 
 export type UnVoteEventMutation = { __typename?: 'Mutation', unVoteEvent: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ChangeEventVoteMutationVariables = Exact<{
-  voteId: Scalars['ID'];
-  eventId: Scalars['ID'];
-  eventSlot: Scalars['Int'];
-  newValue: Scalars['Int'];
+  voteId: Scalars['ID']['input'];
+  eventId: Scalars['ID']['input'];
+  eventSlot: Scalars['Int']['input'];
+  newValue: Scalars['Int']['input'];
 }>;
 
 
 export type ChangeEventVoteMutation = { __typename?: 'Mutation', changeEventVote: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ChangeSlotsMutationVariables = Exact<{
-  status: Scalars['Int'];
-  eventId: Scalars['ID'];
-  eventSlot: Scalars['Int'];
-  newValue: Scalars['Int'];
+  status: Scalars['Int']['input'];
+  eventId: Scalars['ID']['input'];
+  eventSlot: Scalars['Int']['input'];
+  newValue: Scalars['Int']['input'];
 }>;
 
 
 export type ChangeSlotsMutation = { __typename?: 'Mutation', changeSlots: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateEventMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   updateEventInput: UpdateEventInput;
 }>;
 
@@ -1712,66 +1742,66 @@ export type UpdateEventMutationVariables = Exact<{
 export type UpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ChangeEventStatusMutationVariables = Exact<{
-  id: Scalars['ID'];
-  status: Scalars['Int'];
+  id: Scalars['ID']['input'];
+  status: Scalars['Int']['input'];
 }>;
 
 
 export type ChangeEventStatusMutation = { __typename?: 'Mutation', changeEventStatus: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteEventMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteEventMutation = { __typename?: 'Mutation', deleteEvent: { __typename?: 'EventMutationResponse', code: number, success: boolean, message?: string | null, event?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type VoteChangePaidMutationVariables = Exact<{
-  voteId: Scalars['ID'];
-  payStatus: Scalars['String'];
+  voteId: Scalars['ID']['input'];
+  payStatus: Scalars['String']['input'];
 }>;
 
 
 export type VoteChangePaidMutation = { __typename?: 'Mutation', voteChangePaid: { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type NoteVoteMutationVariables = Exact<{
-  voteId: Scalars['ID'];
-  note: Scalars['String'];
+  voteId: Scalars['ID']['input'];
+  note: Scalars['String']['input'];
 }>;
 
 
 export type NoteVoteMutation = { __typename?: 'Mutation', noteVote: { __typename?: 'EventVoteMutationResponse', code: number, success: boolean, message?: string | null, vote?: { __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type FollowUserMutationVariables = Exact<{
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 }>;
 
 
 export type FollowUserMutation = { __typename?: 'Mutation', follow: { __typename?: 'FollowingMutaionResponse', code: number, success: boolean, message?: string | null } };
 
 export type UnFollowUserMutationVariables = Exact<{
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 }>;
 
 
 export type UnFollowUserMutation = { __typename?: 'Mutation', unFollow: { __typename?: 'FollowingMutaionResponse', code: number, success: boolean, message?: string | null } };
 
 export type ForgotpasswordMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 
 export type ForgotpasswordMutation = { __typename?: 'Mutation', forgotPassword: { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null } };
 
 export type AddFriendMutationVariables = Exact<{
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 }>;
 
 
 export type AddFriendMutation = { __typename?: 'Mutation', addFriend: { __typename?: 'FriendMutaionResponse', code: number, success: boolean, message?: string | null } };
 
 export type DeleteFriendShipMutationVariables = Exact<{
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 }>;
 
 
@@ -1792,7 +1822,7 @@ export type FbLoginMutationVariables = Exact<{
 export type FbLoginMutation = { __typename?: 'Mutation', fbLogin: { __typename?: 'UserMutationResponse', code: number, success: boolean, message?: string | null, accessToken?: string | null, user?: { __typename?: 'User', id: string, email: string, lastName: string, firstName?: string | null, isPublic: boolean, role: string, avatar: string, displayName: string, profile: { __typename?: 'Profile', id: string } } | null } };
 
 export type LogoutMutationVariables = Exact<{
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 }>;
 
 
@@ -1804,7 +1834,7 @@ export type ReadAllNotificationMutationVariables = Exact<{ [key: string]: never;
 export type ReadAllNotificationMutation = { __typename?: 'Mutation', readAllNotis: boolean };
 
 export type DeletePostMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1818,7 +1848,7 @@ export type CreatePostMutationVariables = Exact<{
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostMutationResponse', code: number, success: boolean, message?: string | null, post?: { __typename?: 'Post', id: string, title: string, content: string, cover: string, description?: string | null, tags?: Array<string> | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, metaTitle?: string | null, publish: boolean, allowComments: boolean, createdAt: any, updatedAt: any, favorite: number, comment: number, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdatePostMutationVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   updatePostInput: UpdatePostInput;
 }>;
 
@@ -1826,7 +1856,7 @@ export type UpdatePostMutationVariables = Exact<{
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'PostMutationResponse', code: number, success: boolean, message?: string | null, post?: { __typename?: 'Post', id: string, title: string, content: string, cover: string, description?: string | null, tags?: Array<string> | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, metaTitle?: string | null, publish: boolean, allowComments: boolean, createdAt: any, updatedAt: any, favorite: number, comment: number, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type LikeMutationVariables = Exact<{
-  postId: Scalars['ID'];
+  postId: Scalars['ID']['input'];
 }>;
 
 
@@ -1840,7 +1870,7 @@ export type CommentPostMutationVariables = Exact<{
 export type CommentPostMutation = { __typename?: 'Mutation', commentPost: { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null, comment?: { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteCommentMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1854,7 +1884,7 @@ export type ReplyCommentMutationVariables = Exact<{
 export type ReplyCommentMutation = { __typename?: 'Mutation', replyComment: { __typename?: 'CommentMutationResponse', code: number, success: boolean, message?: string | null, comment?: { __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteRatingMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1868,7 +1898,7 @@ export type CreateRatingMutationVariables = Exact<{
 export type CreateRatingMutation = { __typename?: 'Mutation', createRating: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateRatingMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   updateRatingInput: CreateRatingInput;
 }>;
 
@@ -1876,14 +1906,14 @@ export type UpdateRatingMutationVariables = Exact<{
 export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteCandidateMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteCandidateMutation = { __typename?: 'Mutation', deleteCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null } };
 
 export type CreateCandidateMutationVariables = Exact<{
-  ratingId: Scalars['ID'];
+  ratingId: Scalars['ID']['input'];
   createCandidateInput: CreateRatingCandidateInput;
 }>;
 
@@ -1891,7 +1921,7 @@ export type CreateCandidateMutationVariables = Exact<{
 export type CreateCandidateMutation = { __typename?: 'Mutation', createCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateCandidateMutationVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   updateCandidateInput: CreateRatingCandidateInput;
 }>;
 
@@ -1899,8 +1929,8 @@ export type UpdateCandidateMutationVariables = Exact<{
 export type UpdateCandidateMutation = { __typename?: 'Mutation', updateCandidate: { __typename?: 'RatingMutationResponse', code: number, success: boolean, message?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type VoteCandidateMutationVariables = Exact<{
-  ratingId: Scalars['ID'];
-  candidateId: Scalars['ID'];
+  ratingId: Scalars['ID']['input'];
+  candidateId: Scalars['ID']['input'];
 }>;
 
 
@@ -1921,60 +1951,60 @@ export type UpdateProfileMutationVariables = Exact<{
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'ProfileMutationResponse', code: number, success: boolean, message?: string | null, profile?: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } | null } };
 
 export type ConversationsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type ConversationsQuery = { __typename?: 'Query', getConversations?: { __typename?: 'Conversations', totalCount: number, hasMore: boolean, error: boolean, results: Array<{ __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> }> } | null };
 
 export type GetMessagesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  conversationId: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  conversationId: Scalars['ID']['input'];
 }>;
 
 
 export type GetMessagesQuery = { __typename?: 'Query', getMessages?: { __typename?: 'Messages', totalCount: number, hasMore: boolean, error?: boolean | null, results: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } | null };
 
 export type ConversationQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type ConversationQuery = { __typename?: 'Query', getConversation?: { __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } | null };
 
 export type ClubQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type ClubQuery = { __typename?: 'Query', club?: { __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } } | null };
 
 export type ClubsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  ordering?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  ordering?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type ClubsQuery = { __typename?: 'Query', clubs?: { __typename?: 'Clubs', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Club', id: string, title: string, cover: string, description: string, publish: boolean, createdAt: any, updatedAt: any, isAdmin: boolean, isSubAdmin: boolean, isMember: boolean, isRequesting: boolean, memberCount: number, admin: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } }> } | null };
 
 export type GetClubRequestingNumberQueryVariables = Exact<{
-  clubId: Scalars['ID'];
+  clubId: Scalars['ID']['input'];
 }>;
 
 
 export type GetClubRequestingNumberQuery = { __typename?: 'Query', getClubRequestingNumber?: number | null };
 
 export type ClubMembersQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  clubId: Scalars['ID'];
-  status: Scalars['Int'];
-  role?: InputMaybe<Scalars['Int']>;
-  searchName?: InputMaybe<Scalars['String']>;
-  ordering?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  clubId: Scalars['ID']['input'];
+  status: Scalars['Int']['input'];
+  role?: InputMaybe<Scalars['Int']['input']>;
+  searchName?: InputMaybe<Scalars['String']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1986,37 +2016,37 @@ export type MyClubNotesQueryVariables = Exact<{ [key: string]: never; }>;
 export type MyClubNotesQuery = { __typename?: 'Query', myClubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null, club: { __typename?: 'Club', id: string, title: string } }> } | null };
 
 export type ClubNotesQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  clubId: Scalars['ID'];
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  clubId: Scalars['ID']['input'];
 }>;
 
 
 export type ClubNotesQuery = { __typename?: 'Query', clubNotes?: { __typename?: 'ClubNotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'ClubNote', id: string, description: string, createdAt: any, updatedAt: any, isPublic: boolean, images?: Array<string> | null, club: { __typename?: 'Club', id: string, title: string } }> } | null };
 
 export type CommentsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  ordering?: InputMaybe<Scalars['String']>;
-  postId: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  ordering?: InputMaybe<Scalars['String']['input']>;
+  postId: Scalars['ID']['input'];
 }>;
 
 
 export type CommentsQuery = { __typename?: 'Query', comments?: { __typename?: 'Comments', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string }, replyComments?: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: any, author: { __typename?: 'User', id: string, displayName: string, avatar: string } }> | null }> } | null };
 
 export type EventQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type EventQuery = { __typename?: 'Query', getEvent?: { __typename?: 'ClubEvent', id: string, title: string, description: string, start: string, end: string, createdAt: any, updatedAt: any, show: boolean, status: number, slot: number, addressLink?: string | null, address?: string | null, color: string, voteCount: number, waitingCount: number, isVoted: boolean, isAdmin: boolean, time?: string | null, maxVote?: number | null, price?: number | null, createdBy: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } } | null };
 
 export type EventsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  dateBefore: Scalars['String'];
-  dateAfter: Scalars['String'];
-  clubId: Scalars['String'];
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  dateBefore: Scalars['String']['input'];
+  dateAfter: Scalars['String']['input'];
+  clubId: Scalars['String']['input'];
 }>;
 
 
@@ -2038,88 +2068,97 @@ export type MyEventsCountQueryVariables = Exact<{ [key: string]: never; }>;
 export type MyEventsCountQuery = { __typename?: 'Query', myEventsCount?: number | null };
 
 export type GetVotesQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  status: Scalars['Int'];
-  eventId: Scalars['ID'];
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  status: Scalars['Int']['input'];
+  eventId: Scalars['ID']['input'];
 }>;
 
 
 export type GetVotesQuery = { __typename?: 'Query', getVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } }> } | null };
 
 export type GetVoteStatsQueryVariables = Exact<{
-  eventId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
 }>;
 
 
 export type GetVoteStatsQuery = { __typename?: 'Query', getVoteStats?: { __typename?: 'VotCount', confirmed: number, waiting: number, total: number } | null };
 
 export type GetMyVotesQueryVariables = Exact<{
-  eventId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
 }>;
 
 
 export type GetMyVotesQuery = { __typename?: 'Query', getMyVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } }> } | null };
 
 export type GetMyHistoryVotesQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
 }>;
 
 
 export type GetMyHistoryVotesQuery = { __typename?: 'Query', getMyHistoryVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } }> } | null };
 
 export type GetMemberVotesQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  memberId: Scalars['String'];
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  memberId: Scalars['String']['input'];
 }>;
 
 
 export type GetMemberVotesQuery = { __typename?: 'Query', getMemberVotes?: { __typename?: 'Votes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Vote', id: string, value: number, createdAt: any, status: number, updatedAt: any, paid?: string | null, note?: string | null, member: { __typename?: 'ClubMember', id: string, status: number, role?: number | null, isAdmin: boolean, createdAt: any, updatedAt: any, isAdvanced: boolean, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }, club: { __typename?: 'Club', id: string, title: string } } }> } | null };
 
 export type GetVoteCountQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type GetVoteCountQuery = { __typename?: 'Query', getVoteCount: number };
 
 export type GetWaitingVoteQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type GetWaitingVoteQuery = { __typename?: 'Query', getWaitingVote: number };
 
 export type GetEventIsVotedQueryVariables = Exact<{
-  eventId: Scalars['ID'];
+  eventId: Scalars['ID']['input'];
 }>;
 
 
 export type GetEventIsVotedQuery = { __typename?: 'Query', getEventIsVoted: boolean };
 
+export type GetEventHistoryQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  eventId: Scalars['ID']['input'];
+}>;
+
+
+export type GetEventHistoryQuery = { __typename?: 'Query', getEventHistory?: { __typename?: 'EventHistoryList', totalCount: number, results: Array<{ __typename?: 'EventHistory', id: string, createdAt: any, value?: number | null, type: string, objectString?: string | null, member: { __typename?: 'ClubMember', id: string, profile: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }, event: { __typename?: 'ClubEvent', id: string, title: string } }> } | null };
+
 export type GetFollowersQueryVariables = Exact<{
-  profileId: Scalars['String'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  profileId: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type GetFollowersQuery = { __typename?: 'Query', getFollowers?: { __typename?: 'Profiles', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Profile', isFollowing: boolean, id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }> } | null };
 
 export type GetFriendsQueryVariables = Exact<{
-  profileId: Scalars['String'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
+  profileId: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type GetFriendsQuery = { __typename?: 'Query', getFriends?: { __typename?: 'Profiles', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Profile', isFollowing: boolean, id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }> } | null };
 
 export type GetProfileQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -2141,8 +2180,8 @@ export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 export type MyProfileQuery = { __typename?: 'Query', myProfile?: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null } | null };
 
 export type GetNotificationsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
 }>;
 
 
@@ -2154,35 +2193,35 @@ export type GetNotiUnreadCountQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetNotiUnreadCountQuery = { __typename?: 'Query', getUnreadCount?: number | null };
 
 export type PostQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, title: string, content: string, cover: string, description?: string | null, tags?: Array<string> | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, metaTitle?: string | null, publish: boolean, allowComments: boolean, createdAt: any, updatedAt: any, favorite: number, comment: number, favoritePerson?: Array<{ __typename?: 'User', id: string, avatar: string, displayName: string }> | null, author: { __typename?: 'User', id: string, displayName: string, avatar: string } } | null };
 
 export type PostsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  ordering?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  ordering?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Posts', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Post', id: string, title: string, content: string, cover: string, description?: string | null, tags?: Array<string> | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, metaTitle?: string | null, publish: boolean, allowComments: boolean, createdAt: any, updatedAt: any, favorite: number, comment: number, author: { __typename?: 'User', id: string, displayName: string, avatar: string } }> } | null };
 
 export type ProfilesQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  ordering?: InputMaybe<Scalars['String']>;
-  search?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  ordering?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type ProfilesQuery = { __typename?: 'Query', getProfiles?: { __typename?: 'Profiles', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null, cover?: string | null, gender?: string | null, country?: string | null, role?: string | null, company?: string | null, position?: string | null, email?: string | null, facebookLink?: string | null, instagramLink?: string | null, linkedinLink?: string | null, twitterLink?: string | null, portfolioLink?: string | null, school?: string | null, follower: number, following: number, friend: number, about?: string | null, phoneNumber?: string | null, isFollowing: boolean, isFriend: boolean, isFriendRequest: boolean, isFriendSending: boolean, dob?: string | null }> } | null };
 
 export type RatingsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  ordering?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  ordering?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -2194,50 +2233,50 @@ export type MyRatingsQueryVariables = Exact<{ [key: string]: never; }>;
 export type MyRatingsQuery = { __typename?: 'Query', myRatings?: { __typename?: 'Ratings', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'Rating', id: string, name: string, description?: string | null, start: string, end: string, createdAt: any, updatedAt: any, status: number, votedFor?: { __typename?: 'RatingCandidate', id: string, name: string, bio?: string | null, createdAt: any, order?: number | null, photo1: string, photo2?: string | null } | null }> } | null };
 
 export type RatingQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type RatingQuery = { __typename?: 'Query', rating?: { __typename?: 'Rating', id: string, name: string, description?: string | null, start: string, end: string, createdAt: any, updatedAt: any, status: number } | null };
 
 export type GetCandidatesQueryVariables = Exact<{
-  ratingId: Scalars['ID'];
+  ratingId: Scalars['ID']['input'];
 }>;
 
 
 export type GetCandidatesQuery = { __typename?: 'Query', getCandidates?: { __typename?: 'Candidates', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'RatingCandidate', id: string, name: string, bio?: string | null, createdAt: any, order?: number | null, photo1: string, photo2?: string | null }> } | null };
 
 export type GetRatingVoteQueryVariables = Exact<{
-  candidateId: Scalars['ID'];
+  candidateId: Scalars['ID']['input'];
 }>;
 
 
 export type GetRatingVoteQuery = { __typename?: 'Query', getRatingVotes?: { __typename?: 'RatingVotes', totalCount: number, hasMore: boolean, results: Array<{ __typename?: 'RatingVote', id: string, createdAt: any, voter: { __typename?: 'User', id: string, email: string, lastName: string, firstName?: string | null, isPublic: boolean, role: string, avatar: string, displayName: string, profile: { __typename?: 'Profile', id: string } } }> } | null };
 
 export type MessageSendSubscriptionSubscriptionVariables = Exact<{
-  conversationId: Scalars['ID'];
+  conversationId: Scalars['ID']['input'];
 }>;
 
 
 export type MessageSendSubscriptionSubscription = { __typename?: 'Subscription', newMessageSent: { __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } } };
 
 export type ConversationChangedSubscriptionVariables = Exact<{
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 }>;
 
 
 export type ConversationChangedSubscription = { __typename?: 'Subscription', conversationChanged: { __typename?: 'Conversation', id: string, type: string, updatedAt: any, isRead: boolean, members: Array<{ __typename?: 'Profile', id: string, displayName?: string | null, avatar?: string | null, email?: string | null, phoneNumber?: string | null, country?: string | null, instagramLink?: string | null, portfolioLink?: string | null, twitterLink?: string | null, linkedinLink?: string | null, facebookLink?: string | null }>, messages: Array<{ __typename?: 'Message', id: string, createdAt: any, content: string, contentType: string, isRead?: boolean | null, sender: { __typename?: 'Profile', id: string, avatar?: string | null, displayName?: string | null } }> } };
 
 export type EventVoteChangedSubscriptionSubscriptionVariables = Exact<{
-  eventId: Scalars['ID'];
-  status: Scalars['Int'];
+  eventId: Scalars['ID']['input'];
+  status: Scalars['Int']['input'];
 }>;
 
 
 export type EventVoteChangedSubscriptionSubscription = { __typename?: 'Subscription', voteChanged: { __typename?: 'NewVoteSubscriptionData', voteCount?: number | null, waitingCount?: number | null, eventId: string } };
 
 export type NewNotificationSubscriptionVariables = Exact<{
-  profileId: Scalars['ID'];
+  profileId: Scalars['ID']['input'];
 }>;
 
 
@@ -2544,6 +2583,27 @@ export const EventVoteMutationResponseFragmentDoc = gql`
     ${MutationStatusesFragmentDoc}
 ${VoteInfoFragmentDoc}
 ${FieldErrorFragmentDoc}`;
+export const EventActivityFragmentDoc = gql`
+    fragment eventActivity on EventHistory {
+  id
+  createdAt
+  value
+  type
+  member {
+    id
+    profile {
+      id
+      avatar
+      displayName
+    }
+  }
+  objectString
+  event {
+    id
+    title
+  }
+}
+    `;
 export const UserMutationStatusesFragmentDoc = gql`
     fragment userMutationStatuses on UserMutationResponse {
   code
@@ -5419,6 +5479,46 @@ export function useGetEventIsVotedLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetEventIsVotedQueryHookResult = ReturnType<typeof useGetEventIsVotedQuery>;
 export type GetEventIsVotedLazyQueryHookResult = ReturnType<typeof useGetEventIsVotedLazyQuery>;
 export type GetEventIsVotedQueryResult = Apollo.QueryResult<GetEventIsVotedQuery, GetEventIsVotedQueryVariables>;
+export const GetEventHistoryDocument = gql`
+    query GetEventHistory($limit: Int!, $offset: Int!, $eventId: ID!) {
+  getEventHistory(limit: $limit, offset: $offset, eventId: $eventId) {
+    totalCount
+    results {
+      ...eventActivity
+    }
+  }
+}
+    ${EventActivityFragmentDoc}`;
+
+/**
+ * __useGetEventHistoryQuery__
+ *
+ * To run a query within a React component, call `useGetEventHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventHistoryQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useGetEventHistoryQuery(baseOptions: Apollo.QueryHookOptions<GetEventHistoryQuery, GetEventHistoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEventHistoryQuery, GetEventHistoryQueryVariables>(GetEventHistoryDocument, options);
+      }
+export function useGetEventHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventHistoryQuery, GetEventHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEventHistoryQuery, GetEventHistoryQueryVariables>(GetEventHistoryDocument, options);
+        }
+export type GetEventHistoryQueryHookResult = ReturnType<typeof useGetEventHistoryQuery>;
+export type GetEventHistoryLazyQueryHookResult = ReturnType<typeof useGetEventHistoryLazyQuery>;
+export type GetEventHistoryQueryResult = Apollo.QueryResult<GetEventHistoryQuery, GetEventHistoryQueryVariables>;
 export const GetFollowersDocument = gql`
     query GetFollowers($profileId: String!, $limit: Int, $offset: Int) {
   getFollowers(limit: $limit, offset: $offset, profileId: $profileId) {

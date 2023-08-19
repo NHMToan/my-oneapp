@@ -151,6 +151,7 @@ export default function Router() {
     },
     { path: "/", element: <Navigate to="/home" replace /> },
     { path: "/privacy-policy", element: <PrivacyPolicy /> },
+    { path: "/tos", element: <TOS /> },
     {
       path: "*",
       element: <LogoOnlyLayout />,
@@ -208,3 +209,4 @@ const AdminRatingForm = Loadable(
 );
 const HistoryVotes = Loadable(lazy(() => import("../pages/HistoryVotes")));
 const PrivacyPolicy = Loadable(lazy(() => import("../pages/PrivacyPolicy")));
+const TOS = Loadable(lazy(() => import("../pages/TOS")));

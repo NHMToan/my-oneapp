@@ -1,0 +1,19 @@
+fragment eventActivity on EventHistory {
+  id
+  createdAt
+  value
+  type
+  member {
+    id
+    profile {
+      id
+      avatar
+      displayName
+    }
+  }
+  objectString
+  event {
+    id
+    title
+  }
+}

@@ -1,0 +1,9 @@
+query GetEventHistory($limit: Int!, $offset: Int!, $eventId: ID!) {
+  getEventHistory(limit: $limit, offset: $offset, eventId: $eventId) {
+    totalCount
+
+    results {
+      ...eventActivity
+    }
+  }
+}

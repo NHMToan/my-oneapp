@@ -254,5 +254,20 @@
     "list": {
       "title": "评分"
     }
+  },
+  "event_history": {
+    "key": {
+      "add_note": "",
+      "bank": "",
+      "cash": "",
+      "momo": "",
+      "prepaid": "",
+      "remove_tag": ""
+    }
+  },
+  "history": {
+    "list": {
+      "title": ""
+    }
   }
 }

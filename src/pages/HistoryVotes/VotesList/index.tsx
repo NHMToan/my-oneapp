@@ -40,7 +40,7 @@ export default function VotesList() {
   const { themeStretch } = useSettings();
   const { translate } = useLocales();
   const { data, loading, refetch } = useGetMyHistoryVotesQuery({
-    variables: { limit: 200, offset: 0 },
+    variables: { limit: 50, offset: 0 },
     fetchPolicy: "no-cache",
   });
 
