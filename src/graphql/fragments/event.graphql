@@ -40,6 +40,7 @@ fragment eventInfo on ClubEvent {
   time
   maxVote
   price
+  type
 }
 fragment voteInfo on Vote {
   id
@@ -52,4 +53,5 @@ fragment voteInfo on Vote {
   updatedAt
   paid
   note
+  type
 }

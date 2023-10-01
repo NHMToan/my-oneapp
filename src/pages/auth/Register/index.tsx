@@ -4,7 +4,6 @@ import { styled } from "@mui/material/styles";
 import Page from "components/Page";
 import useLocales from "hooks/useLocales";
 import { useState } from "react";
-import AuthSocial from "sections/auth/AuthSocial";
 import { RegisterForm } from "sections/auth/register";
 import PolicyModal from "../components/PolicyModal";
 import TOSModal from "../components/TOSModal";
@@ -47,7 +46,7 @@ export default function Register() {
             <Typography variant="h4" gutterBottom>
               {translate("auth.register.title")}
             </Typography>
-            <AuthSocial />
+            {/* <AuthSocial /> */}
 
             <RegisterForm />
             <Typography

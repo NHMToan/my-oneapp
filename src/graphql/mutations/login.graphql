@@ -5,6 +5,7 @@ mutation Login($loginInput: LoginInput!) {
     message
     accessToken
     user {
+      hasClub
       ...userInfo
     }
   }

@@ -40,4 +40,5 @@ export interface IUser {
   profile: IProfile;
   avatar: string;
   displayName: string;
+  hasClub?: boolean;
 }

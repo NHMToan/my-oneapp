@@ -22,13 +22,11 @@ import { useSnackbar } from "notistack";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link as RouterLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-import useIsMountedRef from "../../../hooks/useIsMountedRef";
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
   const { register } = useAuth();
 
-  const isMountedRef = useIsMountedRef();
   const { translate } = useLocales();
   const [showPassword, setShowPassword] = useState(false);
 

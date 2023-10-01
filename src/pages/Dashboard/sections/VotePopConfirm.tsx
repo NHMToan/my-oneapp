@@ -7,19 +7,22 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   Stack,
 } from "@mui/material";
 import { FormProvider, RHFSelect } from "components/hook-form";
 import useLocales from "hooks/useLocales";
 import { ClubEvent } from "pages/Clubs/data.t";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 interface VotePopConfirmProps {
   event?: ClubEvent;
   isOpen: boolean;
   onClose: () => void;
-  onPostSave: (count: number) => void;
+  onPostSave: (count: number, type: string) => void;
   isWaiting?: boolean;
   currentVoteCount?: number;
   isSubmitting: boolean;
@@ -44,11 +47,13 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
     resolver: yupResolver(EventSchema),
     defaultValues,
   });
+  const [type, setType] = useState<string>("play");
 
   const { reset, handleSubmit } = methods;
   const onCancel = () => {
     onClose();
     reset();
+    setType("play");
   };
 
   const onSubmit = async (data) => {
@@ -57,7 +62,7 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
         value: ~~data.value,
       };
 
-      onPostSave(params.value);
+      onPostSave(params.value, type || "");
 
       onClose();
       reset();
@@ -109,6 +114,27 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {maxVote > 0 && (
           <Stack spacing={3} sx={{ p: 3 }}>
+            {event.type === "bowling" && (
+              <RadioGroup
+                name="use-radio-group"
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value);
+                }}
+                row
+              >
+                <FormControlLabel
+                  value="play"
+                  label="Play"
+                  control={<Radio />}
+                />
+                <FormControlLabel
+                  value="compete"
+                  label="Compete"
+                  control={<Radio />}
+                />
+              </RadioGroup>
+            )}
             <RHFSelect
               name="value"
               label="Slots"

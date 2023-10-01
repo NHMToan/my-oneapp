@@ -9,12 +9,11 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { FormProvider, RHFUploadAvatar } from "components/hook-form";
-import { AuthContext } from "contexts/JWTContext";
 import { useUpdateProfileMutation } from "generated/graphql";
 import useAuth from "hooks/useAuth";
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
 import { fData } from "utils/formatNumber";
@@ -23,8 +22,7 @@ const SettingsForm = (props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { translate } = useLocales();
   const [updateProfile] = useUpdateProfileMutation();
-  const { refreshUser } = useContext(AuthContext);
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [isValid, setIsValid] = useState<boolean>(false);
   const UpdateUserSchema = Yup.object().shape({});
@@ -38,6 +36,8 @@ const SettingsForm = (props) => {
       (!user.avatar || user.avatar.includes("platform-lookaside.fbsbx.com"))
     ) {
       setIsOpen(true);
+    } else {
+      setIsOpen(false);
     }
   }, [user]);
   const methods: any = useForm({
@@ -105,7 +105,7 @@ const SettingsForm = (props) => {
           <RHFUploadAvatar
             name="avatarFile"
             accept={"image/*" as any}
-            maxSize={3145728}
+            maxSize={1572864}
             onDrop={handleAvatarDrop}
             helperText={
               <Typography
@@ -120,10 +120,10 @@ const SettingsForm = (props) => {
               >
                 <Trans
                   i18nKey="form.validation.max_file_size"
-                  values={{ size: fData(3145728) }}
+                  values={{ size: fData(1572864) }}
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
+                  <br /> max size of {fData(1572864)}
                 </Trans>
               </Typography>
             }

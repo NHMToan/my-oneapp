@@ -128,6 +128,7 @@ interface MemberCardProps {
   refetch?: any;
   isAuth: boolean;
   isAdmin?: boolean;
+  isSubAdmin: boolean;
 }
 function MemberCard({
   member,

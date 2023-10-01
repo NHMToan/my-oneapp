@@ -50,6 +50,7 @@ export interface ClubEvent {
   vote: VoteData;
   maxVote: number;
   price: number | string;
+  type?: string;
 }
 export interface VoteData {
   id: string;

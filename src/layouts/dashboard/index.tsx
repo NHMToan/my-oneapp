@@ -11,10 +11,11 @@ import useResponsive from "../../hooks/useResponsive";
 import useSettings from "../../hooks/useSettings";
 import MobileBottomNavigation from "./bottom-navigation/BottomNavigation";
 //
+import RenewForm from "./RenewForm";
+import SettingsForm from "./SettingsForm";
 import DashboardHeader from "./header";
 import NavbarHorizontal from "./navbar/NavbarHorizontal";
 import NavbarVertical from "./navbar/NavbarVertical";
-import SettingsForm from "./SettingsForm";
 
 // ----------------------------------------------------------------------
 type MainStyleProps = {
@@ -112,6 +113,7 @@ export default function DashboardLayout() {
         <Outlet />
         {!isDesktop && <MobileBottomNavigation />}
         <SettingsForm />
+        <RenewForm />
       </MainStyle>
     </Box>
   );

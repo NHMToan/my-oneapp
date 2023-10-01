@@ -68,6 +68,7 @@ interface EventFormProps {
   onCancel: () => void;
   onPostSave: () => void;
   club?: ClubData;
+  type: string;
 }
 export default function EventForm({
   event,
@@ -75,6 +76,7 @@ export default function EventForm({
   onCancel,
   onPostSave,
   club,
+  type,
 }: EventFormProps) {
   const [onUpdate] = useUpdateEventMutation({ fetchPolicy: "no-cache" });
   const { translate } = useLocales();
@@ -121,12 +123,14 @@ export default function EventForm({
         isInstant: false,
         clubId: club?.id,
         price: data?.price || 0,
+        type,
       };
 
       if (!club) delete newEvent.clubId;
 
       if (event?.id) {
         delete newEvent.isInstant;
+        delete newEvent.type;
         const updateRes = await onUpdate({
           variables: { updateEventInput: newEvent, id: event.id },
         });

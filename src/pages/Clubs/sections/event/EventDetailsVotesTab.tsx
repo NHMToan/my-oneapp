@@ -18,7 +18,7 @@ const EventDetailsVotesTab: FC<EventDetailsVotesTabProps> = ({
         <EventVoteList event={event} refetchStats={refetchStats} />
       </Grid>
       <Grid item xs={12} md={6}>
-        <EventWaitingList event={event} />
+        <EventWaitingList event={event} refetchStats={refetchStats} />
       </Grid>
     </Grid>
   );

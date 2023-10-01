@@ -27,3 +27,8 @@ export const PAID_STATUS = {
     </Label>
   ),
 };
+export const EVENT_TYPES = ["badminton", "bowling"];
+export const BOWLING_VOTE_TYPE = [
+  { id: "play", color: "#54D62C" },
+  { id: "compete", color: "#f50" },
+];

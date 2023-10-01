@@ -56,15 +56,17 @@ const EventActions: FC<EventActionsProps> = ({
 
   const [onVote] = useCreateVoteEventMutation({ fetchPolicy: "no-cache" });
 
-  const isChangeVote = statsData?.getVoteStats?.confirmed > 0;
-  const isChangeWaitingVote = statsData?.getVoteStats?.waiting > 0;
-
-  const handleVote = async (value) => {
+  const handleVote = async (value, type) => {
     setSubmitting(true);
     try {
       const voteRes = await onVote({
         variables: {
-          createVoteInput: { value: ~~value, eventId: event.id, status: 1 },
+          createVoteInput: {
+            value: ~~value,
+            eventId: event.id,
+            status: 1,
+            type,
+          },
         },
       });
 
@@ -92,12 +94,17 @@ const EventActions: FC<EventActionsProps> = ({
     }
   };
 
-  const handleWaitingVote = async (value) => {
+  const handleWaitingVote = async (value, type) => {
     setSubmitting(true);
     try {
       const voteRes = await onVote({
         variables: {
-          createVoteInput: { value: ~~value, eventId: event.id, status: 2 },
+          createVoteInput: {
+            value: ~~value,
+            eventId: event.id,
+            status: 2,
+            type,
+          },
         },
       });
 
@@ -214,6 +221,23 @@ const EventActions: FC<EventActionsProps> = ({
     );
   if (renderCountDown) return <RenderCountdown />;
 
+  if (statsData?.getVoteStats?.total >= event.maxVote) {
+    return (
+      <Card
+        sx={{
+          p: 1,
+          boxShadow: 0,
+          textAlign: "center",
+          color: (theme: any) => theme.palette["error"].darker,
+          bgcolor: (theme: any) => theme.palette["error"].lighter,
+          borderRadius: 2,
+        }}
+        key="message"
+      >
+        {translate("club.event.details.vote_max")}
+      </Card>
+    );
+  }
   return (
     <Grid container spacing={1.5}>
       <Grid item xs={12}>
@@ -264,19 +288,12 @@ const EventActions: FC<EventActionsProps> = ({
             fullWidth
             variant="contained"
             onClick={() => {
-              if (statsData?.getVoteStats?.confirmed) {
-                setIsFormChangeOpen(true);
-                setIsVoteWaiting(false);
-              } else {
-                setIsFormOpen(true);
-                setIsVoteWaiting(false);
-              }
+              setIsFormOpen(true);
+              setIsVoteWaiting(false);
             }}
-            disabled={!isChangeVote && isFull}
+            disabled={statsData?.getVoteStats?.total >= event.maxVote || isFull}
           >
-            {isChangeVote
-              ? translate("common.btn.change")
-              : translate("common.btn.register")}
+            {translate("common.btn.register")}
           </Button>
 
           <Button
@@ -284,22 +301,12 @@ const EventActions: FC<EventActionsProps> = ({
             variant="contained"
             color="info"
             onClick={() => {
-              if (statsData?.getVoteStats?.waiting) {
-                setIsFormChangeOpen(true);
-                setIsVoteWaiting(true);
-              } else {
-                setIsFormOpen(true);
-                setIsVoteWaiting(true);
-              }
+              setIsFormOpen(true);
+              setIsVoteWaiting(true);
             }}
-            disabled={
-              !isChangeWaitingVote &&
-              statsData?.getVoteStats?.total >= event.maxVote
-            }
+            disabled={statsData?.getVoteStats?.total >= event.maxVote}
           >
-            {isChangeWaitingVote
-              ? translate("common.btn.change")
-              : translate("common.btn.queue")}
+            {translate("common.btn.queue")}
           </Button>
           <VotePopConfirm
             isOpen={isFormOpen}
@@ -307,11 +314,11 @@ const EventActions: FC<EventActionsProps> = ({
             onClose={() => {
               setIsFormOpen(false);
             }}
-            onPostSave={(value) => {
+            onPostSave={(value, type) => {
               if (isVoteWaiting) {
-                handleWaitingVote(value);
+                handleWaitingVote(value, type);
               } else {
-                handleVote(value);
+                handleVote(value, type);
               }
             }}
             isWaiting={isVoteWaiting}

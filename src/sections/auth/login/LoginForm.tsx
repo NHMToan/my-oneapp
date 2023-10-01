@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import {
-  Alert,
   IconButton,
   InputAdornment,
   Link,
@@ -13,6 +12,7 @@ import Iconify from "components/Iconify";
 import useAuth from "hooks/useAuth";
 import useIsMountedRef from "hooks/useIsMountedRef";
 import useLocales from "hooks/useLocales";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link as RouterLink } from "react-router-dom";
@@ -26,11 +26,10 @@ export default function LoginForm() {
   const isMountedRef = useIsMountedRef();
   const { translate } = useLocales();
   const [showPassword, setShowPassword] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
+    email: Yup.string().required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -50,7 +49,7 @@ export default function LoginForm() {
     reset,
     setError,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async (data: any) => {
@@ -60,6 +59,7 @@ export default function LoginForm() {
       reset();
       if (isMountedRef.current) {
         setError("afterSubmit", { ...error, message: error || "Server error" });
+        enqueueSnackbar("Incorrect password", { variant: "error" });
       }
     }
   };
@@ -67,12 +67,6 @@ export default function LoginForm() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        {!!errors.afterSubmit && (
-          <Alert severity="error">
-            {errors.afterSubmit.message || "Error"}
-          </Alert>
-        )}
-
         <RHFTextField name="email" label={translate("auth.login.form.email")} />
 
         <RHFTextField

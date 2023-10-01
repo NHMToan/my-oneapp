@@ -52,10 +52,34 @@ const Welcome: FC<WelcomeProps> = ({}) => {
             pr: { xs: 3, md: 0 },
             textAlign: { xs: "center", md: "left" },
           }}
+          flexGrow={1}
+          justifyContent="center"
+          alignItems={{ xs: "center", md: "flex-start" }}
         >
           <Typography variant="h4">
             {`${translate("activity.no_event_label")} \n ${user?.displayName}!`}
           </Typography>
+
+          {!user.hasClub && (
+            <>
+              <Typography
+                variant="body2"
+                sx={{
+                  opacity: 0.8,
+                  mb: { xs: 1, xl: 2 },
+                }}
+              >
+                {translate("home.no_club_message")}
+              </Typography>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={PATH_DASHBOARD.club.root}
+              >
+                Join now
+              </Button>
+            </>
+          )}
         </Stack>
       </RootStyle>
     );

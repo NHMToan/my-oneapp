@@ -6,28 +6,45 @@ import {
   IconButton,
   Stack,
   Typography,
+  capitalize,
 } from "@mui/material";
 import Avatar from "components/Avatar";
 import Iconify from "components/Iconify";
+import LabelContainer from "components/LabelContainer";
 import PopConfirm from "components/PopConfirm";
 import { SimpleSkeleton } from "components/skeleton";
 import { useGetVotesQuery, useUnVoteEventMutation } from "generated/graphql";
+import useAuth from "hooks/useAuth";
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
+import { BOWLING_VOTE_TYPE } from "pages/Clubs/consts";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
 import { fSDateTime } from "utils/formatTime";
 
 interface EventWaitingListProps {
   event: ClubEvent;
+  refetchStats: () => void;
 }
-const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
+
+function applySortFilter({ tableData }) {
+  return tableData;
+}
+const EventWaitingList: FC<EventWaitingListProps> = ({
+  event,
+  refetchStats,
+}) => {
   const { data, loading, refetch } = useGetVotesQuery({
     fetchPolicy: "no-cache",
     skip: !event,
     variables: { status: 2, limit: 100, offset: 0, eventId: event.id },
   });
   const { translate } = useLocales();
+
+  const dataFiltered = applySortFilter({
+    tableData: data?.getVotes?.results || [],
+  });
+
   const renderList = () => {
     if (loading)
       return (
@@ -42,7 +59,39 @@ const EventWaitingList: FC<EventWaitingListProps> = ({ event }) => {
           {translate("club.event.details.tab_vote_info.waiting_list.no_data")}
         </Typography>
       );
-
+    if (event?.type === "bowling") {
+      return (
+        <Stack spacing={3} sx={{ p: 3 }}>
+          {BOWLING_VOTE_TYPE.map((type) => {
+            return (
+              <LabelContainer
+                key={type.id}
+                label={capitalize(type.id)}
+                borderColor={type.color}
+              >
+                <Stack spacing={3} sx={{ p: 1 }}>
+                  {dataFiltered
+                    .filter((item) => item.type === type.id)
+                    .map((vote, index) => (
+                      <Voter
+                        key={vote.id}
+                        vote={vote as any}
+                        index={index}
+                        isAdmin={event.isAdmin}
+                        postActions={() => {
+                          refetch();
+                          if (refetchStats) refetchStats();
+                        }}
+                        event={event}
+                      />
+                    ))}
+                </Stack>
+              </LabelContainer>
+            );
+          })}
+        </Stack>
+      );
+    }
     return (
       <Stack spacing={3} sx={{ p: 3 }}>
         {data?.getVotes?.results.map((vote, index) => (
@@ -89,6 +138,12 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
+  const { user } = useAuth();
+
+  const current = new Date();
+
+  const isEventClose = event.end < current.toISOString() || event.status === 2;
+
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Avatar
@@ -118,7 +173,71 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
           {fSDateTime(vote.createdAt)}
         </Typography>
       </Box>
-
+      {!isEventClose &&
+        !isAdmin &&
+        vote.member.profile.id === user.profile.id && (
+          <PopConfirm
+            open={openDelete}
+            onClose={() => setOpenDelete(false)}
+            title={
+              <CardHeader
+                title={translate(
+                  "club.event.details.tab_vote_info.waiting_list.delete.confirmation"
+                )}
+              />
+            }
+            actions={
+              <>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  onClick={() => setOpenDelete(false)}
+                  size="small"
+                >
+                  {translate("common.btn.cancel")}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={async () => {
+                    try {
+                      const deleteVoteRes = await onDeleteVote({
+                        variables: {
+                          voteId: vote.id,
+                          eventId: event.id,
+                          eventSlot: event.slot,
+                          isSelf: true,
+                        },
+                      });
+                      if (deleteVoteRes?.data?.unVoteEvent?.success) {
+                        enqueueSnackbar(
+                          translate(
+                            "club.event.details.tab_vote_info.waiting_list.delete.success"
+                          )
+                        );
+                        postActions();
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}
+                >
+                  {translate("common.btn.delete")}
+                </Button>
+              </>
+            }
+          >
+            <Button
+              color="error"
+              variant="contained"
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+            >
+              {translate("common.btn.delete")}
+            </Button>
+          </PopConfirm>
+        )}
       {isAdmin && (
         <PopConfirm
           open={openDelete}
@@ -149,6 +268,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                         voteId: vote.id,
                         eventId: event.id,
                         eventSlot: event.slot,
+                        isSelf: false,
                       },
                     });
                     if (deleteVoteRes?.data?.unVoteEvent?.success) {
@@ -158,6 +278,11 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                         )
                       );
                       postActions();
+                    } else {
+                      enqueueSnackbar(
+                        deleteVoteRes?.data?.unVoteEvent?.message,
+                        { variant: "error" }
+                      );
                     }
                   } catch (e) {
                     console.error(e);

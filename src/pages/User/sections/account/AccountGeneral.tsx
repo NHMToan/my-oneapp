@@ -11,16 +11,17 @@ import {
   RHFUploadSingleFile,
 } from "components/hook-form";
 
+import { genders } from "_mock";
 import { AuthContext } from "contexts/JWTContext";
 import { useUpdateProfileMutation } from "generated/graphql";
 import useAuth from "hooks/useAuth";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
+import { Trans } from "react-i18next";
 import { IProfile } from "types/user";
 import { fData } from "utils/formatNumber";
 import * as Yup from "yup";
-import { genders } from "_mock";
 // ----------------------------------------------------------------------
 interface IAccountGeneral {
   profile: IProfile;
@@ -134,14 +135,14 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
             <RHFUploadSingleFile
               name="coverFile"
               accept="image/*"
-              maxSize={3145728}
+              maxSize={1572864}
               onDrop={handleCoverDrop}
             />
 
             <RHFUploadAvatar
               name="avatarFile"
               accept={"image/*" as any}
-              maxSize={3145728}
+              maxSize={1572864}
               onDrop={handleAvatarDrop}
               helperText={
                 <Typography
@@ -154,8 +155,13 @@ export default function AccountGeneral({ profile }: IAccountGeneral) {
                     color: "text.secondary",
                   }}
                 >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
+                  <Trans
+                    i18nKey="form.validation.max_file_size"
+                    values={{ size: fData(1572864) }}
+                  >
+                    Allowed *.jpeg, *.jpg, *.png, *.gif
+                    <br /> max size of {fData(1572864)}
+                  </Trans>
                 </Typography>
               }
               sx={{ mt: 2 }}

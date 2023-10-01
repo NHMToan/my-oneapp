@@ -8,8 +8,18 @@ mutation CreateVoteEvent($createVoteInput: CreateVoteInput!) {
     ...eventMutationResponse
   }
 }
-mutation UnVoteEvent($voteId: ID!, $eventId: ID!, $eventSlot: Int!) {
-  unVoteEvent(voteId: $voteId, eventId: $eventId, eventSlot: $eventSlot) {
+mutation UnVoteEvent(
+  $voteId: ID!
+  $eventId: ID!
+  $eventSlot: Int!
+  $isSelf: Boolean!
+) {
+  unVoteEvent(
+    voteId: $voteId
+    eventId: $eventId
+    eventSlot: $eventSlot
+    isSelf: $isSelf
+  ) {
     ...eventMutationResponse
   }
 }

@@ -3,7 +3,6 @@ import { styled } from "@mui/material/styles";
 import Page from "components/Page";
 import useLocales from "hooks/useLocales";
 import { useState } from "react";
-import AuthSocial from "sections/auth/AuthSocial";
 import { LoginForm } from "sections/auth/login";
 import PolicyModal from "../components/PolicyModal";
 import TOSModal from "../components/TOSModal";
@@ -51,7 +50,7 @@ export default function Login() {
               </Box>
             </Stack>
 
-            <AuthSocial />
+            {/* <AuthSocial /> */}
 
             <LoginForm />
 
