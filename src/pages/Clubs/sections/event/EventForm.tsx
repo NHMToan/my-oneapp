@@ -14,6 +14,7 @@ import {
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import { ColorSinglePicker } from "components/color-utils";
 import { FormProvider, RHFTextField } from "components/hook-form";
+import RHFAutocomplete from "components/hook-form/RHFAutocomplete";
 import { isBefore } from "date-fns";
 import {
   useCreateEventMutation,
@@ -37,8 +38,8 @@ const COLOR_OPTIONS = [
   "#04297A", // theme.palette.info.darker
   "#7A0C2E", // theme.palette.error.darker
 ];
-
-const getInitialValues = (event, range) => {
+const GROUPS_OPTION = ["play", "compete"];
+const getInitialValues = (event) => {
   const _event = {
     title: "",
     description: "",
@@ -47,13 +48,13 @@ const getInitialValues = (event, range) => {
     textColor: "#1890FF",
     start: "",
     end: "",
-    time: range ? new Date(range.start) : new Date(),
+    time: "",
     slot: 0,
     maxVote: 0,
     price: 0,
   };
 
-  if (event || range) {
+  if (event) {
     return merge({}, _event, event);
   }
 
@@ -89,12 +90,17 @@ export default function EventForm({
     time: Yup.date().required("Time is required"),
     maxVote: Yup.string().required("Max vote is required"),
     slot: Yup.string().required("Slot is required"),
+    groups:
+      type === "2_activity" &&
+      Yup.array()
+        .required("Groups is required")
+        .min(2, "Must have at least 2 groups"),
     description: Yup.string().max(5000),
   });
 
   const methods = useForm({
     resolver: yupResolver(EventSchema),
-    defaultValues: getInitialValues(event, range),
+    defaultValues: getInitialValues(event),
   });
 
   const {
@@ -124,6 +130,7 @@ export default function EventForm({
         clubId: club?.id,
         price: data?.price || 0,
         type,
+        groups: data?.groups,
       };
 
       if (!club) delete newEvent.clubId;
@@ -131,6 +138,7 @@ export default function EventForm({
       if (event?.id) {
         delete newEvent.isInstant;
         delete newEvent.type;
+        delete newEvent.groups;
         const updateRes = await onUpdate({
           variables: { updateEventInput: newEvent, id: event.id },
         });
@@ -179,9 +187,35 @@ export default function EventForm({
               {translate("club.event.form.info_section")}
             </Typography>
 
+            {type === "2_activity" && (
+              <RHFAutocomplete
+                name="groups"
+                label="Groups"
+                multiple
+                freeSolo
+                options={GROUPS_OPTION.map((option) => option)}
+                ChipProps={{ size: "medium" }}
+                disabled={event?.id}
+              />
+            )}
+
             <RHFTextField
               name="title"
               label={translate("club.event.form.name")}
+            />
+
+            <Controller
+              name="time"
+              control={control}
+              render={({ field }) => (
+                <MobileDateTimePicker
+                  {...field}
+                  label={translate("club.event.form.event_time")}
+                  ampm={false}
+                  inputFormat="dd/MM/yyyy HH:mm"
+                  renderInput={(params) => <TextField {...params} fullWidth />}
+                />
+              )}
             />
 
             <RHFTextField
@@ -260,20 +294,6 @@ export default function EventForm({
                 ),
                 type: "number",
               }}
-            />
-
-            <Controller
-              name="time"
-              control={control}
-              render={({ field }) => (
-                <MobileDateTimePicker
-                  {...field}
-                  label={translate("club.event.form.event_time")}
-                  ampm={false}
-                  inputFormat="dd/MM/yyyy HH:mm"
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                />
-              )}
             />
 
             <RHFTextField

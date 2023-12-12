@@ -122,6 +122,84 @@ function renderContent(activity) {
 
   const actor_name = member.profile.displayName;
   let action_object = null;
+
+  if (type === "remove_tag") {
+    if (objectString) {
+      const newObject = JSON.parse(objectString);
+
+      action_object = `[${newObject.value}] ${newObject.user} (${fDateTime(
+        newObject.createdAt
+      )})`;
+    } else if (object) {
+      action_object = `[${object.value}] ${
+        object.member.profile.displayName
+      } (${fDateTime(object.createdAt)})`;
+    }
+    return {
+      icon: "mdi:tag-remove",
+      title: (
+        <Typography component="span" variant="body2">
+          <Trans
+            i18nKey={`event_history.key.${type}`}
+            values={{ actor_name, action_object }}
+          >
+            <strong>{actor_name}</strong> remove tag for the vote of
+            <strong>{action_object}</strong>
+          </Trans>
+        </Typography>
+      ),
+    };
+  }
+  if (type === "add_note") {
+    if (objectString) {
+      const newObject = JSON.parse(objectString);
+
+      action_object = `[${newObject.value}] ${newObject.user} (${fDateTime(
+        newObject.createdAt
+      )})`;
+    } else if (object) {
+      action_object = `[${object.value}] ${
+        object.member.profile.displayName
+      } (${fDateTime(object.createdAt)})`;
+    }
+    return {
+      icon: "clarity:note-solid",
+      title: (
+        <Typography component="span" variant="body2">
+          <Trans
+            i18nKey={`event_history.key.${type}`}
+            values={{ actor_name, action_object }}
+          >
+            <strong>{actor_name}</strong> added note to
+            <strong>{action_object}</strong>
+          </Trans>
+        </Typography>
+      ),
+    };
+  }
+  if (type === "delete_vote") {
+    let count = 0;
+    if (objectString) {
+      const newObject = JSON.parse(objectString);
+
+      count = newObject.value;
+    }
+    return {
+      icon: "material-symbols:delete",
+      title: (
+        <Typography component="span" variant="body2">
+          <Trans
+            i18nKey={`event_history.key.${type}`}
+            values={{ actor_name, count }}
+          >
+            <strong>{actor_name}</strong> deteled
+            <strong>{count}</strong> slot(s)
+          </Trans>
+        </Typography>
+      ),
+    };
+  }
+
   if (objectString) {
     const newObject = JSON.parse(objectString);
 
@@ -148,42 +226,9 @@ function renderContent(activity) {
     </>
   );
 
-  if (type === "remove_tag") {
-    return {
-      icon: "mdi:tag-remove",
-      title: (
-        <Typography component="span" variant="body2">
-          <Trans
-            i18nKey={`event_history.key.${type}`}
-            values={{ actor_name, action_object }}
-          >
-            <strong>{actor_name}</strong> remove tag for the vote of
-            <strong>{action_object}</strong>
-          </Trans>
-        </Typography>
-      ),
-    };
-  }
-  if (type === "add_note") {
-    return {
-      icon: "clarity:note-solid",
-      title: (
-        <Typography component="span" variant="body2">
-          <Trans
-            i18nKey={`event_history.key.${type}`}
-            values={{ actor_name, action_object }}
-          >
-            <strong>{actor_name}</strong> added note to
-            <strong>{action_object}</strong>
-          </Trans>
-        </Typography>
-      ),
-    };
-  }
-
   return {
     icon: "solar:dollar-bold",
-    title,
+    title: title,
   };
 }
 

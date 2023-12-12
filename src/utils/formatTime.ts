@@ -1,5 +1,6 @@
 import { format, formatDistanceToNow, getTime } from "date-fns";
-
+import { vi, zhCN } from "date-fns/locale";
+import i18next from "../i18n";
 // ----------------------------------------------------------------------
 
 export function fDate(date, formatDate = "dd MMMM yyyy") {
@@ -9,7 +10,17 @@ export function fSDate(date, formatDate = "dd/MM/yyyy") {
   return format(new Date(date), formatDate);
 }
 export function fDateTime(date) {
-  return format(new Date(date), "eee, dd MMM yyyy, HH:mm");
+  const currentLocale = i18next.language;
+
+  const localeMap = {
+    en: null,
+    vn: vi,
+    cn: zhCN,
+  };
+
+  const locale = localeMap[currentLocale] || null;
+
+  return format(new Date(date), "eeee, dd MMM yyyy, HH:mm", { locale });
 }
 
 export function fSDateTime(date) {

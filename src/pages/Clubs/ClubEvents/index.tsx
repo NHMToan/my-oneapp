@@ -111,18 +111,6 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
     }
   };
 
-  const handleSelectRange = (arg) => {
-    if (isAdmin || isSubAdmin) {
-      const calendarEl = calendarRef.current;
-      if (calendarEl) {
-        const calendarApi = calendarEl.getApi();
-        calendarApi.unselect();
-      }
-      setSelectedRange({ start: arg.start.getTime(), end: arg.end.getTime() });
-      setIsFormOpen(true);
-    }
-  };
-
   const handleSelectEvent = (arg) => {
     setSelectedEvent(arg.event.id);
     setIsDetailsOpen(true);
@@ -180,7 +168,6 @@ const ClubEvents: FC<ClubEventsProps> = ({ club }) => {
             headerToolbar={false}
             allDayMaintainDuration
             eventResizableFromStart
-            select={handleSelectRange}
             eventClick={handleSelectEvent}
             height={isDesktop ? 720 : "auto"}
             plugins={[

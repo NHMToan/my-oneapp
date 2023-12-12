@@ -41,6 +41,7 @@ fragment eventInfo on ClubEvent {
   maxVote
   price
   type
+  groups
 }
 fragment voteInfo on Vote {
   id

@@ -268,7 +268,8 @@
       "prepaid": "<0>{{actor_name}}</0> add [Prepaid] tag for the vote of <2>{{action_object}}</2>",
       "bank": "<0>{{actor_name}}</0> add [Bank] tag for the vote of <2>{{action_object}}</2>",
       "momo": "<0>{{actor_name}}</0> add [Momo] tag for the vote of <2>{{action_object}}</2>",
-      "cash": "<0>{{actor_name}}</0> add [Cash] tag for the vote of <2>{{action_object}}</2>"
+      "cash": "<0>{{actor_name}}</0> add [Cash] tag for the vote of <2>{{action_object}}</2>",
+      "delete_vote": "<0>{{actor_name}}</0> deleted <2>{{count}}</2> slot(s)"
     }
   },
   "home": {

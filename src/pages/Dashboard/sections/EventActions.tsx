@@ -56,16 +56,16 @@ const EventActions: FC<EventActionsProps> = ({
 
   const [onVote] = useCreateVoteEventMutation({ fetchPolicy: "no-cache" });
 
-  const handleVote = async (value, type) => {
+  const handleVote = async (params) => {
     setSubmitting(true);
     try {
       const voteRes = await onVote({
         variables: {
           createVoteInput: {
-            value: ~~value,
+            value: ~~params.value,
             eventId: event.id,
             status: 1,
-            type,
+            type: params?.type || "",
           },
         },
       });
@@ -74,7 +74,7 @@ const EventActions: FC<EventActionsProps> = ({
         refetchStats();
         enqueueSnackbar(
           translate("club.event.details.vote.confirmed_success", {
-            count: value,
+            count: params.value,
           })
         );
       } else {
@@ -94,16 +94,16 @@ const EventActions: FC<EventActionsProps> = ({
     }
   };
 
-  const handleWaitingVote = async (value, type) => {
+  const handleWaitingVote = async (params) => {
     setSubmitting(true);
     try {
       const voteRes = await onVote({
         variables: {
           createVoteInput: {
-            value: ~~value,
+            value: ~~params.value,
             eventId: event.id,
             status: 2,
-            type,
+            type: params.type || "",
           },
         },
       });
@@ -111,7 +111,9 @@ const EventActions: FC<EventActionsProps> = ({
       if (voteRes?.data?.voteEvent?.success) {
         refetchStats();
         enqueueSnackbar(
-          translate("club.event.details.vote.waiting_success", { count: value })
+          translate("club.event.details.vote.waiting_success", {
+            count: params.value,
+          })
         );
       } else {
         enqueueSnackbar(voteRes?.data?.voteEvent?.message || "Internal error", {
@@ -314,11 +316,11 @@ const EventActions: FC<EventActionsProps> = ({
             onClose={() => {
               setIsFormOpen(false);
             }}
-            onPostSave={(value, type) => {
+            onPostSave={(params) => {
               if (isVoteWaiting) {
-                handleWaitingVote(value, type);
+                handleWaitingVote(params);
               } else {
-                handleVote(value, type);
+                handleVote(params);
               }
             }}
             isWaiting={isVoteWaiting}

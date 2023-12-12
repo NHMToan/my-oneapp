@@ -7,22 +7,20 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   Stack,
+  capitalize,
 } from "@mui/material";
-import { FormProvider, RHFSelect } from "components/hook-form";
+import { FormProvider, RHFRadioGroup, RHFSelect } from "components/hook-form";
 import useLocales from "hooks/useLocales";
 import { ClubEvent } from "pages/Clubs/data.t";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 interface VotePopConfirmProps {
   event?: ClubEvent;
   isOpen: boolean;
   onClose: () => void;
-  onPostSave: (count: number, type: string) => void;
+  onPostSave: (params: any) => void;
   isWaiting?: boolean;
   currentVoteCount?: number;
   isSubmitting: boolean;
@@ -38,31 +36,33 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
 }) => {
   const defaultValues: any = {
     value: 1,
+    type: event?.groups[0],
   };
   const EventSchema = Yup.object().shape({
     value: Yup.number().required("Slot is required"),
+    type:
+      event.type === "2_activity" && Yup.string().required("Type is required"),
   });
   const { translate } = useLocales();
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues,
   });
-  const [type, setType] = useState<string>("play");
 
   const { reset, handleSubmit } = methods;
   const onCancel = () => {
     onClose();
     reset();
-    setType("play");
   };
 
   const onSubmit = async (data) => {
     try {
       const params: any = {
         value: ~~data.value,
+        type: data.type,
       };
 
-      onPostSave(params.value, type || "");
+      onPostSave(params);
 
       onClose();
       reset();
@@ -114,27 +114,16 @@ const VotePopConfirm: FC<VotePopConfirmProps> = ({
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {maxVote > 0 && (
           <Stack spacing={3} sx={{ p: 3 }}>
-            {event.type === "bowling" && (
-              <RadioGroup
-                name="use-radio-group"
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value);
-                }}
-                row
-              >
-                <FormControlLabel
-                  value="play"
-                  label="Play"
-                  control={<Radio />}
-                />
-                <FormControlLabel
-                  value="compete"
-                  label="Compete"
-                  control={<Radio />}
-                />
-              </RadioGroup>
+            {event.type === "2_activity" && (
+              <RHFRadioGroup
+                name="type"
+                options={event.groups.map((type) => ({
+                  label: capitalize(type),
+                  value: type,
+                }))}
+              />
             )}
+
             <RHFSelect
               name="value"
               label="Slots"

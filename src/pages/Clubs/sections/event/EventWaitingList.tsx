@@ -21,6 +21,7 @@ import { BOWLING_VOTE_TYPE } from "pages/Clubs/consts";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useState } from "react";
 import { fSDateTime } from "utils/formatTime";
+import ChangeVoteModal from "./ChangeVoteModal";
 
 interface EventWaitingListProps {
   event: ClubEvent;
@@ -59,7 +60,7 @@ const EventWaitingList: FC<EventWaitingListProps> = ({
           {translate("club.event.details.tab_vote_info.waiting_list.no_data")}
         </Typography>
       );
-    if (event?.type === "bowling") {
+    if (event?.type === "2_activity") {
       return (
         <Stack spacing={3} sx={{ p: 3 }}>
           {BOWLING_VOTE_TYPE.map((type) => {
@@ -139,7 +140,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
   const { user } = useAuth();
-
+  const [isFormChangeOpen, setIsFormChangeOpen] = useState<boolean>(false);
   const current = new Date();
 
   const isEventClose = event.end < current.toISOString() || event.status === 2;
@@ -176,67 +177,28 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       {!isEventClose &&
         !isAdmin &&
         vote.member.profile.id === user.profile.id && (
-          <PopConfirm
-            open={openDelete}
-            onClose={() => setOpenDelete(false)}
-            title={
-              <CardHeader
-                title={translate(
-                  "club.event.details.tab_vote_info.waiting_list.delete.confirmation"
-                )}
-              />
-            }
-            actions={
-              <>
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  onClick={() => setOpenDelete(false)}
-                  size="small"
-                >
-                  {translate("common.btn.cancel")}
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={async () => {
-                    try {
-                      const deleteVoteRes = await onDeleteVote({
-                        variables: {
-                          voteId: vote.id,
-                          eventId: event.id,
-                          eventSlot: event.slot,
-                          isSelf: true,
-                        },
-                      });
-                      if (deleteVoteRes?.data?.unVoteEvent?.success) {
-                        enqueueSnackbar(
-                          translate(
-                            "club.event.details.tab_vote_info.waiting_list.delete.success"
-                          )
-                        );
-                        postActions();
-                      }
-                    } catch (e) {
-                      console.error(e);
-                    }
-                  }}
-                >
-                  {translate("common.btn.delete")}
-                </Button>
-              </>
-            }
-          >
+          <>
             <Button
-              color="error"
               variant="contained"
+              color="info"
               onClick={() => {
-                setOpenDelete(true);
+                setIsFormChangeOpen(true);
               }}
             >
-              {translate("common.btn.delete")}
+              {translate("common.btn.change")}
             </Button>
-          </PopConfirm>
+            <ChangeVoteModal
+              isOpen={isFormChangeOpen}
+              onClose={() => {
+                setIsFormChangeOpen(false);
+              }}
+              voteInfo={vote}
+              postActions={() => {
+                postActions();
+              }}
+              event={event}
+            />
+          </>
         )}
       {isAdmin && (
         <PopConfirm

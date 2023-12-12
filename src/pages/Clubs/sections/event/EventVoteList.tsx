@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Button,
@@ -29,12 +30,12 @@ import useAuth from "hooks/useAuth";
 import useLocales from "hooks/useLocales";
 import { useSnackbar } from "notistack";
 import SendMessageButton from "pages/Chat/components/SendMessageModal";
-import { BOWLING_VOTE_TYPE, PAID_STATUS } from "pages/Clubs/consts";
+import { PAID_STATUS } from "pages/Clubs/consts";
 import { ClubEvent, VoteData } from "pages/Clubs/data.t";
 import { FC, useRef, useState } from "react";
 import { fSDateTime } from "utils/formatTime";
 import { searchVietnameseName } from "utils/search";
-
+import ChangeVoteModal from "./ChangeVoteModal";
 interface EventVoteListProps {
   event: ClubEvent;
   refetchStats?: () => void;
@@ -75,19 +76,15 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
           {translate("club.event.details.tab_vote_info.confirm_list.no_data")}
         </Typography>
       );
-    if (event?.type === "bowling") {
+    if (event?.type === "2_activity") {
       return (
         <Stack spacing={3} sx={{ p: 3 }}>
-          {BOWLING_VOTE_TYPE.map((type) => {
+          {event.groups.map((type) => {
             return (
-              <LabelContainer
-                key={type.id}
-                label={capitalize(type.id)}
-                borderColor={type.color}
-              >
+              <LabelContainer key={type} label={capitalize(type)}>
                 <Stack spacing={3} sx={{ p: 1 }}>
                   {dataFiltered
-                    .filter((item) => item.type === type.id)
+                    .filter((item) => item.type === type)
                     .map((vote, index) => (
                       <Voter
                         key={vote.id}
@@ -189,6 +186,9 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
 
   const isEventClose = event.end < current.toISOString() || event.status === 2;
 
+  const [isFormChangeOpen, setIsFormChangeOpen] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -220,6 +220,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   };
   const onNote = async () => {
     try {
+      setSubmitting(true);
       const res = await onNoteVote({
         variables: { voteId: vote.id, note: message },
       });
@@ -231,6 +232,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       } else {
         enqueueSnackbar("Error", { variant: "error" });
       }
+      setSubmitting(false);
     } catch (e) {
       console.log(e);
     }
@@ -250,6 +252,17 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
   };
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
+      <ChangeVoteModal
+        isOpen={isFormChangeOpen}
+        onClose={() => {
+          setIsFormChangeOpen(false);
+        }}
+        voteInfo={vote}
+        postActions={() => {
+          postActions();
+        }}
+        event={event}
+      />
       <Avatar
         alt={vote.member.profile.displayName}
         src={vote.member.profile.avatar}
@@ -299,72 +312,17 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
       {!isEventClose &&
         !isAdmin &&
         vote.member.profile.id === user.profile.id && (
-          <PopConfirm
-            open={openDelete}
-            onClose={() => setOpenDelete(false)}
-            title={
-              <CardHeader
-                title={translate(
-                  "club.event.details.tab_vote_info.waiting_list.delete.confirmation"
-                )}
-              />
-            }
-            actions={
-              <>
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  onClick={() => setOpenDelete(false)}
-                  size="small"
-                >
-                  {translate("common.btn.cancel")}
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={async () => {
-                    try {
-                      const deleteVoteRes = await onDeleteVote({
-                        variables: {
-                          voteId: vote.id,
-                          eventId: event.id,
-                          eventSlot: event.slot,
-                          isSelf: true,
-                        },
-                      });
-                      if (deleteVoteRes?.data?.unVoteEvent?.success) {
-                        enqueueSnackbar(
-                          translate(
-                            "club.event.details.tab_vote_info.waiting_list.delete.success"
-                          )
-                        );
-                        postActions();
-                      } else {
-                        enqueueSnackbar(
-                          deleteVoteRes?.data?.unVoteEvent?.message,
-                          { variant: "error" }
-                        );
-                      }
-                    } catch (e) {
-                      console.error(e);
-                    }
-                  }}
-                >
-                  {translate("common.btn.delete")}
-                </Button>
-              </>
-            }
-          >
+          <>
             <Button
-              color="error"
               variant="contained"
+              color="info"
               onClick={() => {
-                setOpenDelete(true);
+                setIsFormChangeOpen(true);
               }}
             >
-              {translate("common.btn.delete")}
+              {translate("common.btn.change")}
             </Button>
-          </PopConfirm>
+          </>
         )}
 
       {isAdmin && (
@@ -464,7 +422,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                       >
                         {translate("common.btn.cancel")}
                       </Button>
-                      <Button
+                      <LoadingButton
                         variant="contained"
                         disabled={!message}
                         onClick={() => {
@@ -474,9 +432,10 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                             console.error(e);
                           }
                         }}
+                        LoadingButton
                       >
                         {translate("common.btn.save")}
-                      </Button>
+                      </LoadingButton>
                     </>
                   }
                 >
@@ -493,6 +452,17 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
               {vote.member.profile.id !== user.profile.id && (
                 <SendMessageButton to={vote.member.profile} />
               )}
+
+              {vote.member.profile.id === user.profile.id && (
+                <MenuItem
+                  onClick={() => {
+                    setIsFormChangeOpen(true);
+                  }}
+                >
+                  {translate("common.btn.change")}
+                </MenuItem>
+              )}
+
               {isAdmin && (
                 <PopConfirm
                   open={openDelete}

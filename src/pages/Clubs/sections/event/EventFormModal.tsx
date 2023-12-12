@@ -39,24 +39,24 @@ const EventFormModal: FC<EventFormModalProps> = ({
           flexWrap="wrap"
         >
           <Button
-            key="badminton"
+            key="normal"
             variant="contained"
             startIcon={<Iconify icon="mdi:badminton" />}
             onClick={() => {
-              onSetType("badminton");
+              onSetType("normal");
             }}
           >
-            Badminton
+            Normal
           </Button>
           <Button
-            key="bowling"
+            key="2_activity"
             variant="contained"
             startIcon={<Iconify icon="game-icons:bowling-strike" />}
             onClick={() => {
-              onSetType("bowling");
+              onSetType("2_activity");
             }}
           >
-            Bowling
+            Multiple activities
           </Button>
         </Stack>
       </Box>

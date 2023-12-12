@@ -30,7 +30,7 @@ const EventDetailsModal: FC<EventDetailsModalProps> = ({
     if (loading) return <SimpleSkeleton />;
     if (!data?.getEvent) return null;
 
-    if (data.getEvent.type === "bowling")
+    if (data.getEvent.type === "2_activity")
       return (
         <BowlingEvent
           onRefreshList={onRefreshList}

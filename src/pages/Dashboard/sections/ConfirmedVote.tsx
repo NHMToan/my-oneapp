@@ -103,6 +103,7 @@ const ConfirmedVote: FC<ConfirmedVoteProps> = ({
                                 voteId: vote.id,
                                 eventId: event.id,
                                 eventSlot: event.slot,
+                                isSelf: false,
                               },
                             });
                             if (deleteVoteRes?.data?.unVoteEvent?.success) {
