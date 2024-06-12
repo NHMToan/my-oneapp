@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   Button,
   CardHeader,
+  Divider,
   MenuItem,
   TableCell,
   TableRow,
@@ -10,12 +11,16 @@ import {
   useTheme,
 } from "@mui/material";
 // components
+import { PATH_DASHBOARD } from "Router/paths";
 import Label from "components/Label";
 import PopConfirm from "components/PopConfirm";
-import { useDeleteRatingMutation } from "generated/graphql";
+import {
+  useChangeHiddenRatingMutation,
+  useChangeStatusRatingMutation,
+  useDeleteRatingMutation,
+} from "generated/graphql";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { PATH_DASHBOARD } from "Router/paths";
 import { TableMoreMenu } from "../../../../../components/table";
 
 // ----------------------------------------------------------------------
@@ -30,7 +35,7 @@ export default function RatingRow({
   selected,
   postDeleted,
 }: RatingRowProps) {
-  const { name, start, end, status, id } = row;
+  const { name, hidden, status, id } = row;
   const theme = useTheme();
   const [openMenu, setOpenMenuActions] = useState(null);
   const navigate = useNavigate();
@@ -43,6 +48,9 @@ export default function RatingRow({
   };
   const [onDelete] = useDeleteRatingMutation();
 
+  const [onChangeHidden] = useChangeHiddenRatingMutation();
+  const [onChangeStatus] = useChangeStatusRatingMutation();
+
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -54,8 +62,15 @@ export default function RatingRow({
         </Typography>
       </TableCell>
 
-      <TableCell align="left">{start}</TableCell>
-      <TableCell align="left">{end}</TableCell>
+      <TableCell align="left">
+        <Label
+          variant={theme.palette.mode === "light" ? "ghost" : "filled"}
+          color={hidden ? "error" : "success"}
+          sx={{ textTransform: "capitalize" }}
+        >
+          {hidden ? "Closed" : "Open"}
+        </Label>
+      </TableCell>
       <TableCell align="left">
         <Label
           variant={theme.palette.mode === "light" ? "ghost" : "filled"}
@@ -88,7 +103,50 @@ export default function RatingRow({
               >
                 Edit
               </MenuItem>
-
+              <Divider />
+              <MenuItem
+                onClick={async () => {
+                  try {
+                    const changeHiddenRes = await onChangeHidden({
+                      variables: {
+                        id: row.id,
+                        hidden: !hidden,
+                      },
+                    });
+                    if (changeHiddenRes?.data?.changeHiddenRating?.success) {
+                      enqueueSnackbar("Rating hidden is changed successfully!");
+                      postDeleted();
+                    }
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+                key="hidden"
+              >
+                {hidden ? "Open" : "Close"}
+              </MenuItem>
+              <MenuItem
+                onClick={async () => {
+                  try {
+                    const changeStatusRes = await onChangeStatus({
+                      variables: {
+                        id: row.id,
+                        status: status === 1 ? 2 : 1,
+                      },
+                    });
+                    if (changeStatusRes?.data?.changeStatusRating?.success) {
+                      enqueueSnackbar("Rating hidden is changed successfully!");
+                      postDeleted();
+                    }
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+                key="hidden"
+              >
+                {status === 1 ? "Inactivate" : "Activate"}
+              </MenuItem>
+              <Divider />
               <PopConfirm
                 open={openDelete}
                 onClose={() => setOpenDelete(false)}

@@ -30,6 +30,7 @@ const getInitialValues = (candidate) => {
     name: candidate?.name || "",
     bio: candidate?.bio || "",
     photo1: candidate?.photo1 || "",
+    video: candidate?.video || "",
   };
 
   return _candidate;
@@ -144,6 +145,7 @@ const CandidateForm: FC<CandidateFormProps> = ({
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3} sx={{ p: 3 }}>
         <RHFTextField name="name" label="Name" />
+
         <div>
           <LabelStyle>Description</LabelStyle>
           <RHFEditor simple name="bio" />
@@ -158,6 +160,8 @@ const CandidateForm: FC<CandidateFormProps> = ({
             onDrop={handleDrop}
           />
         </div>
+
+        <RHFTextField name="video" label="Video url" />
       </Stack>
 
       <DialogActions>

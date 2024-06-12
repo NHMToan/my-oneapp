@@ -14,6 +14,7 @@ fragment ratingInfo on Rating {
   createdAt
   updatedAt
   status
+  hidden
 }
 fragment ratingCandidateInfo on RatingCandidate {
   id
@@ -24,11 +25,14 @@ fragment ratingCandidateInfo on RatingCandidate {
   photo1
   photo2
   photo2
+  video
+  votedCount
 }
 fragment ratingVoteInfo on RatingVote {
   id
   voter {
     ...userInfo
   }
+  status
   createdAt
 }

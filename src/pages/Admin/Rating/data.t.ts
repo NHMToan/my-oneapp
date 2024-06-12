@@ -7,6 +7,8 @@ export interface RatingData {
   id: string;
   end: string;
   votedFor?: RatingCandidateData;
+  status: number;
+  hidden: boolean;
 }
 export interface RatingCandidateData {
   id: string;
@@ -17,6 +19,7 @@ export interface RatingCandidateData {
   photo2: string;
   photo3: string;
   order: number;
+  video: string;
 }
 export interface RatingCandidateData {
   id: string;
@@ -24,4 +27,5 @@ export interface RatingCandidateData {
   createdAt: string;
   votedFor: RatingCandidateData;
   rating: RatingData;
+  votedCount: number;
 }

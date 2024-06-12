@@ -6,6 +6,8 @@ import {
   IconButton,
   Stack,
   styled,
+  Tab,
+  Tabs,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -20,9 +22,12 @@ import {
 } from "generated/graphql";
 import useCountdown from "hooks/useCountdown";
 import useLocales from "hooks/useLocales";
+import useTabs from "hooks/useTabs";
 import merge from "lodash/merge";
 import { ClubEvent } from "pages/Clubs/data.t";
 import { EventDetailsModal } from "pages/Clubs/sections/event";
+import EventDetailsVotesTab from "pages/Clubs/sections/event/EventDetailsVotesTab";
+import EventHistory from "pages/Clubs/sections/event/EventHistory";
 import { FC, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { fNumber } from "utils/formatNumber";
@@ -31,6 +36,7 @@ import EventActions from "./EventActions";
 interface EventCardProps {
   event: ClubEvent;
   hideInfo?: boolean;
+  compact?: boolean;
 }
 
 const CountdownStyle = styled("div")({
@@ -78,9 +84,9 @@ const RenderCountdown = ({ date, onEnd }) => {
     </CountdownStyle>
   );
 };
-const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
+const EventCard: FC<EventCardProps> = ({ event, hideInfo, compact }) => {
   const { title, start, end, id, voteCount, slot, status, price } = event;
-
+  const { currentTab, onChangeTab } = useTabs("general");
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const theme: any = useTheme();
   const [eventVoteCount, setEventVoteCount] = useState<number>(voteCount);
@@ -212,6 +218,150 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
     }
   };
 
+  const TABS = compact
+    ? [
+        {
+          title: translate("club.event.details.tab_general.title"),
+          value: "general",
+          icon: (
+            <Iconify icon={"fluent:info-24-filled"} width={20} height={20} />
+          ),
+          component: (
+            <>
+              {renderGeneral()}
+              <div style={{ position: "relative", marginBottom: 12 }}>
+                {renderCountDown()}
+                <ReactApexChart
+                  type="radialBar"
+                  series={[chartSeries]}
+                  options={chartOptions}
+                  height={300}
+                />
+                <Box
+                  sx={{
+                    flexGrow: 1,
+                    position: "absolute",
+                    top: "calc(50% + 15px)",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <Typography variant="h3">
+                    {`${fNumber(eventVoteCount)}/${fNumber(slot)}`}
+                  </Typography>
+                </Box>
+              </div>
+              <Container sx={{ p: 3 }}>
+                <EventActions
+                  event={event}
+                  isFull={eventVoteCount >= event.slot}
+                  isClose={isClose}
+                  refetchStats={refetchStats}
+                  statsData={statsData}
+                />
+              </Container>
+            </>
+          ),
+        },
+        {
+          title: translate("club.event.details.tab_vote_info.title"),
+          value: "vote_info",
+          icon: (
+            <Iconify
+              icon={"fluent:task-list-square-person-20-filled"}
+              width={20}
+              height={20}
+            />
+          ),
+          component: (
+            <EventDetailsVotesTab
+              event={event}
+              refetchStats={refetchStats}
+              isOneCol
+              sx={{ overflow: "hidden auto", maxHeight: 490 }}
+              compact={compact}
+            />
+          ),
+        },
+      ]
+    : [
+        {
+          title: translate("club.event.details.tab_general.title"),
+          value: "general",
+          icon: (
+            <Iconify icon={"fluent:info-24-filled"} width={20} height={20} />
+          ),
+          component: (
+            <>
+              {renderGeneral()}
+              <div style={{ position: "relative", marginBottom: 12 }}>
+                {renderCountDown()}
+                <ReactApexChart
+                  type="radialBar"
+                  series={[chartSeries]}
+                  options={chartOptions}
+                  height={300}
+                />
+                <Box
+                  sx={{
+                    flexGrow: 1,
+                    position: "absolute",
+                    top: "calc(50% + 15px)",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <Typography variant="h3">
+                    {`${fNumber(eventVoteCount)}/${fNumber(slot)}`}
+                  </Typography>
+                </Box>
+              </div>
+              <Container sx={{ p: 3 }}>
+                <EventActions
+                  event={event}
+                  isFull={eventVoteCount >= event.slot}
+                  isClose={isClose}
+                  refetchStats={refetchStats}
+                  statsData={statsData}
+                />
+              </Container>
+            </>
+          ),
+        },
+        {
+          title: translate("club.event.details.tab_vote_info.title"),
+          value: "vote_info",
+          icon: (
+            <Iconify
+              icon={"fluent:task-list-square-person-20-filled"}
+              width={20}
+              height={20}
+            />
+          ),
+          component: (
+            <EventDetailsVotesTab
+              event={event}
+              refetchStats={refetchStats}
+              isOneCol
+              sx={{ overflow: "hidden auto", maxHeight: 490 }}
+            />
+          ),
+        },
+        {
+          title: "History",
+          value: "history",
+          icon: (
+            <Iconify icon={"material-symbols:history"} width={20} height={20} />
+          ),
+          component: (
+            <EventHistory
+              event={event}
+              sx={{ overflow: "hidden auto", maxHeight: 490 }}
+            />
+          ),
+        },
+      ];
+
   return (
     <Card
       sx={
@@ -238,38 +388,31 @@ const EventCard: FC<EventCardProps> = ({ event, hideInfo }) => {
         }
         sx={{ mb: 2 }}
       />
-      {renderGeneral()}
-      <div style={{ position: "relative", marginBottom: 12 }}>
-        {renderCountDown()}
-        <ReactApexChart
-          type="radialBar"
-          series={[chartSeries]}
-          options={chartOptions}
-          height={300}
-        />
-        <Box
-          sx={{
-            flexGrow: 1,
-            position: "absolute",
-            top: "calc(50% + 15px)",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <Typography variant="h3">
-            {`${fNumber(eventVoteCount)}/${fNumber(slot)}`}
-          </Typography>
-        </Box>
-      </div>
 
-      <Container sx={{ p: 3 }}>
-        <EventActions
-          event={event}
-          isFull={eventVoteCount >= event.slot}
-          isClose={isClose}
-          refetchStats={refetchStats}
-          statsData={statsData}
-        />
+      <Container sx={{ px: 2 }}>
+        <Tabs
+          allowScrollButtonsMobile
+          variant="scrollable"
+          scrollButtons="auto"
+          value={currentTab}
+          onChange={onChangeTab}
+        >
+          {TABS.map((tab) => (
+            <Tab
+              disableRipple
+              key={tab.value}
+              label={tab.title}
+              icon={tab.icon}
+              value={tab.value}
+            />
+          ))}
+        </Tabs>
+        <Box sx={{ mb: 2 }} />
+
+        {TABS.map((tab) => {
+          const isMatched = tab.value === currentTab;
+          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+        })}
       </Container>
 
       {!hideInfo && (

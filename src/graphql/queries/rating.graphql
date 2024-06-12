@@ -41,6 +41,7 @@ query GetRatingVote($candidateId: ID!) {
     results {
       id
       createdAt
+      status
       voter {
         ...userInfo
       }

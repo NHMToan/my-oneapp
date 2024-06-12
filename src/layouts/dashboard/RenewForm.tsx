@@ -39,7 +39,6 @@ const RenewForm = (props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    console.log(user);
     if (user && !isNaN(Number(user.email))) {
       setIsOpen(true);
     }

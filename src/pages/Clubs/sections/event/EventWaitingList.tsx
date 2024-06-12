@@ -5,6 +5,7 @@ import {
   CardHeader,
   IconButton,
   Stack,
+  SxProps,
   Typography,
   capitalize,
 } from "@mui/material";
@@ -26,6 +27,7 @@ import ChangeVoteModal from "./ChangeVoteModal";
 interface EventWaitingListProps {
   event: ClubEvent;
   refetchStats: () => void;
+  sx?: SxProps;
 }
 
 function applySortFilter({ tableData }) {
@@ -34,6 +36,7 @@ function applySortFilter({ tableData }) {
 const EventWaitingList: FC<EventWaitingListProps> = ({
   event,
   refetchStats,
+  sx,
 }) => {
   const { data, loading, refetch } = useGetVotesQuery({
     fetchPolicy: "no-cache",
@@ -62,7 +65,7 @@ const EventWaitingList: FC<EventWaitingListProps> = ({
       );
     if (event?.type === "2_activity") {
       return (
-        <Stack spacing={3} sx={{ p: 3 }}>
+        <Stack spacing={3} sx={{ p: 3, ...sx }}>
           {BOWLING_VOTE_TYPE.map((type) => {
             return (
               <LabelContainer
@@ -94,7 +97,7 @@ const EventWaitingList: FC<EventWaitingListProps> = ({
       );
     }
     return (
-      <Stack spacing={3} sx={{ p: 3 }}>
+      <Stack spacing={3} sx={{ p: 3, ...sx }}>
         {data?.getVotes?.results.map((vote, index) => (
           <Voter
             key={vote.id}

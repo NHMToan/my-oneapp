@@ -18,7 +18,7 @@ const RatingList: FC<RatingListProps> = (props) => {
       <Grid item xs={12}>
         <Stack direction="column" justifyContent="center" spacing={4}>
           {data.myRatings.results.map((item) => (
-            <RatingCard data={item as any} postVoted={refetch} />
+            <RatingCard data={item as any} postVoted={refetch} key={item.id} />
           ))}
         </Stack>
       </Grid>

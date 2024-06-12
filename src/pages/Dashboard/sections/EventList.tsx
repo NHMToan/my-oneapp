@@ -37,7 +37,7 @@ const EventList: FC<EventListProps> = (props) => {
     <Container maxWidth="xs" sx={{ pt: 3 }}>
       <Stack direction="column" justifyContent="center" spacing={4}>
         {data?.myEvents?.results?.map((event: any) => {
-          return <EventCard event={event} key={event.id} />;
+          return <EventCard event={event} key={event.id} compact />;
         })}
       </Stack>
     </Container>

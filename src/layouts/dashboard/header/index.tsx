@@ -1,8 +1,8 @@
 import { AppBar, AppBarProps, Box, Stack, Toolbar } from "@mui/material";
 // @mui
 import { styled } from "@mui/material/styles";
-import { IconButtonAnimate } from "../../../components/animate";
 import Iconify from "../../../components/Iconify";
+import { IconButtonAnimate } from "../../../components/animate";
 // components
 import Logo from "../../../components/Logo4";
 // config
@@ -14,10 +14,10 @@ import useResponsive from "../../../hooks/useResponsive";
 import cssStyles from "../../../utils/cssStyles";
 import AccountPopover from "./AccountPopover";
 import LanguagePopover from "./LanguagePopover";
-import MessagePopover from "./MessagePopover";
 import NotificationsPopover from "./NotificationsPopover";
 //
 import Searchbar from "./Searchbar";
+import VotesPopover from "./VotesPopover";
 
 // ----------------------------------------------------------------------
 interface RootStyle extends AppBarProps {
@@ -104,7 +104,7 @@ export default function DashboardHeader({
           spacing={{ xs: 0.5, sm: 1.5 }}
         >
           <LanguagePopover />
-          <MessagePopover />
+          <VotesPopover />
           <NotificationsPopover />
           <AccountPopover />
         </Stack>

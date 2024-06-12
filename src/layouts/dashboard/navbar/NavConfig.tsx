@@ -60,7 +60,7 @@ const navConfig = [
       //   path: PATH_DASHBOARD.blog.posts,
       //   icon: ICONS.blog,
       // },
-      { title: "menu.chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      // { title: "menu.chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
       // {
       //   title: "menu.chatbot",
       //   path: PATH_DASHBOARD.chatbot.root,

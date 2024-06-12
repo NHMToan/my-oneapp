@@ -14,6 +14,23 @@ mutation UpdateRating($id: ID!, $updateRatingInput: CreateRatingInput!) {
     ...ratingMutationResponse
   }
 }
+
+mutation ChangeStatusRating($id: ID!, $status: Int!) {
+  changeStatusRating(id: $id, status: $status) {
+    ...ratingMutationResponse
+  }
+}
+mutation ChangeStatusRatingVote($id: ID!, $status: Int!) {
+  changeStatusRatingVote(id: $id, status: $status) {
+    ...ratingMutationResponse
+  }
+}
+
+mutation ChangeHiddenRating($id: ID!, $hidden: Boolean!) {
+  changeHiddenRating(id: $id, hidden: $hidden) {
+    ...ratingMutationResponse
+  }
+}
 mutation DeleteCandidate($id: ID!) {
   deleteCandidate(id: $id) {
     ...mutationStatuses
@@ -39,6 +56,7 @@ mutation UpdateCandidate(
     ...ratingMutationResponse
   }
 }
+
 mutation VoteCandidate($ratingId: ID!, $candidateId: ID!) {
   voteCandidate(ratingId: $ratingId, candidateId: $candidateId) {
     ...ratingMutationResponse

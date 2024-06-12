@@ -12,6 +12,7 @@ import {
   CardHeader,
   IconButton,
   Stack,
+  SxProps,
   Typography,
 } from "@mui/material";
 import Iconify from "components/Iconify";
@@ -24,13 +25,14 @@ import { fDateTime } from "utils/formatTime";
 
 interface EventHistoryProps {
   event: ClubEvent;
+  sx?: SxProps;
 }
 
 function applySortFilter({ tableData }) {
   return tableData;
 }
 
-const EventHistory: FC<EventHistoryProps> = ({ event }) => {
+const EventHistory: FC<EventHistoryProps> = ({ event, sx }) => {
   const { data, loading, refetch } = useGetEventHistoryQuery({
     fetchPolicy: "no-cache",
     skip: !event,
@@ -69,7 +71,7 @@ const EventHistory: FC<EventHistoryProps> = ({ event }) => {
   };
 
   return (
-    <Card>
+    <Card sx={{ mb: 2 }}>
       <CardHeader
         title="Event history activities"
         action={
@@ -83,6 +85,7 @@ const EventHistory: FC<EventHistoryProps> = ({ event }) => {
           "& .MuiTimelineItem-missingOppositeContent:before": {
             display: "none",
           },
+          ...sx,
         }}
       >
         {renderList()}

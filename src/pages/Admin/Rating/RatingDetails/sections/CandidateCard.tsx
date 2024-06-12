@@ -28,7 +28,7 @@ const CandidateCard: FC<CandidateCardProps> = ({
   postDeleted,
   onEdit,
 }) => {
-  const { photo1, name, bio } = data;
+  const { photo1, name, bio, votedCount } = data;
   const [onDeleteCandidate] = useDeleteCandidateMutation({
     fetchPolicy: "no-cache",
   });
@@ -51,7 +51,9 @@ const CandidateCard: FC<CandidateCardProps> = ({
         <Stack direction="column" spacing={1}>
           <div>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="subtitle2">{name}</Typography>
+              <Typography variant="subtitle2">
+                {name} ({votedCount})
+              </Typography>
               <DropdownMenu
                 actions={
                   <>

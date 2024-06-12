@@ -1,8 +1,19 @@
-import { Box, CardHeader, Dialog, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CardHeader,
+  Dialog,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Avatar from "components/Avatar";
 import Iconify from "components/Iconify";
 import { SkeletonCommon } from "components/skeleton";
-import { useGetRatingVoteQuery } from "generated/graphql";
+import {
+  useChangeStatusRatingVoteMutation,
+  useGetRatingVoteQuery,
+} from "generated/graphql";
+import { useSnackbar } from "notistack";
 import { FC } from "react";
 import { fSDateTime } from "utils/formatTime";
 import { RatingCandidateData } from "../../data.t";
@@ -13,11 +24,14 @@ interface VotedListProps {
   onClose: any;
 }
 const VotedList: FC<VotedListProps> = ({ open, candidate, onClose }) => {
-  const { data, loading } = useGetRatingVoteQuery({
+  const { data, loading, refetch } = useGetRatingVoteQuery({
     fetchPolicy: "no-cache",
     skip: !candidate || !open,
     variables: { candidateId: candidate?.id },
   });
+  const [onChangeStatus] = useChangeStatusRatingVoteMutation();
+
+  const { enqueueSnackbar } = useSnackbar();
   const renderContent = () => {
     if (loading) return <SkeletonCommon />;
     if (!data || data.getRatingVotes.totalCount === 0)
@@ -37,9 +51,24 @@ const VotedList: FC<VotedListProps> = ({ open, candidate, onClose }) => {
             />
 
             <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="subtitle2">
-                {vote.voter.displayName}
-              </Typography>
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <Typography variant="subtitle2">
+                  {vote.voter.displayName}
+                </Typography>
+                {vote?.status === 2 ? (
+                  <Iconify
+                    color="#f50"
+                    icon={"gridicons:cross-circle"}
+                    fontSize={18}
+                  />
+                ) : (
+                  <Iconify
+                    color="#00AB55"
+                    icon={"lets-icons:check-fill"}
+                    fontSize={18}
+                  />
+                )}
+              </Stack>
               <Typography
                 variant="caption"
                 sx={{
@@ -56,6 +85,59 @@ const VotedList: FC<VotedListProps> = ({ open, candidate, onClose }) => {
                 {fSDateTime(vote.createdAt)}
               </Typography>
             </Box>
+            <IconButton aria-label="delete">
+              {vote?.status === 1 ? (
+                <Iconify
+                  icon={"gridicons:cross-circle"}
+                  fontSize={24}
+                  onClick={async () => {
+                    try {
+                      const changeStatusRes = await onChangeStatus({
+                        variables: {
+                          id: vote.id,
+                          status: 2,
+                        },
+                      });
+                      if (
+                        changeStatusRes?.data?.changeStatusRatingVote?.success
+                      ) {
+                        enqueueSnackbar(
+                          "Rating hidden is changed successfully!"
+                        );
+                        refetch();
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}
+                />
+              ) : (
+                <Iconify
+                  icon={"lets-icons:check-fill"}
+                  fontSize={24}
+                  onClick={async () => {
+                    try {
+                      const changeStatusRes = await onChangeStatus({
+                        variables: {
+                          id: vote.id,
+                          status: 1,
+                        },
+                      });
+                      if (
+                        changeStatusRes?.data?.changeStatusRatingVote?.success
+                      ) {
+                        enqueueSnackbar(
+                          "Rating vote status is changed successfully!"
+                        );
+                        refetch();
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}
+                />
+              )}
+            </IconButton>
           </Stack>
         ))}
       </Stack>
@@ -65,8 +147,10 @@ const VotedList: FC<VotedListProps> = ({ open, candidate, onClose }) => {
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
       <Stack sx={{ p: 2 }}>
         <CardHeader
-          title={`Candidate voted list (${data?.getRatingVotes?.totalCount})`}
-          subheader={candidate?.name}
+          title={`${candidate?.name} (${
+            data?.getRatingVotes?.results?.filter((item) => item.status === 1)
+              .length
+          })`}
         />
 
         {renderContent()}

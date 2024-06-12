@@ -2,140 +2,50 @@ import {
   Box,
   Button,
   CardHeader,
+  Grid,
   Paper,
   Stack,
-  styled,
   Typography,
-  useTheme,
 } from "@mui/material";
-import Carousel, { CarouselArrows } from "components/carousel";
 import Image from "components/Image";
 import Markdown from "components/Markdown";
-import PopConfirm from "components/PopConfirm";
 import { SkeletionComment } from "components/skeleton";
-import {
-  useGetCandidatesQuery,
-  useVoteCandidateMutation,
-} from "generated/graphql";
-import useCountdown from "hooks/useCountdown";
-import { useSnackbar } from "notistack";
+import { useGetCandidatesQuery } from "generated/graphql";
 import { RatingCandidateData, RatingData } from "pages/Admin/Rating/data.t";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useState } from "react";
+import CandidateModal from "./CandidateModal";
 
 interface CandidatesProps {
   rating: RatingData;
   postVoted: any;
 }
-const CountdownStyle = styled("div")({
-  display: "flex",
-});
-
-const SeparatorStyle = styled(Typography)(({ theme }: { theme: any }) => ({
-  margin: theme.spacing(0, 1),
-  [theme.breakpoints.up("sm")]: {
-    margin: theme.spacing(0, 0.5),
-  },
-}));
-const RenderCountdown = ({ date, onEnd }) => {
-  const countdown = useCountdown(new Date(date));
-  useEffect(() => {
-    const now = new Date();
-    if (now > new Date(date)) {
-      onEnd();
-    }
-  }, [countdown]);
-  return (
-    <CountdownStyle>
-      <div>
-        <Typography>{countdown.hours}</Typography>
-      </div>
-
-      <SeparatorStyle>:</SeparatorStyle>
-
-      <div>
-        <Typography>{countdown.minutes}</Typography>
-      </div>
-
-      <SeparatorStyle>:</SeparatorStyle>
-
-      <div>
-        <Typography>{countdown.seconds}</Typography>
-      </div>
-    </CountdownStyle>
-  );
-};
 
 const Candidates: FC<CandidatesProps> = ({ rating, postVoted }) => {
-  const theme = useTheme();
-  const [isClose, setIsClose] = useState<boolean>(
-    new Date() > new Date(rating?.end)
-  );
-  const { data, loading } = useGetCandidatesQuery({
+  const { data, loading, refetch } = useGetCandidatesQuery({
     variables: { ratingId: rating?.id },
     skip: !rating,
   });
+  const { status, hidden } = rating;
+  if (!data || !data.getCandidates.results.length) return null;
 
-  const carouselSettings = {
-    dots: false,
-    arrows: false,
-    slidesToShow:
-      data?.getCandidates?.totalCount < 4 ? data?.getCandidates?.totalCount : 4,
-    slidesToScroll: 1,
-    rtl: Boolean(theme.direction === "rtl"),
-    responsive: [
-      {
-        breakpoint: theme.breakpoints.values.lg,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: theme.breakpoints.values.md,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: theme.breakpoints.values.sm,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-  const carouselRef = useRef(null);
-  const handlePrev = () => {
-    carouselRef.current?.slickPrev();
-  };
+  let list = [...data?.getCandidates?.results];
 
-  const handleNext = () => {
-    carouselRef.current?.slickNext();
-  };
+  // // Check if the list is not null and contains items
+  // if (list && list.length > 0) {
+  //   list.sort((a, b) => b.votedCount - a.votedCount);
+
+  //   list = list.map((candidate, index) => ({
+  //     ...candidate,
+  //     votedCount: candidate.votedCount || 0,
+  //     rank: index + 1,
+  //   }));
+  // }
 
   return (
     <Box>
       <CardHeader
-        title={
-          <>
-            {rating.name}{" "}
-            {!isClose && (
-              <RenderCountdown
-                onEnd={() => {
-                  setIsClose(true);
-                }}
-                date={rating.end}
-              />
-            )}
-          </>
-        }
-        subheader={`${data?.getCandidates?.totalCount || 0} candidates`}
-        action={
-          <Stack direction="row" spacing={3}>
-            {data?.getCandidates?.totalCount > 0 && (
-              <CarouselArrows onNext={handleNext} onPrevious={handlePrev} />
-            )}
-          </Stack>
-        }
+        title={<>{rating.name}</>}
+        subheader={<Markdown children={rating.description} />}
         sx={{
           p: 0,
           mb: 3,
@@ -146,19 +56,27 @@ const Candidates: FC<CandidatesProps> = ({ rating, postVoted }) => {
       {loading ? (
         <SkeletionComment />
       ) : (
-        <Carousel ref={carouselRef} {...carouselSettings}>
-          {data?.getCandidates?.results?.map((item: any) => (
-            <CandidateCard
-              key={item.id}
-              data={item as any}
-              isVoted={rating?.votedFor?.id === item.id}
-              voteFor={rating?.votedFor}
-              rating={rating}
-              postVoted={postVoted}
-              isClose={isClose}
-            />
+        <Grid container spacing={[1, 1]}>
+          {list?.map((item: any, index) => (
+            <Grid key={item.id} item xs={6} sm={3}>
+              <CandidateCard
+                key={item.id}
+                avatarKey={index + 1}
+                data={item as any}
+                isVoted={rating?.votedFor?.id === item.id}
+                voteFor={rating?.votedFor}
+                rating={rating}
+                postVoted={() => {
+                  refetch();
+                  postVoted();
+                }}
+                isClose={status === 1 && hidden}
+                isHidden={hidden}
+                rank={item.rank}
+              />
+            </Grid>
           ))}
-        </Carousel>
+        </Grid>
       )}
     </Box>
   );
@@ -171,6 +89,9 @@ interface CandidateCardProps {
   rating: RatingData;
   postVoted: any;
   isClose: boolean;
+  isHidden: boolean;
+  avatarKey: number;
+  rank: number;
 }
 const CandidateCard: FC<CandidateCardProps> = ({
   data,
@@ -179,22 +100,47 @@ const CandidateCard: FC<CandidateCardProps> = ({
   rating,
   postVoted,
   isClose,
+  isHidden,
+  avatarKey,
+  rank,
 }) => {
-  const { photo1, name, bio } = data;
-  const [onVote] = useVoteCandidateMutation();
-  const [openVote, setOpenVote] = useState<boolean>(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const { photo1, name } = data;
+  const [open, setOpen] = useState<boolean>(false);
+
+  // const renderRating =
+  //   rank > 3 ? null : (
+  //     <Stack
+  //       direction="row"
+  //       alignItems="center"
+  //       sx={{
+  //         top: 15,
+  //         right: 18,
+  //         zIndex: 9,
+  //         borderRadius: 1,
+  //         position: "absolute",
+  //         p: "2px 6px 2px 4px",
+  //         typography: "subtitle2",
+  //         bgcolor: "warning.lighter",
+  //       }}
+  //     >
+  //       <Iconify
+  //         icon="eva:star-fill"
+  //         sx={{ color: "warning.main", mr: 0.25 }}
+  //       />{" "}
+  //       {rank}
+  //     </Stack>
+  //   );
+
   return (
     <Paper
       sx={{
-        mx: 1,
         borderRadius: 2,
         bgcolor: isVoted
           ? (theme: any) => theme.palette["primary"].lighter
           : "background.neutral",
       }}
     >
-      <Box sx={{ p: 1, position: "relative" }}>
+      <Box flexGrow={1} sx={{ p: 1, position: "relative" }}>
         <Image
           alt="cover"
           src={photo1}
@@ -207,71 +153,32 @@ const CandidateCard: FC<CandidateCardProps> = ({
         <Stack direction="column" spacing={1}>
           <div>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="subtitle2">{name}</Typography>
+              <Typography variant="subtitle1">{name}</Typography>
             </Stack>
           </div>
-          <div>
-            <Markdown children={bio} />
-          </div>
-          <div>
-            <PopConfirm
-              open={openVote}
-              onClose={() => setOpenVote(false)}
-              title={
-                voteFor ? (
-                  <CardHeader
-                    title={`You have already voted for ${voteFor?.name}, do you want to change your vote to ${data.name}?`}
-                  />
-                ) : (
-                  <CardHeader title={`Are you sure to vote for ${name}?`} />
-                )
-              }
-              actions={
-                <>
-                  <Button
-                    variant="outlined"
-                    color="inherit"
-                    onClick={() => setOpenVote(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={async () => {
-                      try {
-                        const res = await onVote({
-                          variables: {
-                            ratingId: rating.id,
-                            candidateId: data.id,
-                          },
-                        });
-                        if (res?.data?.voteCandidate?.success) {
-                          enqueueSnackbar("Thanks for your vote!");
-                          postVoted();
-                          setOpenVote(false);
-                        }
-                      } catch (e) {
-                        console.error(e);
-                      }
-                    }}
-                  >
-                    Vote
-                  </Button>
-                </>
-              }
-            >
-              <Button
-                variant="contained"
-                fullWidth
-                disabled={isVoted || isClose}
-                onClick={() => {
-                  setOpenVote(true);
-                }}
-              >
-                Vote
-              </Button>
-            </PopConfirm>
-          </div>
+
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            Show info
+          </Button>
+          <CandidateModal
+            open={open}
+            onClose={() => setOpen(false)}
+            key={data.id}
+            avatarKey={avatarKey}
+            data={data}
+            isVoted={isVoted}
+            voteFor={voteFor}
+            rating={rating}
+            postVoted={postVoted}
+            isClose={isClose}
+            isHidden={isHidden}
+          />
         </Stack>
       </Stack>
     </Paper>

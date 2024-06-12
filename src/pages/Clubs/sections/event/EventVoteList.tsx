@@ -10,6 +10,7 @@ import {
   MenuItem,
   Popover,
   Stack,
+  SxProps,
   TextField,
   Typography,
   capitalize,
@@ -39,6 +40,8 @@ import ChangeVoteModal from "./ChangeVoteModal";
 interface EventVoteListProps {
   event: ClubEvent;
   refetchStats?: () => void;
+  sx?: SxProps;
+  compact?: boolean;
 }
 function applySortFilter({ tableData, filterName }) {
   if (filterName) {
@@ -48,7 +51,12 @@ function applySortFilter({ tableData, filterName }) {
   }
   return tableData;
 }
-const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
+const EventVoteList: FC<EventVoteListProps> = ({
+  event,
+  refetchStats,
+  sx,
+  compact,
+}) => {
   const { data, loading, refetch } = useGetVotesQuery({
     fetchPolicy: "no-cache",
     skip: !event,
@@ -78,7 +86,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
       );
     if (event?.type === "2_activity") {
       return (
-        <Stack spacing={3} sx={{ p: 3 }}>
+        <Stack spacing={3} sx={{ p: 3, ...sx }}>
           {event.groups.map((type) => {
             return (
               <LabelContainer key={type} label={capitalize(type)}>
@@ -106,7 +114,7 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
       );
     }
     return (
-      <Stack spacing={3} sx={{ p: 3 }}>
+      <Stack spacing={3} sx={{ p: 3, ...sx }}>
         {dataFiltered.map((vote, index) => (
           <Voter
             key={vote.id}
@@ -123,6 +131,33 @@ const EventVoteList: FC<EventVoteListProps> = ({ event, refetchStats }) => {
       </Stack>
     );
   };
+  if (compact)
+    return (
+      <Card>
+        <Stack
+          spacing={2}
+          direction={{ xs: "column", sm: "row" }}
+          sx={{ pt: 2, pb: 0, px: 3 }}
+        >
+          <TextField
+            fullWidth
+            placeholder="Search name..."
+            onChange={(event) => setFilterName(event.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify
+                    icon={"eva:search-fill"}
+                    sx={{ color: "text.disabled", width: 20, height: 20 }}
+                  />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Stack>
+        {renderList()}
+      </Card>
+    );
   return (
     <Card>
       <CardHeader
@@ -320,7 +355,7 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                 setIsFormChangeOpen(true);
               }}
             >
-              {translate("common.btn.change")}
+              <Iconify icon="mingcute:pencil-fill" />
             </Button>
           </>
         )}
@@ -432,7 +467,6 @@ function Voter({ vote, index, isAdmin, postActions, event }: VoterProps) {
                             console.error(e);
                           }
                         }}
-                        LoadingButton
                       >
                         {translate("common.btn.save")}
                       </LoadingButton>

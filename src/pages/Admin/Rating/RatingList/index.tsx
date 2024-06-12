@@ -9,6 +9,7 @@ import {
   TableContainer,
   TextField,
 } from "@mui/material";
+import { PATH_DASHBOARD } from "Router/paths";
 import HeaderBreadcrumbs from "components/HeaderBreadcrumbs";
 import Iconify from "components/Iconify";
 import Scrollbar from "components/Scrollbar";
@@ -23,7 +24,6 @@ import useAuth from "hooks/useAuth";
 import useLocales from "hooks/useLocales";
 import useTable, { emptyRows, getComparator } from "hooks/useTable";
 import { Link as RouterLink } from "react-router-dom";
-import { PATH_DASHBOARD } from "Router/paths";
 import Page from "../../../../components/Page";
 import useSettings from "../../../../hooks/useSettings";
 import RatingRow from "./sections/RatingRow";
@@ -31,8 +31,7 @@ import RatingRow from "./sections/RatingRow";
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: "name", label: "Name", align: "left" },
-  { id: "start", label: "Start", align: "left" },
-  { id: "end", label: "End", align: "left" },
+  { id: "hidden", label: "Is hidden", align: "left" },
   { id: "status", label: "Status", align: "left" },
   { id: "" },
 ];
