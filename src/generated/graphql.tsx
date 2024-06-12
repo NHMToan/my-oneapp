@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -1155,6 +1155,13 @@ export type QueryGetMemberVotesArgs = {
 };
 
 
+export type QueryGetMemberVotesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  memberId: Scalars['String'];
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryGetMessagesArgs = {
   conversationId: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1165,6 +1172,12 @@ export type QueryGetMessagesArgs = {
 export type QueryGetMyHistoryVotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetMyHistoryVotesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
